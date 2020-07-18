@@ -1,0 +1,17 @@
+<resources>
+    <string name="scaffold_loading">加载中 …</string>
+    <string name="scaffold_download_task_has_been_exist">该任务已经存在 ， 请勿重复点击下载!</string>
+    <string name="scaffold_download_file_has_been_exist">文件已存在,无需重复下载!</string>
+    <string name="scaffold_tips">提示</string>
+    <string name="scaffold_honeycomblow">您正在使用手机流量 ， 继续下载该文件吗?</string>
+    <string name="scaffold_download_file_tips">是否允许下载%s?</string>
+    <string name="scaffold_download">下载</string>
+    <string name="scaffold_cancel">取消</string>
+    <string name="scaffold_camera">相机</string>
+    <string name="scaffold_file">文件</string>
+    <string name="scaffold_leave_app_and_go_other_page">您需要离开%s前往其他应用吗？</string>
+    <string name="scaffold_leave">离开</string>
+    <string name="scaffold_max_file_length_limit">选择的文件不能大于%sMB</string>
+    <string name="scaffold_default_page_error">出错啦! 点击空白处刷新 ~</string>
+    <string name="scaffold_no_allow_download_file">暂不支持下载该文件</string>
+</resources>

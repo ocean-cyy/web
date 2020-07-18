@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <declare-styleable name="scaffold_ScaffoldWebView">
+        <attr name="scaffold_url" format="string" />
+        <attr name="scaffold_debug" format="boolean" />
+        <attr name="scaffold_indicatorColor" format="reference" />
+        <attr name="scaffold_indicatorHeight" format="dimension" />
+        <attr name="scaffold_error_layout" format="reference" />
+        <attr name="scaffold_refresh_error" format="reference" />
+    </declare-styleable>
+
+    <style name="scaffold_actionActivity" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:statusBarColor" tools:targetApi="lollipop">
+            @android:color/transparent
+        </item>
+    </style>
+
+</resources>
