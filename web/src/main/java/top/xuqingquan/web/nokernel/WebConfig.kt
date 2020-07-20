@@ -2,10 +2,7 @@ package top.xuqingquan.web.nokernel
 
 import android.annotation.SuppressLint
 import android.os.Build
-import com.tencent.smtt.sdk.QbSdk
 import top.xuqingquan.web.BuildConfig
-import top.xuqingquan.utils.Timber
-
 import java.io.File
 
 /**
@@ -82,8 +79,18 @@ object WebConfig {
 
     var x5 = false
 
+    private var x5Status: Boolean? = null
+
+    @JvmStatic
+    fun resetX5Status() {
+        x5Status = null
+    }
+
     @JvmStatic
     fun enableTbs(): Boolean {
-        return x5
+        if (x5Status == null) {
+            x5Status = x5
+        }
+        return x5Status!!
     }
 }

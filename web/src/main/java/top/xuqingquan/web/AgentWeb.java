@@ -318,6 +318,7 @@ public final class AgentWeb {
 
     public void destroy() {
         this.mWebLifeCycle.onDestroy();
+        WebConfig.resetX5Status();
     }
 
     private void doCompat() {
