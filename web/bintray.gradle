@@ -1,8 +1,8 @@
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-def siteUrl = 'https://github.com/xuqingquan1995/Scaffold'
-def gitUrl = 'https://github.com/xuqingquan1995/Scaffold.git'
+def siteUrl = 'https://github.com/xuqingquan1995/Scaffold_web'
+def gitUrl = 'https://github.com/xuqingquan1995/Scaffold_web.git'
 version = versionName
 group = "top.xuqingquan"
 
