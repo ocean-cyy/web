@@ -96,7 +96,11 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
             val context = webView.context
             val processName = getCurrentProcessName(context)
             if (context.applicationContext.packageName != processName) {
-                WebView.setDataDirectorySuffix(processName)
+                try {
+                    WebView.setDataDirectorySuffix(processName)
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
             }
         }
     }

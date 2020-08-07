@@ -192,11 +192,7 @@ class DefaultChromeClient(
         valueCallbacks: ValueCallback<Array<Uri>>,
         fileChooserParams: FileChooserParams
     ): Boolean {
-        Timber.i(
-            "fileChooserParams:" + Arrays.toString(fileChooserParams.acceptTypes) + "  getTitle:" + fileChooserParams.title + " accept:" + Arrays.toString(
-                fileChooserParams.acceptTypes
-            ) + " length:" + fileChooserParams.acceptTypes.size + "  :" + fileChooserParams.isCaptureEnabled + "  " + fileChooserParams.filenameHint + "  intent:" + fileChooserParams.createIntent().toString() + "   mode:" + fileChooserParams.mode
-        )
+        Timber.i("fileChooserParams:${fileChooserParams.acceptTypes}  getTitle:${fileChooserParams.title} accept:${fileChooserParams.acceptTypes} length:${fileChooserParams.acceptTypes.size}  isCaptureEnabled:${fileChooserParams.isCaptureEnabled}  ${fileChooserParams.filenameHint}  intent:${fileChooserParams.createIntent()}    mode:${fileChooserParams.mode}")
         val mActivity = this.mActivityWeakReference.get()
         return if (mActivity == null || mActivity.isFinishing) {
             false

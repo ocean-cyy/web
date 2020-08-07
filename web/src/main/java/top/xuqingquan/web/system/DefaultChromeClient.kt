@@ -3,19 +3,21 @@ package top.xuqingquan.web.system
 import android.app.Activity
 import android.net.Uri
 import android.os.Build
+import android.support.annotation.RequiresApi
 import android.view.View
 import android.webkit.*
-import android.support.annotation.RequiresApi
-import top.xuqingquan.web.nokernel.*
-import top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION
-import top.xuqingquan.web.publics.AgentWebUtils
-import top.xuqingquan.web.publics.IVideo
-import top.xuqingquan.web.publics.IndicatorController
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getDeniedPermissions
 import top.xuqingquan.utils.hasPermission
+import top.xuqingquan.web.nokernel.Action
+import top.xuqingquan.web.nokernel.ActionActivity
+import top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION
+import top.xuqingquan.web.nokernel.AgentWebPermissions
+import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.publics.AgentWebUtils
+import top.xuqingquan.web.publics.IVideo
+import top.xuqingquan.web.publics.IndicatorController
 import java.lang.ref.WeakReference
-import java.util.*
 
 @Suppress("DEPRECATION", "OverridingDeprecatedMember")
 class DefaultChromeClient(
@@ -42,18 +44,22 @@ class DefaultChromeClient(
      * Activity
      */
     private val mActivityWeakReference = WeakReference(activity)
+
     /**
      * 包装Flag
      */
     private val mIsWrapper = chromeClient != null
+
     /**
      * Web端触发的定位 mOrigin
      */
     private var mOrigin: String? = null
+
     /**
      * Web 端触发的定位 Callback 回调成功，或者失败
      */
     private var mCallback: GeolocationPermissions.Callback? = null
+
     /**
      * AbsAgentWebUIController
      */
@@ -193,11 +199,7 @@ class DefaultChromeClient(
         valueCallbacks: ValueCallback<Array<Uri>>,
         fileChooserParams: FileChooserParams
     ): Boolean {
-        Timber.i(
-            "fileChooserParams:" + Arrays.toString(fileChooserParams.acceptTypes) + "  getTitle:" + fileChooserParams.title + " accept:" + Arrays.toString(
-                fileChooserParams.acceptTypes
-            ) + " length:" + fileChooserParams.acceptTypes.size + "  :" + fileChooserParams.isCaptureEnabled + "  " + fileChooserParams.filenameHint + "  intent:" + fileChooserParams.createIntent().toString() + "   mode:" + fileChooserParams.mode
-        )
+        Timber.i("fileChooserParams:${fileChooserParams.acceptTypes}  getTitle:${fileChooserParams.title} accept:${fileChooserParams.acceptTypes} length:${fileChooserParams.acceptTypes.size}  isCaptureEnabled:${fileChooserParams.isCaptureEnabled}  ${fileChooserParams.filenameHint}  intent:${fileChooserParams.createIntent()}    mode:${fileChooserParams.mode}")
         val mActivity = this.mActivityWeakReference.get()
         return if (mActivity == null || mActivity.isFinishing) {
             false
@@ -225,6 +227,7 @@ class DefaultChromeClient(
          * 标志位
          */
         private const val FROM_CODE_INTENTION = 0x18
+
         /**
          * 标识当前是获取定位权限
          */
