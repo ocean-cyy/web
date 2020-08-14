@@ -19,7 +19,7 @@ class DefaultWebLifeCycleImpl : WebLifeCycle {
     }
 
     override fun onResume() {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             mX5WebView?.let {
                 it.onResume()
                 it.resumeTimers()
@@ -33,7 +33,7 @@ class DefaultWebLifeCycleImpl : WebLifeCycle {
     }
 
     override fun onPause() {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             mX5WebView?.let {
                 it.onPause()
                 it.pauseTimers()
@@ -47,7 +47,7 @@ class DefaultWebLifeCycleImpl : WebLifeCycle {
     }
 
     override fun onDestroy() {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mX5WebView?.resumeTimers()
             AgentWebUtils.clearWebView(this.mX5WebView)
         } else {

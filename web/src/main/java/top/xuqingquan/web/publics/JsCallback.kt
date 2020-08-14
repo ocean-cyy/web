@@ -42,7 +42,7 @@ class JsCallback {
      */
     @Throws(JsCallbackException::class)
     fun apply(vararg args: Any) {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (mx5WebViewRef?.get() == null) {
                 throw JsCallbackException("the WebView related to the JsCallback has been recycled")
             }
@@ -71,7 +71,7 @@ class JsCallback {
         val execJs =
             String.format(Locale.getDefault(), CALLBACK_JS_FORMAT, mInjectedName, mIndex, mIsPermanent, sb.toString())
         Timber.d(execJs)
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             mx5WebViewRef?.get()?.loadUrl(execJs)
         } else {
             mWebViewRef?.get()?.loadUrl(execJs)

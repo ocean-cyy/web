@@ -151,7 +151,7 @@ object AgentWebUtils {
     @JvmStatic
     fun clearWebViewAllCache(context: Context) {
         try {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 clearWebViewAllCache(
                     context,
                     top.xuqingquan.web.x5.LollipopFixedWebView(context.applicationContext)

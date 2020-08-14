@@ -139,7 +139,7 @@ public class FileChooser {
         this.mActivity = builder.mActivity;
         this.mIsAboveLollipop = builder.mIsAboveLollipop;
         this.mJsChannel = builder.mJsChannel;
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.x5UriValueCallback = builder.x5UriValueCallback;
             this.x5UriValueCallbacks = builder.x5UriValueCallbacks;
             this.x5FileChooserParams = builder.x5FileChooserParams;
@@ -193,7 +193,7 @@ public class FileChooser {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private Intent getFileChooserIntent() {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (mIsAboveLollipop && x5FileChooserParams != null) {
                 Intent mIntent = x5FileChooserParams.createIntent();
                 if (mIntent != null) {
@@ -236,7 +236,7 @@ public class FileChooser {
     private void openFileChooserInternal() {
         boolean needVideo = false;
         // 是否直接打开文件选择器
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (this.mIsAboveLollipop && this.x5FileChooserParams != null && this.x5FileChooserParams.getAcceptTypes() != null) {
                 boolean needCamera = false;
                 String[] types = this.x5FileChooserParams.getAcceptTypes();
@@ -289,7 +289,7 @@ public class FileChooser {
         }
         Timber.i("controller:" + this.mAgentWebUIController.get() + "   mAcceptType:" + mAcceptType);
         if (this.mAgentWebUIController.get() != null) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 this.mAgentWebUIController
                         .get()
                         .onSelectItemsPrompt(this.x5WebView, x5WebView.getUrl(),
@@ -333,7 +333,7 @@ public class FileChooser {
             return;
         }
         if (mPermissionInterceptor != null) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (mPermissionInterceptor.intercept(FileChooser.this.x5WebView.getUrl(), AgentWebPermissions.CAMERA, "camera")) {
                     cancel();
                     return;
@@ -452,7 +452,7 @@ public class FileChooser {
             return;
         }
         //4.4以下系统通过input标签获取文件
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (x5UriValueCallback == null) {
                 cancel();
                 return;
@@ -464,7 +464,7 @@ public class FileChooser {
             }
         }
         if (mCameraState) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 x5UriValueCallback.onReceiveValue(data.getParcelableExtra(KEY_URI));
             } else {
                 sysUriValueCallback.onReceiveValue(data.getParcelableExtra(KEY_URI));
@@ -479,7 +479,7 @@ public class FileChooser {
             mJsChannelCallback.call(null);
             return;
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (x5UriValueCallback != null) {
                 x5UriValueCallback.onReceiveValue(null);
             }
@@ -499,7 +499,7 @@ public class FileChooser {
 
     private void belowLollipopUriCallback(Intent data) {
         if (data == null) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (x5UriValueCallback != null) {
                     x5UriValueCallback.onReceiveValue(Uri.EMPTY);
                 }
@@ -511,12 +511,12 @@ public class FileChooser {
             return;
         }
         Uri mUri = data.getData();
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             Timber.i("belowLollipopUriCallback  -- >uri:" + mUri + "  sysUriValueCallback:" + sysUriValueCallback);
         } else {
             Timber.i("belowLollipopUriCallback  -- >uri:" + mUri + "  x5UriValueCallback:" + x5UriValueCallback);
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (x5UriValueCallback != null) {
                 x5UriValueCallback.onReceiveValue(mUri);
             }
@@ -593,7 +593,7 @@ public class FileChooser {
      */
     private void aboveLollipopCheckFilesAndCallback(final Uri[] datas, boolean isCamera) {
         String[] paths = FileUtils.uriToPath(mActivity, datas);
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (x5UriValueCallbacks == null) {
                 return;
             }
@@ -629,7 +629,7 @@ public class FileChooser {
         }
         final String path = paths[0];
         mAgentWebUIController.get().onLoading(mActivity.getString(R.string.scaffold_loading));
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(new WaitPhotoRunnable(path, new AboveLCallback(x5UriValueCallbacks, datas, mAgentWebUIController)));
         } else {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(new WaitPhotoRunnable(path, new AboveLCallback(sysUriValueCallbacks, datas, mAgentWebUIController)));
@@ -662,7 +662,7 @@ public class FileChooser {
         }
 
         private void safeHandleMessage() {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (x5ValueCallback != null) {
                     x5ValueCallback.onReceiveValue(mUris);
                 }

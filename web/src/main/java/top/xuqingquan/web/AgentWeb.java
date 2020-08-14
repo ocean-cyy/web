@@ -134,7 +134,7 @@ public final class AgentWeb {
         this.mViewGroup = agentBuilder.mViewGroup;
         this.mIEventHandler = agentBuilder.mIEventHandler;
         this.mEnableIndicator = agentBuilder.mEnableIndicator;
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (agentBuilder.mX5WebCreator == null) {
                 mX5WebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mX5WebView, agentBuilder.mX5WebLayout);
             } else {
@@ -148,7 +148,7 @@ public final class AgentWeb {
             }
         }
         mIndicatorController = agentBuilder.mIndicatorController;
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mX5WebChromeClient = agentBuilder.mX5WebChromeClient;
             this.mX5WebViewClient = agentBuilder.mX5WebViewClient;
             this.mX5AgentWebSettings = agentBuilder.mX5AgentWebSettings;
@@ -212,7 +212,7 @@ public final class AgentWeb {
     public JsAccessEntrace getJsAccessEntrace() {
         JsAccessEntrace mJsAccessEntrace = this.mJsAccessEntrace;
         if (mJsAccessEntrace == null) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 this.mJsAccessEntrace = JsAccessEntraceImpl.getInstance(getX5WebCreator().getWebView());
             } else {
                 this.mJsAccessEntrace = JsAccessEntraceImpl.getInstance(getWebCreator().getWebView());
@@ -223,7 +223,7 @@ public final class AgentWeb {
     }
 
     public AgentWeb clearWebCache() {
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             if (getX5WebCreator() != null && getX5WebCreator().getWebView() != null) {
                 AgentWebUtils.clearWebViewAllCache(mActivity, getX5WebCreator().getWebView());
             } else {
@@ -281,7 +281,7 @@ public final class AgentWeb {
 
     private IEventHandler getIEventHandler() {
         if (this.mIEventHandler == null) {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (getX5WebCreator() != null) {
                     mIEventHandler = EventHandlerImpl.getInstance(getX5WebCreator().getWebView(), getInterceptor());
                 }
@@ -318,7 +318,7 @@ public final class AgentWeb {
 
     public void destroy() {
         this.mWebLifeCycle.onDestroy();
-        WebConfig.resetX5Status();
+        WebConfig.resetTbsStatus();
     }
 
     private void doCompat() {
@@ -438,7 +438,7 @@ public final class AgentWeb {
     @SuppressWarnings("UnusedReturnValue")
     private AgentWeb ready() {
         AgentWebConfig.initCookiesManager(mActivity.getApplicationContext());
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             top.xuqingquan.web.x5.IAgentWebSettings mAgentWebSettings = this.mX5AgentWebSettings;
             if (mAgentWebSettings == null) {
                 this.mX5AgentWebSettings = top.xuqingquan.web.x5.AgentWebSettingsImpl.getInstance();

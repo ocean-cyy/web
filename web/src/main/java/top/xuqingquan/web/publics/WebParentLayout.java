@@ -99,7 +99,7 @@ public class WebParentLayout extends FrameLayout implements Provider<AbsAgentWeb
             final View clickView = mFrameLayout.findViewById(mClickId);
             if (clickView != null) {
                 clickView.setOnClickListener(v -> {
-                    if (WebConfig.enableTbs()) {
+                    if (WebConfig.isTbsEnable()) {
                         if (getX5WebView() != null) {
                             clickView.setClickable(false);
                             getX5WebView().reload();
@@ -117,7 +117,7 @@ public class WebParentLayout extends FrameLayout implements Provider<AbsAgentWeb
             }
         }
         mFrameLayout.setOnClickListener(v -> {
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (getX5WebView() != null) {
                     mFrameLayout.setClickable(false);
                     getX5WebView().reload();

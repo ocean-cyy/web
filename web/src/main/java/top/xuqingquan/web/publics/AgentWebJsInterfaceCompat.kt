@@ -21,7 +21,7 @@ class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
     fun uploadFile(acceptType: String = "*/*") {
         Timber.i(acceptType + "  " + mActivityWeakReference.get() + "  " + mReference.get())
         if (mActivityWeakReference.get() != null && mReference.get() != null) {
-            if (WebConfig.enableTbs() && mReference.get()?.x5WebCreator != null && mReference.get()?.x5WebCreator?.getWebView() != null) {
+            if (WebConfig.isTbsEnable() && mReference.get()?.x5WebCreator != null && mReference.get()?.x5WebCreator?.getWebView() != null) {
                 AgentWebUtils.showFileChooserCompat(mActivityWeakReference.get()!!,
                     mReference.get()!!.x5WebCreator!!.getWebView()!!, null, null,
                     mReference.get()!!.permissionInterceptor, null,

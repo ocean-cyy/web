@@ -53,7 +53,7 @@ class UrlLoaderImpl : IUrlLoader {
                 })
             }
             Timber.i("loadUrl:$url headers:$headers")
-            if (WebConfig.enableTbs()) {
+            if (WebConfig.isTbsEnable()) {
                 if (headers.isNullOrEmpty()) {
                     this.mx5WebView!!.loadUrl(url)
                 } else {
@@ -75,7 +75,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { this.reload() }
             return
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mx5WebView!!.reload()
         } else {
             this.mWebView!!.reload()
@@ -87,7 +87,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { loadData(data, mimeType, encoding) }
             return
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mx5WebView!!.loadData(data, mimeType, encoding)
         } else {
             this.mWebView!!.loadData(data, mimeType, encoding)
@@ -99,7 +99,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { this.stopLoading() }
             return
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mx5WebView!!.stopLoading()
         } else {
             this.mWebView!!.stopLoading()
@@ -117,7 +117,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl) }
             return
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mx5WebView!!.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl)
         } else {
             this.mWebView!!.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl)
@@ -129,7 +129,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { postUrl(url, params) }
             return
         }
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             this.mx5WebView!!.postUrl(url, params)
         } else {
             this.mWebView!!.postUrl(url, params)

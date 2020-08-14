@@ -77,20 +77,39 @@ object WebConfig {
     @JvmField
     var MAX_FILE_LENGTH = 1024 * 1024 * 5
 
-    var x5 = false
+    private var tbsStatus = false//x5是否可用
 
-    private var x5Status: Boolean? = null
+    private var tbsEnable: Boolean? = null//x5是否启用
 
+    /**
+     * 禁用tbs
+     */
     @JvmStatic
-    fun resetX5Status() {
-        x5Status = null
+    fun disableTbs() {
+        tbsEnable = false
+    }
+
+    /**
+     * 设置tbs为可用
+     */
+    @JvmStatic
+    fun enableTbs() {
+        tbsStatus = true
+    }
+
+    /**
+     * 判断tbs是否可用
+     */
+    @JvmStatic
+    fun isTbsEnable(): Boolean {
+        if (tbsEnable == null) {
+            tbsEnable = tbsStatus
+        }
+        return tbsEnable!!
     }
 
     @JvmStatic
-    fun enableTbs(): Boolean {
-        if (x5Status == null) {
-            x5Status = x5
-        }
-        return x5Status!!
+    fun resetTbsStatus() {
+        tbsEnable = tbsStatus
     }
 }

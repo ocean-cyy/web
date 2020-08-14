@@ -108,7 +108,7 @@ class ScaffoldWebView : FrameLayout {
                 })
                 .createAgentWeb()//创建AgentWeb。
                 .get()
-        if (WebConfig.enableTbs()) {
+        if (WebConfig.isTbsEnable()) {
             agentWeb!!.x5WebCreator?.getWebView()?.overScrollMode = X5WebView.OVER_SCROLL_NEVER
         } else {
             agentWeb!!.webCreator?.getWebView()?.overScrollMode = WebView.OVER_SCROLL_NEVER
@@ -154,7 +154,7 @@ class ScaffoldWebView : FrameLayout {
     fun reload() = agentWeb?.urlLoader?.reload()
 
     fun getCurrentUrl(): String? {
-        return if (WebConfig.enableTbs()) {
+        return if (WebConfig.isTbsEnable()) {
             agentWeb?.x5WebCreator?.getWebView()?.url
         } else {
             agentWeb?.webCreator?.getWebView()?.url
