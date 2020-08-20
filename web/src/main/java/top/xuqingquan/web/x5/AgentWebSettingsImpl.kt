@@ -10,7 +10,7 @@ import top.xuqingquan.web.R
 import top.xuqingquan.web.nokernel.WebUtils
 import top.xuqingquan.web.utils.download
 
-class AgentWebSettingsImpl : AbsAgentWebSettings() {
+open class AgentWebSettingsImpl : AbsAgentWebSettings() {
     private var mAgentWeb: AgentWeb? = null
 
     override fun bindAgentWebSupport(agentWeb: AgentWeb) {

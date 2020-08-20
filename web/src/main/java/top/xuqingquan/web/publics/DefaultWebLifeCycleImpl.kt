@@ -20,38 +20,44 @@ class DefaultWebLifeCycleImpl : WebLifeCycle {
 
     override fun onResume() {
         if (WebConfig.isTbsEnable()) {
-            mX5WebView?.let {
-                it.onResume()
-                it.resumeTimers()
+            mX5WebView?.apply {
+                onResume()
+                resumeTimers()
+                //可以激活播放器的内容
+                x5WebViewExtension?.active()
             }
         } else {
-            mWebView?.let {
-                it.onResume()
-                it.resumeTimers()
+            mWebView?.apply {
+                onResume()
+                resumeTimers()
             }
         }
     }
 
     override fun onPause() {
         if (WebConfig.isTbsEnable()) {
-            mX5WebView?.let {
-                it.onPause()
-                it.pauseTimers()
+            mX5WebView?.apply {
+                onPause()
+                pauseTimers()
+                //可以暂停播放器的内容
+                x5WebViewExtension?.deactive()
             }
         } else {
-            mWebView?.let {
-                it.onPause()
-                it.pauseTimers()
+            mWebView?.apply {
+                onPause()
+                pauseTimers()
             }
         }
     }
 
     override fun onDestroy() {
         if (WebConfig.isTbsEnable()) {
-            this.mX5WebView?.resumeTimers()
+            this.mX5WebView?.loadData("", "text/html", "utf-8")
+            this.mX5WebView?.destroy()
             AgentWebUtils.clearWebView(this.mX5WebView)
         } else {
-            this.mWebView?.resumeTimers()
+            this.mWebView?.loadData("", "text/html", "utf-8")
+            this.mWebView?.destroy()
             AgentWebUtils.clearWebView(this.mWebView)
         }
     }
