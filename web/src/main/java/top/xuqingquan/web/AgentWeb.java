@@ -6,22 +6,45 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.support.v4.app.Fragment;
-
-import top.xuqingquan.web.nokernel.*;
-import top.xuqingquan.web.publics.*;
-import top.xuqingquan.utils.Timber;
-
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
-@SuppressWarnings({"unused", "rawtypes"})
+import top.xuqingquan.utils.Timber;
+import top.xuqingquan.web.nokernel.BaseIndicatorView;
+import top.xuqingquan.web.nokernel.EventInterceptor;
+import top.xuqingquan.web.nokernel.HookManager;
+import top.xuqingquan.web.nokernel.HttpHeaders;
+import top.xuqingquan.web.nokernel.IEventHandler;
+import top.xuqingquan.web.nokernel.IUrlLoader;
+import top.xuqingquan.web.nokernel.JsInterfaceHolder;
+import top.xuqingquan.web.nokernel.OpenOtherPageWays;
+import top.xuqingquan.web.nokernel.PermissionInterceptor;
+import top.xuqingquan.web.nokernel.WebConfig;
+import top.xuqingquan.web.nokernel.WebLifeCycle;
+import top.xuqingquan.web.publics.AbsAgentWebUIController;
+import top.xuqingquan.web.publics.AgentWebConfig;
+import top.xuqingquan.web.publics.AgentWebJsInterfaceCompat;
+import top.xuqingquan.web.publics.AgentWebUIControllerImplBase;
+import top.xuqingquan.web.publics.AgentWebUtils;
+import top.xuqingquan.web.publics.DefaultWebLifeCycleImpl;
+import top.xuqingquan.web.publics.EventHandlerImpl;
+import top.xuqingquan.web.publics.IVideo;
+import top.xuqingquan.web.publics.IndicatorController;
+import top.xuqingquan.web.publics.IndicatorHandler;
+import top.xuqingquan.web.publics.JsAccessEntrace;
+import top.xuqingquan.web.publics.JsAccessEntraceImpl;
+import top.xuqingquan.web.publics.UrlLoaderImpl;
+import top.xuqingquan.web.publics.VideoImpl;
+import top.xuqingquan.web.publics.WebParentLayout;
+
+@SuppressWarnings({"rawtypes", "unused", "RedundantSuppression"})
 public final class AgentWeb {
     /**
      * Activity
@@ -108,6 +131,9 @@ public final class AgentWeb {
      * 是否拦截未知的Url， @link{DefaultWebClient}
      */
     private boolean mIsInterceptUnkownUrl;
+    /**
+     * Url处理方式，是直接跳转还是弹窗让用户去选择
+     */
     private int mUrlHandleWays = -1;
     /**
      * MiddlewareWebClientBase WebViewClient 中间件
@@ -191,7 +217,7 @@ public final class AgentWeb {
             this.mPermissionInterceptor = new PermissionInterceptorWrapper(agentBuilder.mPermissionInterceptor);
         }
         this.mWebClientHelper = agentBuilder.mWebClientHelper;
-        this.mIsInterceptUnkownUrl = agentBuilder.mIsInterceptUnkownUrl;
+        this.mIsInterceptUnkownUrl = agentBuilder.mIsInterceptUnknownUrl;
         if (agentBuilder.mOpenOtherPage != null) {
             this.mUrlHandleWays = agentBuilder.mOpenOtherPage.getCode();
         }
@@ -613,7 +639,7 @@ public final class AgentWeb {
         private PermissionInterceptor mPermissionInterceptor = null;
         private AbsAgentWebUIController mAgentWebUIController;
         private OpenOtherPageWays mOpenOtherPage = null;
-        private boolean mIsInterceptUnkownUrl = false;
+        private boolean mIsInterceptUnknownUrl = false;
         private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
         private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddlewareWebClientBaseHeader;
         private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseTail;
@@ -887,8 +913,8 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder interceptUnkownUrl() {
-            this.mAgentBuilder.mIsInterceptUnkownUrl = true;
+        public CommonBuilder interceptUnknownUrl() {
+            this.mAgentBuilder.mIsInterceptUnknownUrl = true;
             return this;
         }
     }

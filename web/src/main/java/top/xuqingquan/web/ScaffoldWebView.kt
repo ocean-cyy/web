@@ -98,7 +98,7 @@ class ScaffoldWebView : FrameLayout {
                 )//传入AgentWeb的父控件。
                 .useDefaultIndicator(indicatorColor, indicatorHeight)
                 .setMainFrameErrorView(error_layout, refresh_error)//当使用X5时候这一句失效
-                .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
+                .interceptUnknownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                 .setPermissionInterceptor(object : PermissionInterceptor {
                     override fun intercept(
                         url: String?,
