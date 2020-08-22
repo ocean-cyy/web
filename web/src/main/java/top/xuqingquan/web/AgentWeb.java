@@ -372,7 +372,9 @@ public final class AgentWeb {
     }
 
     private AgentWeb go(String url) {
-        this.getUrlLoader().loadUrl(url);
+        if (getUrlLoader() != null) {
+            getUrlLoader().loadUrl(url);
+        }
         IndicatorController mIndicatorController = getIndicatorController();
         if (!TextUtils.isEmpty(url) && mIndicatorController != null && mIndicatorController.offerIndicator() != null) {
             //noinspection ConstantConditions
@@ -588,7 +590,7 @@ public final class AgentWeb {
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        PreAgentWeb ready() {
+        public PreAgentWeb ready() {
             if (!isReady) {
                 mAgentWeb.ready();
                 isReady = true;

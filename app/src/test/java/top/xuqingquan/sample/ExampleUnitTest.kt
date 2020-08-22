@@ -1,4 +1,4 @@
-package top.xuqingquan.web
+package top.xuqingquan.sample
 
 import org.junit.Test
 

@@ -1,19 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "top.xuqingquan.web"
+        applicationId "top.xuqingquan.sample"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk{
+            abiFilters 'armeabi-v7a'
+        }
     }
 
     buildTypes {
@@ -21,6 +24,32 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'//说明so的路径为该libs路径，关联所有so文件
+        }
+    }
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+    }
+    //如果有用到kapt添加如下配置
+    kapt {
+        useBuildCache = true
+        javacOptions {
+            option("-Xmaxerrs", 500)
+        }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -33,5 +62,8 @@ dependencies {
     testImplementation "junit:junit:${junit}"
     androidTestImplementation "com.android.support.test:runner:${test}"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espresso}"
-
+    implementation project(path: ':web')
+    implementation "top.xuqingquan:utils:2.2.7-support"
+    implementation 'com.tencent.sonic:sdk:3.1.0'
+    implementation "com.download.library:Downloader:4.1.3"
 }
