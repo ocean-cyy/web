@@ -88,6 +88,11 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
         mWebSettings!!.userAgentString = getWebSettings()!!
             .userAgentString + USERAGENT_AGENTWEB + USERAGENT_UC
         Timber.i("UserAgentString : " + mWebSettings!!.userAgentString)
+        //X5独有的
+        //开启后前进后退将不再重新加载页面，默认关闭
+        webView.settingsExtension?.setContentCacheEnable(true)
+        // 对于刘海屏机器如果webView被遮挡会自动padding
+        webView.settingsExtension?.setDisplayCutoutEnable(true)
     }
 
     override fun getWebSettings(): WebSettings? {
