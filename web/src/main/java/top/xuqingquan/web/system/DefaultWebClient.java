@@ -480,7 +480,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
         private Activity mActivity;
         private WebViewClient mClient;
         private boolean mWebClientHelper;
-        @SuppressWarnings({"unused", "FieldCanBeLocal"})
+        @SuppressWarnings({"unused", "FieldCanBeLocal", "RedundantSuppression"})
         private PermissionInterceptor mPermissionInterceptor;
         private WebView mWebView;
         private boolean mIsInterceptUnkownScheme;

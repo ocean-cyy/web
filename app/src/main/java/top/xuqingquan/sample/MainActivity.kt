@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
+import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
+import top.xuqingquan.web.nokernel.PermissionInterceptor
 import top.xuqingquan.web.sonic.SonicImpl
+import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://www.freebuf.com/articles/system/34571.html"
+    private val url = "http://www.meilizyz.com/"
 
     private lateinit var mSonicImpl: SonicImpl
     private lateinit var agentWeb: AgentWeb
@@ -24,6 +27,19 @@ class MainActivity : AppCompatActivity() {
             .with(this)
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
+            .setPermissionInterceptor(object : PermissionInterceptor {
+                override fun intercept(
+                    url: String?,
+                    permissions: Array<String>,
+                    action: String
+                ): Boolean {
+                    Timber.d("url===>$url")
+                    Timber.d("permissions===>$permissions")
+                    Timber.d("action===>$action")
+                    return false
+                }
+            })
+            .setWebView(AdblockWebView(this))
             .useMiddlewareWebClient(mSonicImpl.createSonicClientMiddleWare())
             .createAgentWeb()
             .ready()

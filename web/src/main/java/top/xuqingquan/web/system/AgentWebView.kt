@@ -16,8 +16,14 @@ import top.xuqingquan.web.R
 import top.xuqingquan.utils.Timber
 
 
-open class AgentWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LollipopFixedWebView(context, attrs) {
+open class AgentWebView : LollipopFixedWebView {
     private val mFixedOnReceivedTitle = FixedOnReceivedTitle()
+
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context, attrs, defStyleAttr
+    )
 
     init {
         id = R.id.scaffold_webview_id
@@ -58,7 +64,8 @@ open class AgentWebView @JvmOverloads constructor(context: Context, attrs: Attri
 
     }
 
-    class AgentWebClient internal constructor(private val mAgentWebView: AgentWebView) : MiddlewareWebClientBase() {
+    class AgentWebClient internal constructor(private val mAgentWebView: AgentWebView) :
+        MiddlewareWebClientBase() {
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
@@ -74,7 +81,8 @@ open class AgentWebView @JvmOverloads constructor(context: Context, attrs: Attri
 
     }
 
-    class AgentWebChrome internal constructor(private val mAgentWebView: AgentWebView) : MiddlewareWebChromeBase() {
+    class AgentWebChrome internal constructor(private val mAgentWebView: AgentWebView) :
+        MiddlewareWebChromeBase() {
 
         override fun onReceivedTitle(view: WebView, title: String) {
             this.mAgentWebView.mFixedOnReceivedTitle.onReceivedTitle()

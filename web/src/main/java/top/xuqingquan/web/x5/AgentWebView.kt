@@ -16,8 +16,14 @@ import top.xuqingquan.web.R
 import top.xuqingquan.utils.Timber
 
 
-open class AgentWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LollipopFixedWebView(context, attrs) {
+open class AgentWebView : LollipopFixedWebView {
     private val mFixedOnReceivedTitle = FixedOnReceivedTitle()
+
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context, attrs, defStyleAttr
+    )
 
     init {
         id = R.id.scaffold_webview_id
