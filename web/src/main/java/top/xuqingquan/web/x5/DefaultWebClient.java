@@ -388,7 +388,9 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     @Deprecated
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         Timber.i("onReceivedError：" + description + "  CODE:" + errorCode);
-        onMainFrameError(view, errorCode, description, failingUrl);
+        if (errorCode != -1) {
+            onMainFrameError(view, errorCode, description, failingUrl);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
