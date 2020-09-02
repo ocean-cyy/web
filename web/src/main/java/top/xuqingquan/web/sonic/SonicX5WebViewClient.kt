@@ -27,7 +27,7 @@ class SonicX5WebViewClient(private val sonicSession: SonicSession?) : Middleware
     }
 
     override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
-        if (sonicSession != null) {
+        if (sonicSession != null && sonicSession.sessionClient != null) {
             return sonicSession.sessionClient.requestResource(url) as? WebResourceResponse?
         }
         return super.shouldInterceptRequest(view, url)
