@@ -84,7 +84,7 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
         mWebSettings!!.databasePath = dir
         mWebSettings!!.setAppCachePath(dir)
         //缓存文件最大值
-        mWebSettings!!.setAppCacheMaxSize(java.lang.Long.MAX_VALUE)
+        mWebSettings!!.setAppCacheMaxSize(Long.MAX_VALUE)
         mWebSettings!!.userAgentString = getWebSettings()!!
             .userAgentString + USERAGENT_AGENTWEB + USERAGENT_UC
         Timber.i("UserAgentString : " + mWebSettings!!.userAgentString)
