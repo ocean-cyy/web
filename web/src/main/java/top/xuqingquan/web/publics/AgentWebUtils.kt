@@ -153,8 +153,7 @@ object AgentWebUtils {
         try {
             if (WebConfig.isTbsEnable()) {
                 clearWebViewAllCache(
-                    context,
-                    top.xuqingquan.web.x5.LollipopFixedWebView(context.applicationContext)
+                    context,X5WebView(context.applicationContext)
                 )
             } else {
                 clearWebViewAllCache(

@@ -16,7 +16,7 @@ import top.xuqingquan.web.R
 import top.xuqingquan.utils.Timber
 
 
-open class AgentWebView : LollipopFixedWebView {
+open class AgentWebView : WebView {
     private val mFixedOnReceivedTitle = FixedOnReceivedTitle()
 
     constructor(context: Context?) : super(context)

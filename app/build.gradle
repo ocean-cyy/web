@@ -73,7 +73,7 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espresso}"
     implementation project(path: ':web')
     implementation "top.xuqingquan:utils:2.2.7-support"
-    implementation 'com.tencent.sonic:sdk:3.1.0'
     implementation "com.download.library:Downloader:4.1.3"
     implementation 'org.adblockplus:adblock-android-settings:3.0'
+    implementation "com.tencent.tbs.tbssdk:sdk:43903"
 }

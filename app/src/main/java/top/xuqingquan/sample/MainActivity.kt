@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
+import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.sonic.SonicImpl
-import top.xuqingquan.web.system.AdblockWebView
+import top.xuqingquan.web.nokernel.WebConfig
+import top.xuqingquan.web.x5.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "http://www.meilizyz.com/"
+    private val url = "http://m.miguvideo.com/mgs/msite/prd/index.html"
 
-    private lateinit var mSonicImpl: SonicImpl
     private lateinit var agentWeb: AgentWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WebConfig.enableTbs()
+        WebConfig.resetTbsStatus()
         setContentView(R.layout.activity_main)
-        mSonicImpl = SonicImpl(url, this)
-        mSonicImpl.onCreateSession()
         agentWeb = AgentWeb
             .with(this)
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
@@ -40,12 +40,11 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             .setWebView(AdblockWebView(this))
-            .useMiddlewareWebClient(mSonicImpl.createSonicClientMiddleWare())
+            .setOpenOtherPageWays(OpenOtherPageWays.DISALLOW)
             .createAgentWeb()
             .ready()
             .get()
         agentWeb.urlLoader?.loadUrl(url)
-        mSonicImpl.bindAgentWeb(agentWeb)
     }
 
     override fun onPause() {
@@ -60,7 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         agentWeb.webLifeCycle.onDestroy()
-        mSonicImpl.destroy()
         super.onDestroy()
     }
 
