@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
@@ -56,7 +56,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${support}"
     //noinspection GradleCompatible
     compileOnly "com.android.support:design:${support}"
-    implementation "top.xuqingquan:utils:2.2.7-support"
+    implementation "top.xuqingquan:utils:2.2.8-support"
     //download（需要用到web下载的时候需要依赖）
     compileOnly "com.download.library:Downloader:4.1.3"
     compileOnly "com.tencent.tbs.tbssdk:sdk:43939"
