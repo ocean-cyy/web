@@ -6,11 +6,12 @@ import android.view.KeyEvent
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
+import top.xuqingquan.utils.bundleOf
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
 import top.xuqingquan.web.nokernel.WebConfig
-import top.xuqingquan.web.system.AdblockWebView
+import top.xuqingquan.web.x5.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WebConfig.disableTbs()
+        WebConfig.enableTbs()
 //        WebConfig.resetTbsStatus()
         setContentView(R.layout.activity_main)
         agentWeb = AgentWeb
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
             .ready()
             .get()
         agentWeb.urlLoader?.loadUrl(url)
+        agentWeb.x5WebCreator!!.getWebView()!!.x5WebViewExtension!!.invokeMiscMethod(
+            "setVideoParams", bundleOf(
+                "standardFullScreen" to true
+            )
+        )
     }
 
     override fun onPause() {

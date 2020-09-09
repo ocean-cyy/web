@@ -88,6 +88,7 @@ public class AdblockWebView extends AgentWebView {
     private boolean loading;
     private volatile boolean elementsHidden = false;
     private final Handler handler = new Handler();
+    private boolean isDebug;
 
     // used to prevent user see flickering for elements to hide
     // for some reason it's rendered even if element is hidden on 'dom ready' event
@@ -115,7 +116,7 @@ public class AdblockWebView extends AgentWebView {
      */
     @JavascriptInterface
     public void setAddDomListener(boolean value) {
-        Timber.d("addDomListener=" + value);
+        logd("addDomListener=" + value);
         this.addDomListener = value;
     }
 
@@ -149,13 +150,13 @@ public class AdblockWebView extends AgentWebView {
         return Utils
                 .readAssetAsString(getContext(), filename)
                 .replace(BRIDGE_TOKEN, BRIDGE)
-                .replace(DEBUG_TOKEN, (WebConfig.DEBUG ? "" : "//"));
+                .replace(DEBUG_TOKEN, (isDebug() ? "" : "//"));
     }
 
     private void runScript(String script) {
-        Timber.d("runScript started");
+        logd("runScript started");
         evaluateJavascript(script, null);
-        Timber.d("runScript finished");
+        logd("runScript finished");
     }
 
     public void setProvider(final AdblockEngineProvider provider) {
@@ -185,11 +186,11 @@ public class AdblockWebView extends AgentWebView {
 
         @Override
         public void onProgressChanged(@Nullable WebView view, int newProgress) {
-            Timber.d("Loading progress=" + newProgress + "%");
+            logd("Loading progress=" + newProgress + "%");
 
             // addDomListener is changed to 'false' in `setAddDomListener` invoked from injected JS
             if (getAddDomListener() && loadError == null && injectJs != null) {
-                Timber.d("Injecting script");
+                logd("Injecting script");
                 runScript(injectJs);
 
                 if (allowDraw && loading) {
@@ -199,7 +200,7 @@ public class AdblockWebView extends AgentWebView {
 
             // workaround for the issue: https://issues.adblockplus.org/ticket/5303
             if (newProgress == 100 && !allowDraw) {
-                Timber.w("Workaround for the issue #5303");
+                logw("Workaround for the issue #5303");
                 stopPreventDrawing();
             }
 
@@ -229,6 +230,14 @@ public class AdblockWebView extends AgentWebView {
         this.allowDrawDelay = allowDrawDelay;
     }
 
+    public boolean isDebug() {
+        return isDebug && WebConfig.DEBUG;
+    }
+
+    public void setDebug(boolean debug) {
+        isDebug = debug;
+    }
+
     @Override
     public void setWebViewClient(WebViewClient client) {
         extWebViewClient = client;
@@ -237,7 +246,7 @@ public class AdblockWebView extends AgentWebView {
     }
 
     private void clearReferrers() {
-        Timber.d("Clearing referrers");
+        logd("Clearing referrers");
         url2Referrer.clear();
     }
 
@@ -274,7 +283,7 @@ public class AdblockWebView extends AgentWebView {
 
         @Override
         public void onReceivedError(@Nullable WebView view, int errorCode, @Nullable String description, @Nullable String failingUrl) {
-            Timber.e("Load error:" +
+            loge("Load error:" +
                     " code=" + errorCode +
                     " with description=" + description +
                     " for url=" + failingUrl);
@@ -295,7 +304,7 @@ public class AdblockWebView extends AgentWebView {
             synchronized (provider.getEngineLock()) {
                 // if dispose() was invoke, but the page is still loading then just let it go
                 if (provider.getCounter() == 0) {
-                    Timber.e("FilterEngine already disposed, allow loading");
+                    loge("FilterEngine already disposed, allow loading");
 
                     // allow loading by returning null
                     return null;
@@ -305,7 +314,7 @@ public class AdblockWebView extends AgentWebView {
 
                 if (isMainFrame) {
                     // never blocking main frame requests, just subrequests
-                    Timber.w(url + " is main frame, allow loading");
+                    logw(url + " is main frame, allow loading");
 
                     // allow loading by returning null
                     return null;
@@ -313,14 +322,14 @@ public class AdblockWebView extends AgentWebView {
 
                 // whitelisted
                 if (provider.getEngine().isDomainWhitelisted(url, referrerChainArray)) {
-                    Timber.w(url + " domain is whitelisted, allow loading");
+                    logw(url + " domain is whitelisted, allow loading");
 
                     // allow loading by returning null
                     return null;
                 }
 
                 if (provider.getEngine().isDocumentWhitelisted(url, referrerChainArray)) {
-                    Timber.w(url + " document is whitelisted, allow loading");
+                    logw(url + " document is whitelisted, allow loading");
 
                     // allow loading by returning null
                     return null;
@@ -348,13 +357,13 @@ public class AdblockWebView extends AgentWebView {
 
                 // check if we should block
                 if (provider.getEngine().matches(url, contentType, referrerChainArray)) {
-                    Timber.w("Blocked loading " + url);
+                    logw("Blocked loading " + url);
 
                     // if we should block, return empty response which results in 'errorLoading' callback
                     return new WebResourceResponse("text/plain", "UTF-8", null);
                 }
 
-                Timber.d("Allowed loading " + url);
+                logd("Allowed loading " + url);
 
                 // continue by returning null
                 return null;
@@ -384,7 +393,7 @@ public class AdblockWebView extends AgentWebView {
             String[] referrers;
 
             if (referrer != null) {
-                Timber.d("Header referrer for " + url + " is " + referrer);
+                logd("Header referrer for " + url + " is " + referrer);
                 url2Referrer.put(url, referrer);
 
                 referrers = new String[]
@@ -392,7 +401,7 @@ public class AdblockWebView extends AgentWebView {
                                 referrer
                         };
             } else {
-                Timber.w("No referrer header for " + url);
+                logw("No referrer header for " + url);
                 referrers = EMPTY_ARRAY;
             }
 
@@ -429,7 +438,7 @@ public class AdblockWebView extends AgentWebView {
             synchronized (provider.getEngineLock()) {
                 try {
                     if (provider.getCounter() == 0) {
-                        Timber.w("FilterEngine already disposed");
+                        logw("FilterEngine already disposed");
                         selectorsString = EMPTY_ELEMHIDE_ARRAY_STRING;
                     } else {
                         provider.waitForReady();
@@ -444,10 +453,10 @@ public class AdblockWebView extends AgentWebView {
                                 .getListedSubscriptions();
 
                         try {
-                            Timber.d("Listed subscriptions: " + subscriptions.size());
-                            if (WebConfig.DEBUG) {
+                            logd("Listed subscriptions: " + subscriptions.size());
+                            if (isDebug()) {
                                 for (Subscription eachSubscription : subscriptions) {
-                                    Timber.d("Subscribed to "
+                                    logd("Subscribed to "
                                             + (eachSubscription.isDisabled() ? "disabled" : "enabled")
                                             + " " + eachSubscription);
                                 }
@@ -460,21 +469,21 @@ public class AdblockWebView extends AgentWebView {
 
                         final String domain = provider.getEngine().getFilterEngine().getHostFromURL(url);
                         if (domain == null) {
-                            Timber.e("Failed to extract domain from " + url);
+                            loge("Failed to extract domain from " + url);
                             selectorsString = EMPTY_ELEMHIDE_ARRAY_STRING;
                         } else {
-                            Timber.d("Requesting elemhide selectors from AdblockEngine for " + url + " in " + this);
+                            logd("Requesting elemhide selectors from AdblockEngine for " + url + " in " + this);
                             List<String> selectors = provider
                                     .getEngine()
                                     .getElementHidingSelectors(url, domain, referrers);
 
-                            Timber.d("Finished requesting elemhide selectors, got " + selectors.size() + " in " + this);
+                            logd("Finished requesting elemhide selectors, got " + selectors.size() + " in " + this);
                             selectorsString = Utils.stringListToJsonArray(selectors);
                         }
                     }
                 } finally {
                     if (isCancelled.get()) {
-                        Timber.w("This thread is cancelled, exiting silently " + this);
+                        logw("This thread is cancelled, exiting silently " + this);
                     } else {
                         finish(selectorsString);
                     }
@@ -494,7 +503,7 @@ public class AdblockWebView extends AgentWebView {
         private void finish(String result) {
             isFinished.set(true);
             if (result != null) {
-                Timber.d("Setting elemhide string " + result.length() + " bytes");
+                logd("Setting elemhide string " + result.length() + " bytes");
             }
             elemHideSelectorsString = result;
             onFinished();
@@ -510,9 +519,9 @@ public class AdblockWebView extends AgentWebView {
         }
 
         public void cancel() {
-            Timber.w("Cancelling elemhide thread " + this);
+            logw("Cancelling elemhide thread " + this);
             if (isFinished.get()) {
-                Timber.w("This thread is finished, exiting silently " + this);
+                logw("This thread is finished, exiting silently " + this);
             } else {
                 isCancelled.set(true);
                 finish(EMPTY_ELEMHIDE_ARRAY_STRING);
@@ -524,7 +533,7 @@ public class AdblockWebView extends AgentWebView {
         @Override
         public void run() {
             synchronized (elemHideThreadLockObject) {
-                Timber.w("elemHideThread set to null");
+                logw("elemHideThread set to null");
                 elemHideThread = null;
             }
         }
@@ -541,12 +550,12 @@ public class AdblockWebView extends AgentWebView {
         // Thus AdblockWebView is using SingleInstanceEngineProvider instance
         if (provider == null) {
             setProvider(new SingleInstanceEngineProvider(
-                    getContext(), AdblockEngine.BASE_PATH_DIRECTORY, WebConfig.DEBUG));
+                    getContext(), AdblockEngine.BASE_PATH_DIRECTORY, isDebug()));
         }
     }
 
     private void startAbpLoading(String newUrl) {
-        Timber.d("Start loading " + newUrl);
+        logd("Start loading " + newUrl);
 
         loading = true;
         addDomListener = true;
@@ -572,7 +581,7 @@ public class AdblockWebView extends AgentWebView {
                 injectJs = readScriptFile("inject.js").replace(HIDE_TOKEN, readScriptFile("css.js"));
             }
         } catch (IOException e) {
-            Timber.e("Failed to read script", e);
+            loge("Failed to read script", e);
         }
     }
 
@@ -657,7 +666,7 @@ public class AdblockWebView extends AgentWebView {
     }
 
     private void stopAbpLoading() {
-        Timber.d("Stop abp loading");
+        logd("Stop abp loading");
 
         loading = false;
         stopPreventDrawing();
@@ -683,7 +692,7 @@ public class AdblockWebView extends AgentWebView {
 //     the user can see element visible even though it was hidden on dom event
 
             if (allowDrawDelay > 0) {
-                Timber.d("Scheduled 'allow drawing' invocation in " + allowDrawDelay + " ms");
+                logd("Scheduled 'allow drawing' invocation in " + allowDrawDelay + " ms");
             }
             handler.postDelayed(allowDrawRunnable, allowDrawDelay);
         }
@@ -706,7 +715,7 @@ public class AdblockWebView extends AgentWebView {
         if (allowDraw) {
             super.onDraw(canvas);
         } else {
-            Timber.w("Prevent drawing");
+            logw("Prevent drawing");
             drawEmptyPage(canvas);
         }
     }
@@ -717,13 +726,13 @@ public class AdblockWebView extends AgentWebView {
     }
 
     protected void startPreventDrawing() {
-        Timber.w("Start prevent drawing");
+        logw("Start prevent drawing");
 
         allowDraw = false;
     }
 
     protected void stopPreventDrawing() {
-        Timber.d("Stop prevent drawing, invalidating");
+        logd("Stop prevent drawing, invalidating");
 
         allowDraw = true;
         invalidate();
@@ -744,22 +753,22 @@ public class AdblockWebView extends AgentWebView {
         } else {
             try {
                 // elemhide selectors list getting is started in startAbpLoad() in background thread
-                Timber.d("Waiting for elemhide selectors to be ready");
+                logd("Waiting for elemhide selectors to be ready");
                 elemHideLatch.await();
-                Timber.d("Elemhide selectors ready, " + elemHideSelectorsString.length() + " bytes");
+                logd("Elemhide selectors ready, " + elemHideSelectorsString.length() + " bytes");
 
                 clearReferrers();
 
                 return elemHideSelectorsString;
             } catch (InterruptedException e) {
-                Timber.w("Interrupted, returning empty selectors list");
+                logw("Interrupted, returning empty selectors list");
                 return EMPTY_ELEMHIDE_ARRAY_STRING;
             }
         }
     }
 
     private void doDispose() {
-        Timber.w("Disposing AdblockEngine");
+        logw("Disposing AdblockEngine");
         provider.release();
     }
 
@@ -788,10 +797,10 @@ public class AdblockWebView extends AgentWebView {
      * @param disposeFinished runnable to run when AdblockWebView is disposed
      */
     public void dispose(final Runnable disposeFinished) {
-        Timber.d("Dispose invoked");
+        logd("Dispose invoked");
 
         if (provider == null) {
-            Timber.d("No internal AdblockEngineProvider created");
+            logd("No internal AdblockEngineProvider created");
             return;
         }
 
@@ -800,11 +809,36 @@ public class AdblockWebView extends AgentWebView {
         AdblockWebView.DisposeRunnable disposeRunnable = new AdblockWebView.DisposeRunnable(disposeFinished);
         synchronized (elemHideThreadLockObject) {
             if (elemHideThread != null) {
-                Timber.w("Busy with elemhide selectors, delayed disposing scheduled");
+                logw("Busy with elemhide selectors, delayed disposing scheduled");
                 elemHideThread.setFinishedRunnable(disposeRunnable);
             } else {
                 disposeRunnable.run();
             }
         }
     }
+
+    public void logd(String msg) {
+        if (isDebug()) {
+            Timber.d(msg);
+        }
+    }
+
+    public void logw(String msg) {
+        if (isDebug()) {
+            Timber.w(msg);
+        }
+    }
+
+    public void loge(String msg) {
+        if (isDebug()) {
+            Timber.e(msg);
+        }
+    }
+
+    public void loge(String msg, Throwable t) {
+        if (isDebug()) {
+            Timber.e(msg, t);
+        }
+    }
+
 }
