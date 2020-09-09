@@ -560,7 +560,7 @@ public final class AgentWeb {
         top.xuqingquan.web.x5.DefaultChromeClient mDefaultChromeClient =
                 new top.xuqingquan.web.x5.DefaultChromeClient(this.mActivity,
                         this.mIndicatorController,
-                        mX5WebChromeClient,
+                        mX5WebChromeClient, this.mIVideo,
                         this.mPermissionInterceptor, getX5WebCreator().getWebView());
         Timber.i("WebChromeClient:" + this.mX5WebChromeClient);
         top.xuqingquan.web.x5.MiddlewareWebChromeBase header = this.mX5MiddlewareWebChromeBaseHeader;

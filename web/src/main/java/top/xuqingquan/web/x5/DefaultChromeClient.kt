@@ -4,10 +4,8 @@ import android.app.Activity
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.RequiresApi
-import com.tencent.smtt.export.external.interfaces.ConsoleMessage
-import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
-import com.tencent.smtt.export.external.interfaces.JsPromptResult
-import com.tencent.smtt.export.external.interfaces.JsResult
+import android.view.View
+import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebStorage
@@ -21,6 +19,7 @@ import top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION
 import top.xuqingquan.web.nokernel.AgentWebPermissions
 import top.xuqingquan.web.nokernel.PermissionInterceptor
 import top.xuqingquan.web.publics.AgentWebUtils
+import top.xuqingquan.web.publics.IVideo
 import top.xuqingquan.web.publics.IndicatorController
 import java.lang.ref.WeakReference
 
@@ -32,6 +31,10 @@ class DefaultChromeClient(
      */
     private val mIndicatorController: IndicatorController?,
     chromeClient: WebChromeClient?,
+    /**
+     * Video 处理类
+     */
+    private val mIVideo: IVideo?,
     /**
      * PermissionInterceptor 权限拦截器
      */
@@ -220,6 +223,14 @@ class DefaultChromeClient(
     override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
         super.onConsoleMessage(consoleMessage)
         return true
+    }
+
+    override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+        mIVideo?.onShowCustomView(view, callback)
+    }
+
+    override fun onHideCustomView() {
+        mIVideo?.onHideCustomView()
     }
 
     companion object {

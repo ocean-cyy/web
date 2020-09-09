@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.FrameLayout
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import top.xuqingquan.web.nokernel.EventInterceptor
 
 class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventInterceptor {
@@ -17,13 +18,23 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
     private var mActivity: Activity? = mActivity
     private var mWebView: WebView? = webView
     private var mFlags = mutableSetOf<Pair<Int, Int>>()
-    private var mMoiveView: View? = null
-    private var mMoiveParentView: ViewGroup? = null
+    private var mMovieView: View? = null
+    private var mMovieParentView: ViewGroup? = null
     private var mCallback: WebChromeClient.CustomViewCallback? = null
+    private var mX5Callback: IX5WebChromeClient.CustomViewCallback? = null
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onShowCustomView(
-        view: View?, callback: WebChromeClient.CustomViewCallback?
+    override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+        onShowCustomView(view, null, callback)
+    }
+
+    override fun onShowCustomView(view: View?, callback: WebChromeClient.CustomViewCallback?) {
+        onShowCustomView(view, callback, null)
+    }
+
+    private fun onShowCustomView(
+        view: View?,
+        callback: WebChromeClient.CustomViewCallback?,
+        x5Callback: IX5WebChromeClient.CustomViewCallback?
     ) {
         val mActivity = this.mActivity
         if (mActivity == null || mActivity.isFinishing || mActivity.isDestroyed) {
@@ -49,26 +60,28 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
             )
             mFlags.add(mPair)
         }
-        if (mMoiveView != null) {
+        if (mMovieView != null) {
             callback?.onCustomViewHidden()
+            x5Callback?.onCustomViewHidden()
             return
         }
         mWebView?.visibility = View.GONE
-        if (mMoiveParentView == null) {
+        if (mMovieParentView == null) {
             val mDecorView = mActivity.window.decorView as FrameLayout
-            mMoiveParentView = FrameLayout(mActivity)
-            mMoiveParentView!!.setBackgroundColor(Color.BLACK)
-            mDecorView.addView(mMoiveParentView)
+            mMovieParentView = FrameLayout(mActivity)
+            mMovieParentView!!.setBackgroundColor(Color.BLACK)
+            mDecorView.addView(mMovieParentView)
         }
         this.mCallback = callback
-        this.mMoiveView = view
-        mMoiveParentView!!.addView(view)
-        mMoiveParentView!!.visibility = View.VISIBLE
+        this.mX5Callback = x5Callback
+        this.mMovieView = view
+        mMovieParentView!!.addView(view)
+        mMovieParentView!!.visibility = View.VISIBLE
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onHideCustomView() {
-        if (mMoiveView == null) {
+        if (mMovieView == null) {
             return
         }
         if (mActivity != null && mActivity!!.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
@@ -83,18 +96,19 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
             }
             mFlags.clear()
         }
-        mMoiveView!!.visibility = View.GONE
-        if (mMoiveParentView != null && mMoiveView != null) {
-            mMoiveParentView!!.removeView(mMoiveView)
+        mMovieView!!.visibility = View.GONE
+        if (mMovieParentView != null && mMovieView != null) {
+            mMovieParentView!!.removeView(mMovieView)
 
         }
-        mMoiveParentView?.visibility = View.GONE
-        this.mMoiveView = null
+        mMovieParentView?.visibility = View.GONE
+        this.mMovieView = null
         mCallback?.onCustomViewHidden()
+        mX5Callback?.onCustomViewHidden()
         mWebView?.visibility = View.VISIBLE
     }
 
-    override fun isVideoState() = mMoiveView != null
+    override fun isVideoState() = mMovieView != null
 
     override fun event(): Boolean {
         return if (isVideoState()) {
