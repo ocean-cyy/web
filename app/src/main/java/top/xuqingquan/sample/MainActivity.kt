@@ -10,18 +10,18 @@ import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
 import top.xuqingquan.web.nokernel.WebConfig
-import top.xuqingquan.web.x5.AdblockWebView
+import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "http://m.miguvideo.com/mgs/msite/prd/index.html"
+    private val url = "http://m.ixigua.com/"
 
     private lateinit var agentWeb: AgentWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WebConfig.enableTbs()
-        WebConfig.resetTbsStatus()
+        WebConfig.disableTbs()
+//        WebConfig.resetTbsStatus()
         setContentView(R.layout.activity_main)
         agentWeb = AgentWeb
             .with(this)

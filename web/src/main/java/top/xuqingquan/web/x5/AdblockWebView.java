@@ -36,7 +36,6 @@ import java.util.regex.Pattern;
 
 import top.xuqingquan.utils.Timber;
 import top.xuqingquan.web.nokernel.WebConfig;
-import top.xuqingquan.web.x5.MiddlewareWebChromeBase;
 
 /**
  * Created by 许清泉 on 2020/8/29 23:41
@@ -77,7 +76,8 @@ public class AdblockWebView extends AgentWebView {
     private int allowDrawDelay = ALLOW_DRAW_DELAY;
     private WebChromeClient extWebChromeClient;
     private WebViewClient extWebViewClient;
-    private WebViewClient intWebViewClient;
+    private AdblockWebViewClient intWebViewClient;
+    private AdblockWebChromeClient intWebChromeClient;
     private Map<String, String> url2Referrer = Collections.synchronizedMap(new HashMap<>());
     private String url;
     private String injectJs;
@@ -141,6 +141,7 @@ public class AdblockWebView extends AgentWebView {
     @Override
     public void setWebChromeClient(WebChromeClient client) {
         extWebChromeClient = client;
+        intWebChromeClient.setDelegate(client);
         applyAdblockEnabled();
     }
 
@@ -180,7 +181,7 @@ public class AdblockWebView extends AgentWebView {
         }
     }
 
-    private WebChromeClient intWebChromeClient = new MiddlewareWebChromeBase() {
+    private class AdblockWebChromeClient extends MiddlewareWebChromeBase {
 
         @Override
         public void onProgressChanged(@Nullable WebView view, int newProgress) {
@@ -208,7 +209,7 @@ public class AdblockWebView extends AgentWebView {
                 super.onProgressChanged(view, newProgress);
             }
         }
-    };
+    }
 
     public int getAllowDrawDelay() {
         return allowDrawDelay;
@@ -231,6 +232,7 @@ public class AdblockWebView extends AgentWebView {
     @Override
     public void setWebViewClient(WebViewClient client) {
         extWebViewClient = client;
+        intWebViewClient.setDelegate(client);
         applyAdblockEnabled();
     }
 
@@ -405,7 +407,8 @@ public class AdblockWebView extends AgentWebView {
     }
 
     private void initClients() {
-        intWebViewClient = new AdblockWebView.AdblockWebViewClient();
+        intWebViewClient = new AdblockWebViewClient();
+        intWebChromeClient = new AdblockWebChromeClient();
         applyAdblockEnabled();
     }
 
