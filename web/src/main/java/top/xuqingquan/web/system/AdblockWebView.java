@@ -178,7 +178,7 @@ public class AdblockWebView extends AgentWebView {
         }
     }
 
-    private WebChromeClient intWebChromeClient = new WebChromeClient() {
+    private WebChromeClient intWebChromeClient = new MiddlewareWebChromeBase() {
 
         @Override
         public void onProgressChanged(@Nullable WebView view, int newProgress) {

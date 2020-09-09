@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 import top.xuqingquan.utils.Timber;
 import top.xuqingquan.web.nokernel.WebConfig;
+import top.xuqingquan.web.x5.MiddlewareWebChromeBase;
 
 /**
  * Created by 许清泉 on 2020/8/29 23:41
@@ -179,7 +180,7 @@ public class AdblockWebView extends AgentWebView {
         }
     }
 
-    private WebChromeClient intWebChromeClient = new WebChromeClient() {
+    private WebChromeClient intWebChromeClient = new MiddlewareWebChromeBase() {
 
         @Override
         public void onProgressChanged(@Nullable WebView view, int newProgress) {
