@@ -13,12 +13,12 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     WebChromeClient() {
     open var delegate: WebChromeClient? = webChromeClient
 
-    override fun onProgressChanged(view: WebView, newProgress: Int) {
+    override fun onProgressChanged(view: WebView?, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
         this.delegate?.onProgressChanged(view, newProgress)
     }
 
-    override fun onReceivedTitle(view: WebView, title: String) {
+    override fun onReceivedTitle(view: WebView?, title: String?) {
         if (this.delegate != null) {
             this.delegate!!.onReceivedTitle(view, title)
             return
@@ -26,7 +26,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onReceivedTitle(view, title)
     }
 
-    override fun onReceivedIcon(view: WebView, icon: Bitmap) {
+    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
         if (this.delegate != null) {
             this.delegate!!.onReceivedIcon(view, icon)
             return
@@ -35,7 +35,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onReceivedTouchIconUrl(
-        view: WebView, url: String,
+        view: WebView?, url: String?,
         precomposed: Boolean
     ) {
         if (this.delegate != null) {
@@ -45,7 +45,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onReceivedTouchIconUrl(view, url, precomposed)
     }
 
-    override fun onShowCustomView(view: View, callback: CustomViewCallback) {
+    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
         if (this.delegate != null) {
             this.delegate!!.onShowCustomView(view, callback)
             return
@@ -53,10 +53,9 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onShowCustomView(view, callback)
     }
 
-    @Deprecated("")
     override fun onShowCustomView(
-        view: View, requestedOrientation: Int,
-        callback: CustomViewCallback
+        view: View?, requestedOrientation: Int,
+        callback: CustomViewCallback?
     ) {
         if (this.delegate != null) {
             this.delegate!!.onShowCustomView(view, requestedOrientation, callback)
@@ -75,8 +74,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onCreateWindow(
-        view: WebView, isDialog: Boolean,
-        isUserGesture: Boolean, resultMsg: Message
+        view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
@@ -85,7 +83,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         }
     }
 
-    override fun onRequestFocus(view: WebView) {
+    override fun onRequestFocus(view: WebView?) {
         if (this.delegate != null) {
             this.delegate!!.onRequestFocus(view)
             return
@@ -93,7 +91,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onRequestFocus(view)
     }
 
-    override fun onCloseWindow(window: WebView) {
+    override fun onCloseWindow(window: WebView?) {
         if (this.delegate != null) {
             this.delegate!!.onCloseWindow(window)
             return
@@ -102,8 +100,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onJsAlert(
-        view: WebView, url: String, message: String,
-        result: JsResult
+        view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onJsAlert(view, url, message, result)
@@ -113,8 +110,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onJsConfirm(
-        view: WebView, url: String, message: String,
-        result: JsResult
+        view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onJsConfirm(view, url, message, result)
@@ -124,8 +120,11 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onJsPrompt(
-        view: WebView, url: String, message: String,
-        defaultValue: String, result: JsPromptResult
+        view: WebView?,
+        url: String?,
+        message: String?,
+        defaultValue: String?,
+        result: JsPromptResult?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onJsPrompt(view, url, message, defaultValue, result)
@@ -135,8 +134,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onJsBeforeUnload(
-        view: WebView, url: String, message: String,
-        result: JsResult
+        view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onJsBeforeUnload(view, url, message, result)
@@ -145,11 +143,9 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         }
     }
 
-    @Deprecated("")
     override fun onExceededDatabaseQuota(
-        url: String, databaseIdentifier: String,
-        quota: Long, estimatedDatabaseSize: Long, totalQuota: Long,
-        quotaUpdater: WebStorage.QuotaUpdater
+        url: String?, databaseIdentifier: String?, quota: Long, estimatedDatabaseSize: Long,
+        totalQuota: Long, quotaUpdater: WebStorage.QuotaUpdater?
     ) {
         if (this.delegate != null) {
             this.delegate!!.onExceededDatabaseQuota(
@@ -160,13 +156,11 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onExceededDatabaseQuota(
             url, databaseIdentifier, quota, estimatedDatabaseSize, totalQuota, quotaUpdater
         )
-
     }
 
-    @Deprecated("")
     override fun onReachedMaxAppCacheSize(
         requiredStorage: Long, quota: Long,
-        quotaUpdater: WebStorage.QuotaUpdater
+        quotaUpdater: WebStorage.QuotaUpdater?
     ) {
         if (this.delegate != null) {
             this.delegate!!.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
@@ -176,8 +170,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     override fun onGeolocationPermissionsShowPrompt(
-        origin: String,
-        callback: GeolocationPermissions.Callback
+        origin: String?, callback: GeolocationPermissions.Callback?
     ) {
         if (this.delegate != null) {
             this.delegate!!.onGeolocationPermissionsShowPrompt(origin, callback)
@@ -197,7 +190,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    override fun onPermissionRequest(request: PermissionRequest) {
+    override fun onPermissionRequest(request: PermissionRequest?) {
         if (this.delegate != null) {
             this.delegate!!.onPermissionRequest(request)
             return
@@ -206,7 +199,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    override fun onPermissionRequestCanceled(request: PermissionRequest) {
+    override fun onPermissionRequestCanceled(request: PermissionRequest?) {
 
         if (this.delegate != null) {
             this.delegate!!.onPermissionRequestCanceled(request)
@@ -223,8 +216,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         }
     }
 
-    @Deprecated("")
-    override fun onConsoleMessage(message: String, lineNumber: Int, sourceID: String) {
+    override fun onConsoleMessage(message: String?, lineNumber: Int, sourceID: String?) {
         if (this.delegate != null) {
             this.delegate!!.onConsoleMessage(message, lineNumber, sourceID)
             return
@@ -232,7 +224,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onConsoleMessage(message, lineNumber, sourceID)
     }
 
-    override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onConsoleMessage(consoleMessage)
         } else {
@@ -256,7 +248,7 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         }
     }
 
-    override fun getVisitedHistory(callback: ValueCallback<Array<String>>) {
+    override fun getVisitedHistory(callback: ValueCallback<Array<String>>?) {
         if (this.delegate != null) {
             this.delegate!!.getVisitedHistory(callback)
             return
@@ -266,8 +258,8 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
-        webView: WebView, filePathCallback: ValueCallback<Array<Uri>>,
-        fileChooserParams: FileChooserParams
+        webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
+        fileChooserParams: FileChooserParams?
     ): Boolean {
         return if (this.delegate != null) {
             this.delegate!!.onShowFileChooser(webView, filePathCallback, fileChooserParams)

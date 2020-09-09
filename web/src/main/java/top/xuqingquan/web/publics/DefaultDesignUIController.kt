@@ -29,16 +29,19 @@ class DefaultDesignUIController : DefaultUIController() {
     private var mWebParentLayout: WebParentLayout? = null
     private var mLayoutInflater: LayoutInflater? = null
 
-    override fun onJsAlert(view: WebView, url: String, message: String) {
+    override fun onJsAlert(view: WebView?, url: String?, message: String?) {
         onJsAlertInternal(view, message)
     }
 
-    override fun onJsAlert(view: X5WebView, url: String, message: String) {
+    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
         onJsAlertInternal(view, message)
     }
 
-    private fun onJsAlertInternal(view: WebView, message: String) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing||this.mActivity!!.isDestroyed) {
+    private fun onJsAlertInternal(view: WebView?, message: String?) {
+        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
+            return
+        }
+        if (view == null || message.isNullOrEmpty()) {
             return
         }
         try {
@@ -57,8 +60,11 @@ class DefaultDesignUIController : DefaultUIController() {
 
     }
 
-    private fun onJsAlertInternal(view: X5WebView, message: String) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing||this.mActivity!!.isDestroyed) {
+    private fun onJsAlertInternal(view: X5WebView?, message: String?) {
+        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
+            return
+        }
+        if (view == null || message.isNullOrEmpty()) {
             return
         }
         try {
@@ -96,7 +102,7 @@ class DefaultDesignUIController : DefaultUIController() {
     }
 
     private fun showChooserInternal(url: String, ways: Array<String>, callback: Handler.Callback?) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing||this.mActivity!!.isDestroyed) {
+        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
             return
         }
         Timber.i("url:" + url + "  ways:" + ways[0])
@@ -116,7 +122,10 @@ class DefaultDesignUIController : DefaultUIController() {
         mBottomSheetDialog!!.show()
     }
 
-    private fun getAdapter(ways: Array<String>, callback: Handler.Callback?): RecyclerView.Adapter<*> {
+    private fun getAdapter(
+        ways: Array<String>,
+        callback: Handler.Callback?
+    ): RecyclerView.Adapter<*> {
         return object : RecyclerView.Adapter<BottomSheetHolder>() {
             override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): BottomSheetHolder {
                 return BottomSheetHolder(
@@ -131,7 +140,11 @@ class DefaultDesignUIController : DefaultUIController() {
             @SuppressLint("RecyclerView")
             override fun onBindViewHolder(bottomSheetHolder: BottomSheetHolder, i: Int) {
                 val outValue = TypedValue()
-                mActivity!!.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                mActivity!!.theme.resolveAttribute(
+                    android.R.attr.selectableItemBackground,
+                    outValue,
+                    true
+                )
                 bottomSheetHolder.mTextView.setBackgroundResource(outValue.resourceId)
                 bottomSheetHolder.mTextView.text = ways[i]
                 bottomSheetHolder.mTextView.setOnClickListener {
@@ -151,7 +164,7 @@ class DefaultDesignUIController : DefaultUIController() {
     }
 
     private class BottomSheetHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal var mTextView: TextView = itemView.findViewById(android.R.id.text1)
+        var mTextView: TextView = itemView.findViewById(android.R.id.text1)
     }
 
     override fun bindSupportWebParent(webParentLayout: WebParentLayout, activity: Activity) {
@@ -162,7 +175,7 @@ class DefaultDesignUIController : DefaultUIController() {
     }
 
     override fun onShowMessage(message: String, intent: String) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing||this.mActivity!!.isDestroyed) {
+        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
             return
         }
         if (!TextUtils.isEmpty(intent) && intent.contains("performDownload")) {

@@ -6,9 +6,9 @@ import com.tencent.smtt.sdk.WebView as X5WebView
 
 interface IndicatorController {
 
-    fun progress(v: WebView, newProgress: Int)
+    fun progress(v: WebView?, newProgress: Int)
 
-    fun progress(v: X5WebView, newProgress: Int)
+    fun progress(v: X5WebView?, newProgress: Int)
 
     fun offerIndicator(): BaseIndicatorSpec?
 

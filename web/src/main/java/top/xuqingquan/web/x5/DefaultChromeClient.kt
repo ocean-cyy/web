@@ -4,20 +4,25 @@ import android.app.Activity
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.RequiresApi
-import com.tencent.smtt.export.external.interfaces.*
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
+import com.tencent.smtt.export.external.interfaces.JsPromptResult
+import com.tencent.smtt.export.external.interfaces.JsResult
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebStorage
 import com.tencent.smtt.sdk.WebView
-import top.xuqingquan.web.nokernel.*
-import top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION
-import top.xuqingquan.web.publics.AgentWebUtils
-import top.xuqingquan.web.publics.IndicatorController
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getDeniedPermissions
 import top.xuqingquan.utils.hasPermission
+import top.xuqingquan.web.nokernel.Action
+import top.xuqingquan.web.nokernel.ActionActivity
+import top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION
+import top.xuqingquan.web.nokernel.AgentWebPermissions
+import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.publics.AgentWebUtils
+import top.xuqingquan.web.publics.IndicatorController
 import java.lang.ref.WeakReference
-import java.util.*
 
 @Suppress("DEPRECATION", "OverridingDeprecatedMember")
 class DefaultChromeClient(
@@ -40,18 +45,22 @@ class DefaultChromeClient(
      * Activity
      */
     private val mActivityWeakReference = WeakReference(activity)
+
     /**
      * 包装Flag
      */
     private val mIsWrapper = chromeClient != null
+
     /**
      * Web端触发的定位 mOrigin
      */
     private var mOrigin: String? = null
+
     /**
      * Web 端触发的定位 Callback 回调成功，或者失败
      */
     private var mCallback: GeolocationPermissionsCallback? = null
+
     /**
      * AbsAgentWebUIController
      */
@@ -82,34 +91,37 @@ class DefaultChromeClient(
     }
 
 
-    override fun onProgressChanged(view: WebView, newProgress: Int) {
+    override fun onProgressChanged(view: WebView?, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
         mIndicatorController?.progress(view, newProgress)
     }
 
-    override fun onReceivedTitle(view: WebView, title: String) {
+    override fun onReceivedTitle(view: WebView?, title: String?) {
         if (mIsWrapper) {
             super.onReceivedTitle(view, title)
         }
     }
 
-    override fun onJsAlert(view: WebView, url: String, message: String, result: JsResult): Boolean {
+    override fun onJsAlert(
+        view: WebView?,
+        url: String?,
+        message: String?,
+        result: JsResult?
+    ): Boolean {
         mAgentWebUIController.get()?.onJsAlert(view, url, message)
-        result.confirm()
+        result?.confirm()
         return true
     }
 
     //location
     override fun onGeolocationPermissionsShowPrompt(
-        origin: String,
-        callback: GeolocationPermissionsCallback
+        origin: String?, callback: GeolocationPermissionsCallback?
     ) {
         onGeolocationPermissionsShowPromptInternal(origin, callback)
     }
 
     private fun onGeolocationPermissionsShowPromptInternal(
-        origin: String,
-        callback: GeolocationPermissionsCallback
+        origin: String?, callback: GeolocationPermissionsCallback?
     ) {
         if (mPermissionInterceptor != null) {
             if (mPermissionInterceptor.intercept(
@@ -118,19 +130,19 @@ class DefaultChromeClient(
                     "location"
                 )
             ) {
-                callback.invoke(origin, false, false)
+                callback?.invoke(origin, false, false)
                 return
             }
         }
         val mActivity = mActivityWeakReference.get()
         if (mActivity == null) {
-            callback.invoke(origin, false, false)
+            callback?.invoke(origin, false, false)
             return
         }
         val deniedPermissions = getDeniedPermissions(mActivity, AgentWebPermissions.LOCATION)
         if (deniedPermissions.isNullOrEmpty()) {
             Timber.i("onGeolocationPermissionsShowPromptInternal:true")
-            callback.invoke(origin, true, false)
+            callback?.invoke(origin, true, false)
         } else {
             val mAction = Action.createPermissionsAction(deniedPermissions.toTypedArray())
             mAction.fromIntention = FROM_CODE_INTENTION_LOCATION
@@ -142,7 +154,11 @@ class DefaultChromeClient(
     }
 
     override fun onJsPrompt(
-        view: WebView, url: String, message: String, defaultValue: String, result: JsPromptResult
+        view: WebView?,
+        url: String?,
+        message: String?,
+        defaultValue: String?,
+        result: JsPromptResult?
     ): Boolean {
         try {
             this.mAgentWebUIController.get()
@@ -155,7 +171,7 @@ class DefaultChromeClient(
     }
 
     override fun onJsConfirm(
-        view: WebView, url: String, message: String, result: JsResult
+        view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
         mAgentWebUIController.get()?.onJsConfirm(view, url, message, result)
         return true
@@ -163,25 +179,25 @@ class DefaultChromeClient(
 
 
     override fun onExceededDatabaseQuota(
-        url: String, databaseIdentifier: String, quota: Long, estimatedDatabaseSize: Long,
-        totalQuota: Long, quotaUpdater: WebStorage.QuotaUpdater
+        url: String?, databaseIdentifier: String?, quota: Long, estimatedDatabaseSize: Long,
+        totalQuota: Long, quotaUpdater: WebStorage.QuotaUpdater?
     ) {
-        quotaUpdater.updateQuota(totalQuota * 2)
+        quotaUpdater?.updateQuota(totalQuota * 2)
     }
 
     override fun onReachedMaxAppCacheSize(
         requiredStorage: Long,
         quota: Long,
-        quotaUpdater: WebStorage.QuotaUpdater
+        quotaUpdater: WebStorage.QuotaUpdater?
     ) {
-        quotaUpdater.updateQuota(requiredStorage * 2)
+        quotaUpdater?.updateQuota(requiredStorage * 2)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
-        webView: WebView,
-        filePathCallback: ValueCallback<Array<Uri>>,
-        fileChooserParams: FileChooserParams
+        webView: WebView?,
+        filePathCallback: ValueCallback<Array<Uri>>?,
+        fileChooserParams: FileChooserParams?
     ): Boolean {
         Timber.i("openFileChooser>=5.0")
         return openFileChooserAboveL(filePathCallback, fileChooserParams)
@@ -189,10 +205,9 @@ class DefaultChromeClient(
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private fun openFileChooserAboveL(
-        valueCallbacks: ValueCallback<Array<Uri>>,
-        fileChooserParams: FileChooserParams
+        valueCallbacks: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?
     ): Boolean {
-        Timber.i("fileChooserParams:${fileChooserParams.acceptTypes}  getTitle:${fileChooserParams.title} accept:${fileChooserParams.acceptTypes} length:${fileChooserParams.acceptTypes.size}  isCaptureEnabled:${fileChooserParams.isCaptureEnabled}  ${fileChooserParams.filenameHint}  intent:${fileChooserParams.createIntent()}    mode:${fileChooserParams.mode}")
+        Timber.i("fileChooserParams:${fileChooserParams?.acceptTypes}  getTitle:${fileChooserParams?.title} accept:${fileChooserParams?.acceptTypes} length:${fileChooserParams?.acceptTypes?.size}  isCaptureEnabled:${fileChooserParams?.isCaptureEnabled}  ${fileChooserParams?.filenameHint}  intent:${fileChooserParams?.createIntent()}    mode:${fileChooserParams?.mode}")
         val mActivity = this.mActivityWeakReference.get()
         return if (mActivity == null || mActivity.isFinishing) {
             false
@@ -202,7 +217,7 @@ class DefaultChromeClient(
         )
     }
 
-    override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
         super.onConsoleMessage(consoleMessage)
         return true
     }
@@ -212,6 +227,7 @@ class DefaultChromeClient(
          * 标志位
          */
         private const val FROM_CODE_INTENTION = 0x18
+
         /**
          * 标识当前是获取定位权限
          */

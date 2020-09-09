@@ -30,11 +30,17 @@ open class DefaultUIController : AbsAgentWebUIController() {
     private var mWebParentLayout: WebParentLayout? = null
     private var mProgressDialog: ProgressDialog? = null
 
-    override fun onJsAlert(view: WebView, url: String, message: String) {
+    override fun onJsAlert(view: WebView?, url: String?, message: String?) {
+        if (view == null || message.isNullOrEmpty()) {
+            return
+        }
         WebUtils.toastShowShort(view.context.applicationContext, message)
     }
 
-    override fun onJsAlert(view: X5WebView, url: String, message: String) {
+    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
+        if (view == null || message.isNullOrEmpty()) {
+            return
+        }
         WebUtils.toastShowShort(view.context.applicationContext, message)
     }
 
@@ -69,13 +75,13 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     override fun onJsConfirm(
-        view: WebView, url: String, message: String, jsResult: JsResult
+        view: WebView?, url: String?, message: String?, jsResult: JsResult?
     ) {
         onJsConfirmInternal(message, jsResult)
     }
 
     override fun onJsConfirm(
-        view: X5WebView, url: String, message: String, jsResult: X5JsResult
+        view: X5WebView?, url: String?, message: String?, jsResult: X5JsResult?
     ) {
         onJsConfirmInternal(message, jsResult)
     }
@@ -149,7 +155,7 @@ open class DefaultUIController : AbsAgentWebUIController() {
             }.create().show()
     }
 
-    private fun onJsConfirmInternal(message: String, jsResult: JsResult) {
+    private fun onJsConfirmInternal(message: String?, jsResult: JsResult?) {
         if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
             toCancelJsresult(jsResult)
             return
@@ -174,7 +180,7 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     private fun onJsConfirmInternal(
-        message: String, jsResult: X5JsResult
+        message: String?, jsResult: X5JsResult?
     ) {
         if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
             toCancelJsresult(jsResult)
@@ -200,10 +206,10 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     private fun onJsPromptInternal(
-        message: String, defaultValue: String, jsPromptResult: JsPromptResult
+        message: String?, defaultValue: String?, jsPromptResult: JsPromptResult?
     ) {
         if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
-            jsPromptResult.cancel()
+            jsPromptResult?.cancel()
             return
         }
         this.mJsPromptResult = jsPromptResult
@@ -228,10 +234,10 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     private fun onJsPromptInternal(
-        message: String, defaultValue: String, jsPromptResult: X5JsPromptResult
+        message: String?, defaultValue: String?, jsPromptResult: X5JsPromptResult?
     ) {
         if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
-            jsPromptResult.cancel()
+            jsPromptResult?.cancel()
             return
         }
         this.mX5JsPromptResult = jsPromptResult
@@ -256,15 +262,15 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     override fun onJsPrompt(
-        view: WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: JsPromptResult
+        view: WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: JsPromptResult?
     ) {
         onJsPromptInternal(message, defaultValue, jsPromptResult)
     }
 
     override fun onJsPrompt(
-        view: X5WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: X5JsPromptResult
+        view: X5WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: X5JsPromptResult?
     ) {
         onJsPromptInternal(message, defaultValue, jsPromptResult)
     }

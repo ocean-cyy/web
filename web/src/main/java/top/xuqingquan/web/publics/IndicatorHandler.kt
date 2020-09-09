@@ -8,11 +8,11 @@ import com.tencent.smtt.sdk.WebView as X5WebView
 class IndicatorHandler : IndicatorController {
     private var mBaseIndicatorSpec: BaseIndicatorSpec? = null
 
-    override fun progress(v: WebView, newProgress: Int) {
+    override fun progress(v: WebView?, newProgress: Int) {
         progress(newProgress)
     }
 
-    override fun progress(v: X5WebView, newProgress: Int) {
+    override fun progress(v: X5WebView?, newProgress: Int) {
         progress(newProgress)
     }
 

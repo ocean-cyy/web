@@ -23,8 +23,7 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onShowCustomView(
-        view: View,
-        callback: WebChromeClient.CustomViewCallback
+        view: View?, callback: WebChromeClient.CustomViewCallback?
     ) {
         val mActivity = this.mActivity
         if (mActivity == null || mActivity.isFinishing || mActivity.isDestroyed) {
@@ -51,7 +50,7 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
             mFlags.add(mPair)
         }
         if (mMoiveView != null) {
-            callback.onCustomViewHidden()
+            callback?.onCustomViewHidden()
             return
         }
         mWebView?.visibility = View.GONE
@@ -77,8 +76,9 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
         }
         if (mFlags.isNotEmpty()) {
             for (mPair in mFlags) {
+                @Suppress("SENSELESS_COMPARISON")
                 if (mPair.first != null && mPair.second != null) {
-                    mActivity?.window?.setFlags(mPair.second!!, mPair.first!!)
+                    mActivity?.window?.setFlags(mPair.second, mPair.first)
                 }
             }
             mFlags.clear()

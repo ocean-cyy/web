@@ -11,11 +11,11 @@ import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptR
 
 open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
 
-    override fun onJsAlert(view: WebView, url: String, message: String) {
+    override fun onJsAlert(view: WebView?, url: String?, message: String?) {
         getDelegate().onJsAlert(view, url, message)
     }
 
-    override fun onJsAlert(view: X5WebView, url: String, message: String) {
+    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
         getDelegate().onJsAlert(view, url, message)
     }
 
@@ -27,11 +27,11 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
         getDelegate().onOpenPagePrompt(view, url, callback)
     }
 
-    override fun onJsConfirm(view: WebView, url: String, message: String, jsResult: JsResult) {
+    override fun onJsConfirm(view: WebView?, url: String?, message: String?, jsResult: JsResult?) {
         getDelegate().onJsConfirm(view, url, message, jsResult)
     }
 
-    override fun onJsConfirm(view: X5WebView, url: String, message: String, jsResult: X5JsResult) {
+    override fun onJsConfirm(view: X5WebView?, url: String?, message: String?, jsResult: X5JsResult?) {
         getDelegate().onJsConfirm(view, url, message, jsResult)
     }
 
@@ -56,15 +56,15 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
     }
 
     override fun onJsPrompt(
-        view: WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: JsPromptResult
+        view: WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: JsPromptResult?
     ) {
         getDelegate().onJsPrompt(view, url, message, defaultValue, jsPromptResult)
     }
 
     override fun onJsPrompt(
-        view: X5WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: X5JsPromptResult
+        view: X5WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: X5JsPromptResult?
     ) {
         getDelegate().onJsPrompt(view, url, message, defaultValue, jsPromptResult)
     }

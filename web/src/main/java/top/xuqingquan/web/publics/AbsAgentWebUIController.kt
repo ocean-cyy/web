@@ -44,9 +44,9 @@ abstract class AbsAgentWebUIController {
      * @param url
      * @param message
      */
-    abstract fun onJsAlert(view: WebView, url: String, message: String)
+    abstract fun onJsAlert(view: WebView?, url: String?, message: String?)
 
-    abstract fun onJsAlert(view: X5WebView, url: String, message: String)
+    abstract fun onJsAlert(view: X5WebView?, url: String?, message: String?)
 
     /**
      * 咨询用户是否前往其他页面
@@ -67,9 +67,14 @@ abstract class AbsAgentWebUIController {
      * @param message
      * @param jsResult
      */
-    abstract fun onJsConfirm(view: WebView, url: String, message: String, jsResult: JsResult)
+    abstract fun onJsConfirm(view: WebView?, url: String?, message: String?, jsResult: JsResult?)
 
-    abstract fun onJsConfirm(view: X5WebView, url: String, message: String, jsResult: X5JsResult)
+    abstract fun onJsConfirm(
+        view: X5WebView?,
+        url: String?,
+        message: String?,
+        jsResult: X5JsResult?
+    )
 
     abstract fun onSelectItemsPrompt(
         view: WebView, url: String, ways: Array<String>, callback: Handler.Callback
@@ -97,13 +102,13 @@ abstract class AbsAgentWebUIController {
      * @param jsPromptResult
      */
     abstract fun onJsPrompt(
-        view: WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: JsPromptResult
+        view: WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: JsPromptResult?
     )
 
     abstract fun onJsPrompt(
-        view: X5WebView, url: String, message: String,
-        defaultValue: String, jsPromptResult: X5JsPromptResult
+        view: X5WebView?, url: String?, message: String?,
+        defaultValue: String?, jsPromptResult: X5JsPromptResult?
     )
 
     /**

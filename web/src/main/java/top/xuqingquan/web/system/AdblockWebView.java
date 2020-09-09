@@ -5,27 +5,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.View;
-import android.webkit.ConsoleMessage;
-import android.webkit.GeolocationPermissions;
-import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
-import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -192,212 +179,9 @@ public class AdblockWebView extends AgentWebView {
     }
 
     private WebChromeClient intWebChromeClient = new WebChromeClient() {
-        @Override
-        public void onReceivedTitle(WebView view, String title) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onReceivedTitle(view, title);
-            }
-        }
 
         @Override
-        public void onReceivedIcon(WebView view, Bitmap icon) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onReceivedIcon(view, icon);
-            }
-        }
-
-        @Override
-        public void onReceivedTouchIconUrl(WebView view, String url, boolean precomposed) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onReceivedTouchIconUrl(view, url, precomposed);
-            }
-        }
-
-        @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onShowCustomView(view, callback);
-            }
-        }
-
-        @Override
-        public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onShowCustomView(view, requestedOrientation, callback);
-            }
-        }
-
-        @Override
-        public void onHideCustomView() {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onHideCustomView();
-            }
-        }
-
-        @Override
-        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
-                                      Message resultMsg) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
-            } else {
-                return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
-            }
-        }
-
-        @Override
-        public void onRequestFocus(WebView view) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onRequestFocus(view);
-            }
-        }
-
-        @Override
-        public void onCloseWindow(WebView window) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onCloseWindow(window);
-            }
-        }
-
-        @Override
-        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onJsAlert(view, url, message, result);
-            } else {
-                return super.onJsAlert(view, url, message, result);
-            }
-        }
-
-        @Override
-        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onJsConfirm(view, url, message, result);
-            } else {
-                return super.onJsConfirm(view, url, message, result);
-            }
-        }
-
-        @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
-                                  JsPromptResult result) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onJsPrompt(view, url, message, defaultValue, result);
-            } else {
-                return super.onJsPrompt(view, url, message, defaultValue, result);
-            }
-        }
-
-        @Override
-        public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onJsBeforeUnload(view, url, message, result);
-            } else {
-                return super.onJsBeforeUnload(view, url, message, result);
-            }
-        }
-
-        @Override
-        public void onExceededDatabaseQuota(String url, String databaseIdentifier, long quota,
-                                            long estimatedDatabaseSize, long totalQuota,
-                                            WebStorage.QuotaUpdater quotaUpdater) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onExceededDatabaseQuota(url, databaseIdentifier, quota,
-                        estimatedDatabaseSize, totalQuota, quotaUpdater);
-            } else {
-                super.onExceededDatabaseQuota(url, databaseIdentifier, quota,
-                        estimatedDatabaseSize, totalQuota, quotaUpdater);
-            }
-        }
-
-        @Override
-        public void onReachedMaxAppCacheSize(long requiredStorage, long quota,
-                                             WebStorage.QuotaUpdater quotaUpdater) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater);
-            } else {
-                super.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater);
-            }
-        }
-
-        @Override
-        public void onGeolocationPermissionsShowPrompt(String origin,
-                                                       GeolocationPermissions.Callback callback) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
-            } else {
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-            }
-        }
-
-        @Override
-        public void onGeolocationPermissionsHidePrompt() {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onGeolocationPermissionsHidePrompt();
-            } else {
-                super.onGeolocationPermissionsHidePrompt();
-            }
-        }
-
-        @Override
-        public boolean onJsTimeout() {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onJsTimeout();
-            } else {
-                return super.onJsTimeout();
-            }
-        }
-
-        @Override
-        public void onConsoleMessage(String message, int lineNumber, String sourceID) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.onConsoleMessage(message, lineNumber, sourceID);
-            } else {
-                super.onConsoleMessage(message, lineNumber, sourceID);
-            }
-        }
-
-        @Override
-        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            Timber.d("JS: level=" + consoleMessage.messageLevel()
-                    + ", message=\"" + consoleMessage.message() + "\""
-                    + ", sourceId=\"" + consoleMessage.sourceId() + "\""
-                    + ", line=" + consoleMessage.lineNumber());
-
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onConsoleMessage(consoleMessage);
-            } else {
-                return super.onConsoleMessage(consoleMessage);
-            }
-        }
-
-        @Override
-        public Bitmap getDefaultVideoPoster() {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.getDefaultVideoPoster();
-            } else {
-                return super.getDefaultVideoPoster();
-            }
-        }
-
-        @Override
-        public View getVideoLoadingProgressView() {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.getVideoLoadingProgressView();
-            } else {
-                return super.getVideoLoadingProgressView();
-            }
-        }
-
-        @Override
-        public void getVisitedHistory(ValueCallback<String[]> callback) {
-            if (extWebChromeClient != null) {
-                extWebChromeClient.getVisitedHistory(callback);
-            } else {
-                super.getVisitedHistory(callback);
-            }
-        }
-
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
+        public void onProgressChanged(@Nullable WebView view, int newProgress) {
             Timber.d("Loading progress=" + newProgress + "%");
 
             // addDomListener is changed to 'false' in `setAddDomListener` invoked from injected JS
@@ -418,17 +202,8 @@ public class AdblockWebView extends AgentWebView {
 
             if (extWebChromeClient != null) {
                 extWebChromeClient.onProgressChanged(view, newProgress);
-            }
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                                         FileChooserParams fileChooserParams) {
-            if (extWebChromeClient != null) {
-                return extWebChromeClient.onShowFileChooser(webView, filePathCallback, fileChooserParams);
             } else {
-                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+                super.onProgressChanged(view, newProgress);
             }
         }
     };
@@ -467,17 +242,9 @@ public class AdblockWebView extends AgentWebView {
      * (has Referrer since it overrides `shouldInterceptRequest(..., request)` with referrer)
      */
     private class AdblockWebViewClient extends MiddlewareWebClientBase {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (extWebViewClient != null) {
-                return extWebViewClient.shouldOverrideUrlLoading(view, url);
-            } else {
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-        }
 
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        public void onPageStarted(@Nullable WebView view, @Nullable String url, @Nullable Bitmap favicon) {
             if (loading) {
                 stopAbpLoading();
             }
@@ -492,7 +259,7 @@ public class AdblockWebView extends AgentWebView {
         }
 
         @Override
-        public void onPageFinished(WebView view, String url) {
+        public void onPageFinished(@Nullable WebView view, @Nullable String url) {
             loading = false;
             if (extWebViewClient != null) {
                 extWebViewClient.onPageFinished(view, url);
@@ -502,25 +269,7 @@ public class AdblockWebView extends AgentWebView {
         }
 
         @Override
-        public void onLoadResource(WebView view, String url) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onLoadResource(view, url);
-            } else {
-                super.onLoadResource(view, url);
-            }
-        }
-
-        @Override
-        public void onTooManyRedirects(WebView view, Message cancelMsg, Message continueMsg) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onTooManyRedirects(view, cancelMsg, continueMsg);
-            } else {
-                super.onTooManyRedirects(view, cancelMsg, continueMsg);
-            }
-        }
-
-        @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        public void onReceivedError(@Nullable WebView view, int errorCode, @Nullable String description, @Nullable String failingUrl) {
             Timber.e("Load error:" +
                     " code=" + errorCode +
                     " with description=" + description +
@@ -533,78 +282,6 @@ public class AdblockWebView extends AgentWebView {
                 extWebViewClient.onReceivedError(view, errorCode, description, failingUrl);
             } else {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-            }
-        }
-
-        @Override
-        public void onFormResubmission(WebView view, Message dontResend, Message resend) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onFormResubmission(view, dontResend, resend);
-            } else {
-                super.onFormResubmission(view, dontResend, resend);
-            }
-        }
-
-        @Override
-        public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
-            if (extWebViewClient != null) {
-                extWebViewClient.doUpdateVisitedHistory(view, url, isReload);
-            } else {
-                super.doUpdateVisitedHistory(view, url, isReload);
-            }
-        }
-
-        @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onReceivedSslError(view, handler, error);
-            } else {
-                super.onReceivedSslError(view, handler, error);
-            }
-        }
-
-        @Override
-        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onReceivedHttpAuthRequest(view, handler, host, realm);
-            } else {
-                super.onReceivedHttpAuthRequest(view, handler, host, realm);
-            }
-        }
-
-        @Override
-        public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
-            if (extWebViewClient != null) {
-                return extWebViewClient.shouldOverrideKeyEvent(view, event);
-            } else {
-                return super.shouldOverrideKeyEvent(view, event);
-            }
-        }
-
-        @Override
-        public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onUnhandledKeyEvent(view, event);
-            } else {
-                super.onUnhandledKeyEvent(view, event);
-            }
-        }
-
-        @Override
-        public void onScaleChanged(WebView view, float oldScale, float newScale) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onScaleChanged(view, oldScale, newScale);
-            } else {
-                super.onScaleChanged(view, oldScale, newScale);
-            }
-        }
-
-        @Override
-        public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
-            if (extWebViewClient != null) {
-                extWebViewClient.onReceivedLoginRequest(view, realm, account, args);
-            } else {
-                super.onReceivedLoginRequest(view, realm, account, args);
             }
         }
 
@@ -682,7 +359,14 @@ public class AdblockWebView extends AgentWebView {
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        public WebResourceResponse shouldInterceptRequest(@Nullable WebView view, @Nullable WebResourceRequest request) {
+            if (view == null || request == null) {
+                if (extWebViewClient != null) {
+                    return extWebViewClient.shouldInterceptRequest(view, request);
+                } else {
+                    return super.shouldInterceptRequest(view, request);
+                }
+            }
             // here we just trying to fill url -> referrer map
             // blocking/allowing loading will happen in `shouldInterceptRequest(WebView,String)`
             String url = request.getUrl().toString();

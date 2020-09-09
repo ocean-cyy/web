@@ -82,7 +82,7 @@ open class AgentWebView : WebView {
 
     class AgentWebChrome internal constructor(private val mAgentWebView: AgentWebView) : MiddlewareWebChromeBase() {
 
-        override fun onReceivedTitle(view: WebView, title: String) {
+        override fun onReceivedTitle(view: WebView?, title: String?) {
             this.mAgentWebView.mFixedOnReceivedTitle.onReceivedTitle()
             super.onReceivedTitle(view, title)
         }

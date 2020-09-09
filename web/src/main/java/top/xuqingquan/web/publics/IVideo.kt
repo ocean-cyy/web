@@ -5,7 +5,7 @@ import android.webkit.WebChromeClient
 
 interface IVideo {
 
-    fun onShowCustomView(view: View, callback: WebChromeClient.CustomViewCallback)
+    fun onShowCustomView(view: View?, callback: WebChromeClient.CustomViewCallback?)
 
     fun onHideCustomView()
 

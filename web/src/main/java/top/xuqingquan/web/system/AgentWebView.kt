@@ -84,7 +84,7 @@ open class AgentWebView : LollipopFixedWebView {
     class AgentWebChrome internal constructor(private val mAgentWebView: AgentWebView) :
         MiddlewareWebChromeBase() {
 
-        override fun onReceivedTitle(view: WebView, title: String) {
+        override fun onReceivedTitle(view: WebView?, title: String?) {
             this.mAgentWebView.mFixedOnReceivedTitle.onReceivedTitle()
             super.onReceivedTitle(view, title)
         }
@@ -101,11 +101,11 @@ open class AgentWebView : LollipopFixedWebView {
             mWebChromeClient = webChromeClient
         }
 
-        internal fun onPageStarted() {
+        fun onPageStarted() {
             mIsOnReceivedTitle = false
         }
 
-        internal fun onPageFinished(view: WebView?) {
+        fun onPageFinished(view: WebView?) {
             if (!mIsOnReceivedTitle && mWebChromeClient != null) {
                 var list: WebBackForwardList? = null
                 try {
@@ -125,7 +125,7 @@ open class AgentWebView : LollipopFixedWebView {
             }
         }
 
-        internal fun onReceivedTitle() {
+        fun onReceivedTitle() {
             mIsOnReceivedTitle = true
         }
     }
