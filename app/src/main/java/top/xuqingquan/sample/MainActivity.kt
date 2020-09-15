@@ -6,23 +6,19 @@ import android.view.KeyEvent
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
-import top.xuqingquan.utils.bundleOf
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.nokernel.WebConfig
-import top.xuqingquan.web.x5.AdblockWebView
+import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "http://m.ixigua.com/"
+    private val url = "https://m.baidu.com/s?word=拍照识图"
 
     private lateinit var agentWeb: AgentWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WebConfig.enableTbs()
-//        WebConfig.resetTbsStatus()
         setContentView(R.layout.activity_main)
         agentWeb = AgentWeb
             .with(this)
@@ -46,11 +42,6 @@ class MainActivity : AppCompatActivity() {
             .ready()
             .get()
         agentWeb.urlLoader?.loadUrl(url)
-        agentWeb.x5WebCreator!!.getWebView()!!.x5WebViewExtension!!.invokeMiscMethod(
-            "setVideoParams", bundleOf(
-                "standardFullScreen" to true
-            )
-        )
     }
 
     override fun onPause() {

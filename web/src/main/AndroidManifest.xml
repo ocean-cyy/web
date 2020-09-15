@@ -30,16 +30,6 @@
             android:launchMode="standard"
             android:theme="@style/scaffold_actionActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
-        <!-- Android 7.0 之后用到FileProvider -->
-        <provider
-            android:name=".provider.ScaffoldWebFileProvider"
-            android:authorities="${applicationId}.ScaffoldWebFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/scaffold_filepaths" />
-        </provider>
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
             android:label="dexopt"

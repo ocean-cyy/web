@@ -15,12 +15,12 @@ import android.text.TextUtils
 import android.widget.Toast
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getMIMEType
+import top.xuqingquan.utils.getUriFromFile
 import top.xuqingquan.web.R
 import top.xuqingquan.web.nokernel.WebConfig.AGENTWEB_CACHE_PATCH
 import top.xuqingquan.web.nokernel.WebConfig.AGENTWEB_FILE_PATH
 import top.xuqingquan.web.nokernel.WebConfig.FILE_CACHE_PATH
 import top.xuqingquan.web.publics.WebParentLayout
-import top.xuqingquan.web.provider.ScaffoldWebFileProvider
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.Method
@@ -69,7 +69,10 @@ object WebUtils {
     @JvmStatic
     internal fun getDiskExternalCacheDir(context: Context): String? {
         val mFile = context.externalCacheDir
-        return if (mFile != null && Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(mFile)) {
+        return if (mFile != null && Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(
+                mFile
+            )
+        ) {
             mFile.absolutePath
         } else null
     }
@@ -182,7 +185,8 @@ object WebUtils {
         if (activity == null || activity.isFinishing) {
             return
         }
-        val mWebParentLayout = activity.findViewById<WebParentLayout>(R.id.scaffold_web_parent_layout_id)
+        val mWebParentLayout =
+            activity.findViewById<WebParentLayout>(R.id.scaffold_web_parent_layout_id)
         val mAgentWebUIController = mWebParentLayout.provide()
         mAgentWebUIController?.onShowMessage(message, from)
     }
@@ -214,14 +218,5 @@ object WebUtils {
             Timber.e(throwable)
         }
         return null
-    }
-
-    @JvmStatic
-    fun getUriFromFile(context: Context, file: File): Uri {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ScaffoldWebFileProvider.getUriForFile(context, context.packageName + ".ScaffoldWebFileProvider", file)
-        } else {
-            Uri.fromFile(file)
-        }
     }
 }
