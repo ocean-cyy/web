@@ -3,11 +3,8 @@ package top.xuqingquan.sample
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.webkit.WebChromeClient
-import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_start.*
-import org.adblockplus.libadblockplus.android.settings.AdblockHelper
-import top.xuqingquan.utils.Timber
+//import org.adblockplus.libadblockplus.android.settings.AdblockHelper
 
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

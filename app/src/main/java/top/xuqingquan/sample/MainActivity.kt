@@ -9,7 +9,6 @@ import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
                     return false
                 }
             })
-            .setWebView(AdblockWebView(this))
             .setOpenOtherPageWays(OpenOtherPageWays.DISALLOW)
             .createAgentWeb()
             .ready()

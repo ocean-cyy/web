@@ -193,20 +193,19 @@ public class FileChooser {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private Intent getFileChooserIntent() {
+        Intent mIntent = null;
         if (WebConfig.isTbsEnable()) {
             if (mIsAboveLollipop && x5FileChooserParams != null) {
-                Intent mIntent = x5FileChooserParams.createIntent();
-                if (mIntent != null) {
-                    return mIntent;
-                }
+                mIntent = x5FileChooserParams.createIntent();
             }
         } else {
             if (mIsAboveLollipop && sysFileChooserParams != null) {
-                Intent mIntent = sysFileChooserParams.createIntent();
-                if (mIntent != null) {
-                    return mIntent;
-                }
+                mIntent = sysFileChooserParams.createIntent();
             }
+        }
+        if (mIntent != null) {
+            mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            return mIntent;
         }
         Intent i = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -592,7 +591,12 @@ public class FileChooser {
      * length为0 ，导致前端 ，获取到的文件， 作预览的时候不正常 ，等待5S左右文件又正常了 ， 所以这里做了阻塞等待处理，
      */
     private void aboveLollipopCheckFilesAndCallback(final Uri[] datas, boolean isCamera) {
-        String[] paths = FileUtils.uriToPath(mActivity, datas);
+        String[] paths = null;
+        try {
+            paths = FileUtils.uriToPath(mActivity, datas);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
         if (WebConfig.isTbsEnable()) {
             if (x5UriValueCallbacks == null) {
                 return;
@@ -634,7 +638,6 @@ public class FileChooser {
         } else {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(new WaitPhotoRunnable(path, new AboveLCallback(sysUriValueCallbacks, datas, mAgentWebUIController)));
         }
-
     }
 
     private static final class AboveLCallback implements Handler.Callback {
