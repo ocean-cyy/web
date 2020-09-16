@@ -51,7 +51,7 @@ object AgentWebUtils {
             val mViewGroup = m.parent as ViewGroup?
             mViewGroup?.removeView(m)
             m.webChromeClient = null
-            m.webViewClient = null
+            //m.webViewClient = null
             m.tag = null
             m.clearHistory()
             m.destroy()

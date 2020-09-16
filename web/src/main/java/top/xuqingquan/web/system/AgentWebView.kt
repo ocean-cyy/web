@@ -29,7 +29,7 @@ open class AgentWebView : LollipopFixedWebView {
         id = R.id.scaffold_webview_id
     }
 
-    override fun setWebChromeClient(client: WebChromeClient) {
+    override fun setWebChromeClient(client: WebChromeClient?) {
         val mAgentWebChrome = AgentWebChrome(this)
         mAgentWebChrome.delegate = client
         mFixedOnReceivedTitle.setWebChromeClient(client)
@@ -97,7 +97,7 @@ open class AgentWebView : LollipopFixedWebView {
         private var mWebChromeClient: WebChromeClient? = null
         private var mIsOnReceivedTitle: Boolean = false
 
-        fun setWebChromeClient(webChromeClient: WebChromeClient) {
+        fun setWebChromeClient(webChromeClient: WebChromeClient?) {
             mWebChromeClient = webChromeClient
         }
 
