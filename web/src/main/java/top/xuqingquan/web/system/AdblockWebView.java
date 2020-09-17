@@ -360,7 +360,7 @@ public class AdblockWebView extends AgentWebView {
                 if (provider.getEngine().matches(url, contentType, referrerChainArray)) {
                     logw("Blocked loading " + url);
                     if (adblockCallback != null) {
-                        adblockCallback.addBlockCount();
+                        adblockCallback.addBlockCount(url);
                     }
                     // if we should block, return empty response which results in 'errorLoading' callback
                     return new WebResourceResponse("text/plain", "UTF-8", null);

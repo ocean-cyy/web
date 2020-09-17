@@ -8,7 +8,7 @@ interface AdblockCallback {
     /**
      * 增加一条拦截记录
      */
-    fun addBlockCount()
+    fun addBlockCount(url: String)
 
 
 }
