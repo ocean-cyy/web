@@ -401,10 +401,7 @@ public class AdblockWebView extends AgentWebView {
                 logd("Header referrer for " + url + " is " + referrer);
                 url2Referrer.put(url, referrer);
 
-                referrers = new String[]
-                        {
-                                referrer
-                        };
+                referrers = new String[]{referrer};
             } else {
                 logw("No referrer header for " + url);
                 referrers = EMPTY_ARRAY;
