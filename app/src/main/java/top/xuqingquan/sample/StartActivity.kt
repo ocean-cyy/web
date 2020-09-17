@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_start.*
+import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.web.publics.AgentWebConfig
 
@@ -16,6 +17,10 @@ class StartActivity : AppCompatActivity() {
         AgentWebConfig.removeAllCookies(null)
         AgentWebConfig.removeAllX5Cookies(null)
         btn.setOnClickListener {
+            Timber.d("status=>${WebConfig.isTbsEnable()}")
+            WebConfig.resetTbsStatus()
+            WebConfig.enableTbs()
+            Timber.d("status=>${WebConfig.isTbsEnable()}")
             startActivity(Intent(this, MainActivity::class.java))
         }
 //        test.setOnClickListener {

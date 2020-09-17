@@ -10,14 +10,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
-import top.xuqingquan.utils.toast
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.publics.AbsAgentWebUIController
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://m.baidu.com/s?word=拍照识图"
+    private val url = "https://m.baidu.com/"
 
     private lateinit var agentWeb: AgentWeb
 
@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             .setOpenOtherPageWays(OpenOtherPageWays.DISALLOW)
-            .setWebViewClient(object :WebViewClient(){
+            .setWebViewClient(object : WebViewClient() {
                 override fun onReceivedError(
-                    view: WebView?,request: WebResourceRequest?,error: WebResourceError?
+                    view: WebView?, request: WebResourceRequest?, error: WebResourceError?
                 ) {
-                    super.onReceivedError(view, request, error)
                     Timber.d("onReceivedError-system-m")
+                    super.onReceivedError(view, request, error)
                 }
 
                 override fun onReceivedError(
@@ -55,29 +55,28 @@ class MainActivity : AppCompatActivity() {
                     description: String?,
                     failingUrl: String?
                 ) {
-                    super.onReceivedError(view, errorCode, description, failingUrl)
                     Timber.d("onReceivedError-system")
+                    super.onReceivedError(view, errorCode, description, failingUrl)
                 }
             })
-            .setWebViewClient(object :com.tencent.smtt.sdk.WebViewClient(){
+            .setWebViewClient(object : com.tencent.smtt.sdk.WebViewClient() {
                 override fun onReceivedError(
                     p0: com.tencent.smtt.sdk.WebView?,
                     p1: com.tencent.smtt.export.external.interfaces.WebResourceRequest?,
                     p2: com.tencent.smtt.export.external.interfaces.WebResourceError?
                 ) {
-                    super.onReceivedError(p0, p1, p2)
                     Timber.d("onReceivedError-x5-m")
+//                    super.onReceivedError(p0, p1, p2)
                 }
 
-                override fun onReceivedError(
-                    p0: com.tencent.smtt.sdk.WebView?,
-                    p1: Int,
-                    p2: String?,
-                    p3: String?
+                fun onMainFrameError(
+                    controller: AbsAgentWebUIController, view: com.tencent.smtt.sdk.WebView,
+                    errorCode: Int, description: String, failingUrl: String
                 ) {
-                    super.onReceivedError(p0, p1, p2, p3)
-                    Timber.d("onReceivedError-x5")
+                    Timber.d("errorCode=${errorCode},description=${description},failingUrl=${failingUrl}")
                 }
+
+
             })
             .createAgentWeb()
             .ready()
