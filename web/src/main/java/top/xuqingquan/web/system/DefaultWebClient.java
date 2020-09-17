@@ -212,12 +212,6 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-        return super.shouldInterceptRequest(view, request);
-    }
-
     @Override
     @Deprecated
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -378,7 +372,6 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
             mWaitingFinishSet.add(url);
         }
         super.onPageStarted(view, url, favicon);
-
     }
 
     /**
@@ -387,6 +380,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     @Override
     @Deprecated
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        super.onReceivedError(view, errorCode, description, failingUrl);
         Timber.i("onReceivedError：" + description + "  CODE:" + errorCode);
         if (errorCode != -1) {
             onMainFrameError(view, errorCode, description, failingUrl);
@@ -396,6 +390,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+        super.onReceivedError(view, request, error);
         if (request.isForMainFrame() && error.getErrorCode() != -1) {
             onMainFrameError(view,
                     error.getErrorCode(), error.getDescription().toString(),
@@ -445,11 +440,6 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
         super.onPageFinished(view, url);
     }
 
-    @Override
-    public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
-        return super.shouldOverrideKeyEvent(view, event);
-    }
-
     private void startActivity(String url) {
         try {
             if (mWeakReference.get() == null) {
@@ -460,7 +450,6 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
             intent.setData(Uri.parse(url));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mWeakReference.get().startActivity(intent);
-
         } catch (Throwable e) {
             Timber.e(e);
         }
@@ -468,6 +457,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
 
     @Override
     public void onScaleChanged(WebView view, float oldScale, float newScale) {
+        super.onScaleChanged(view, oldScale, newScale);
         Timber.i("onScaleChanged:" + oldScale + "   n:" + newScale);
         if (newScale - oldScale > CONSTANTS_ABNORMAL_BIG) {
             view.setInitialScale((int) (oldScale / newScale * 100));

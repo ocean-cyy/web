@@ -106,11 +106,11 @@ class DefaultChromeClient(
     }
 
     override fun onJsAlert(
-        view: WebView?,
-        url: String?,
-        message: String?,
-        result: JsResult?
+        view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
+        if (super.onJsAlert(view, url, message, result)) {
+            return true
+        }
         mAgentWebUIController.get()?.onJsAlert(view, url, message)
         result?.confirm()
         return true
@@ -120,6 +120,7 @@ class DefaultChromeClient(
     override fun onGeolocationPermissionsShowPrompt(
         origin: String?, callback: GeolocationPermissionsCallback?
     ) {
+        super.onGeolocationPermissionsShowPrompt(origin, callback)
         onGeolocationPermissionsShowPromptInternal(origin, callback)
     }
 
@@ -157,25 +158,27 @@ class DefaultChromeClient(
     }
 
     override fun onJsPrompt(
-        view: WebView?,
-        url: String?,
-        message: String?,
-        defaultValue: String?,
-        result: JsPromptResult?
+        view: WebView?, url: String?, message: String?,
+        defaultValue: String?, result: JsPromptResult?
     ): Boolean {
+        if (super.onJsPrompt(view, url, message, defaultValue, result)) {
+            return true
+        }
         try {
             this.mAgentWebUIController.get()
                 ?.onJsPrompt(mWebView, url, message, defaultValue, result)
         } catch (throwable: Throwable) {
             Timber.e(throwable)
         }
-
         return true
     }
 
     override fun onJsConfirm(
         view: WebView?, url: String?, message: String?, result: JsResult?
     ): Boolean {
+        if (super.onJsConfirm(view, url, message, result)) {
+            return true
+        }
         mAgentWebUIController.get()?.onJsConfirm(view, url, message, result)
         return true
     }
@@ -185,30 +188,40 @@ class DefaultChromeClient(
         url: String?, databaseIdentifier: String?, quota: Long, estimatedDatabaseSize: Long,
         totalQuota: Long, quotaUpdater: WebStorage.QuotaUpdater?
     ) {
+        super.onExceededDatabaseQuota(
+            url,
+            databaseIdentifier,
+            quota,
+            estimatedDatabaseSize,
+            totalQuota,
+            quotaUpdater
+        )
         quotaUpdater?.updateQuota(totalQuota * 2)
     }
 
     override fun onReachedMaxAppCacheSize(
-        requiredStorage: Long,
-        quota: Long,
-        quotaUpdater: WebStorage.QuotaUpdater?
+        requiredStorage: Long, quota: Long, quotaUpdater: WebStorage.QuotaUpdater?
     ) {
+        super.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
         quotaUpdater?.updateQuota(requiredStorage * 2)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
-        webView: WebView?,
-        filePathCallback: ValueCallback<Array<Uri>>?,
+        webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?
     ): Boolean {
-        Timber.i("openFileChooser>=5.0")
+        if (super.onShowFileChooser(webView, filePathCallback, fileChooserParams)) {
+            return true
+        }
+        Timber.i("openFileChooser >= 5.0")
         return openFileChooserAboveL(filePathCallback, fileChooserParams)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private fun openFileChooserAboveL(
-        valueCallbacks: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?
+        valueCallbacks: ValueCallback<Array<Uri>>?,
+        fileChooserParams: FileChooserParams?
     ): Boolean {
         Timber.i("fileChooserParams:${fileChooserParams?.acceptTypes}  getTitle:${fileChooserParams?.title} accept:${fileChooserParams?.acceptTypes} length:${fileChooserParams?.acceptTypes?.size}  isCaptureEnabled:${fileChooserParams?.isCaptureEnabled}  ${fileChooserParams?.filenameHint}  intent:${fileChooserParams?.createIntent()}    mode:${fileChooserParams?.mode}")
         val mActivity = this.mActivityWeakReference.get()
@@ -221,15 +234,20 @@ class DefaultChromeClient(
     }
 
     override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-        super.onConsoleMessage(consoleMessage)
+        if (super.onConsoleMessage(consoleMessage)) {
+            return true
+        }
+        Timber.d("onConsoleMessage:level=${consoleMessage?.messageLevel()},message=${consoleMessage?.message()},line=${consoleMessage?.lineNumber()},sourceId=${consoleMessage?.sourceId()}")
         return true
     }
 
     override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+        super.onShowCustomView(view, callback)
         mIVideo?.onShowCustomView(view, callback)
     }
 
     override fun onHideCustomView() {
+        super.onHideCustomView()
         mIVideo?.onHideCustomView()
     }
 

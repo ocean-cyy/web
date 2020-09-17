@@ -96,7 +96,6 @@ open class WebViewClientDelegate internal constructor(client: WebViewClient?) : 
     override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
         if (delegate != null) {
             return delegate!!.onRenderProcessGone(view, detail)
-
         }
         return super.onRenderProcessGone(view, detail)
     }
@@ -187,7 +186,9 @@ open class WebViewClientDelegate internal constructor(client: WebViewClient?) : 
     override fun shouldOverrideKeyEvent(view: WebView?, event: KeyEvent?): Boolean {
         return if (delegate != null) {
             delegate!!.shouldOverrideKeyEvent(view, event)
-        } else super.shouldOverrideKeyEvent(view, event)
+        } else {
+            super.shouldOverrideKeyEvent(view, event)
+        }
     }
 
     override fun onUnhandledKeyEvent(view: WebView?, event: KeyEvent?) {
