@@ -130,7 +130,7 @@ public final class AgentWeb {
     /**
      * 是否拦截未知的Url， @link{DefaultWebClient}
      */
-    private boolean mIsInterceptUnkownUrl;
+    private boolean mIsInterceptUnknownUrl;
     /**
      * Url处理方式，是直接跳转还是弹窗让用户去选择
      */
@@ -138,8 +138,8 @@ public final class AgentWeb {
     /**
      * MiddlewareWebClientBase WebViewClient 中间件
      */
-    private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddleWrareWebClientBaseHeader;
-    private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddleWrareWebClientBaseHeader;
+    private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
+    private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddlewareWebClientBaseHeader;
     /**
      * MiddlewareWebChromeBase WebChromeClient 中间件
      */
@@ -178,7 +178,7 @@ public final class AgentWeb {
             this.mX5WebChromeClient = agentBuilder.mX5WebChromeClient;
             this.mX5WebViewClient = agentBuilder.mX5WebViewClient;
             this.mX5AgentWebSettings = agentBuilder.mX5AgentWebSettings;
-            this.mX5MiddleWrareWebClientBaseHeader = agentBuilder.mX5MiddlewareWebClientBaseHeader;
+            this.mX5MiddlewareWebClientBaseHeader = agentBuilder.mX5MiddlewareWebClientBaseHeader;
             this.mX5MiddlewareWebChromeBaseHeader = agentBuilder.mX5ChromeMiddleWareHeader;
             if (getX5WebCreator() != null) {
                 this.mIUrlLoader = new UrlLoaderImpl(getX5WebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
@@ -194,7 +194,7 @@ public final class AgentWeb {
             this.mWebChromeClient = agentBuilder.mWebChromeClient;
             this.mWebViewClient = agentBuilder.mWebViewClient;
             this.mAgentWebSettings = agentBuilder.mAgentWebSettings;
-            this.mMiddleWrareWebClientBaseHeader = agentBuilder.mMiddlewareWebClientBaseHeader;
+            this.mMiddlewareWebClientBaseHeader = agentBuilder.mMiddlewareWebClientBaseHeader;
             this.mMiddlewareWebChromeBaseHeader = agentBuilder.mChromeMiddleWareHeader;
             if (getWebCreator() != null) {
                 this.mIUrlLoader = new UrlLoaderImpl(getWebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
@@ -217,7 +217,7 @@ public final class AgentWeb {
             this.mPermissionInterceptor = new PermissionInterceptorWrapper(agentBuilder.mPermissionInterceptor);
         }
         this.mWebClientHelper = agentBuilder.mWebClientHelper;
-        this.mIsInterceptUnkownUrl = agentBuilder.mIsInterceptUnknownUrl;
+        this.mIsInterceptUnknownUrl = agentBuilder.mIsInterceptUnknownUrl;
         if (agentBuilder.mOpenOtherPage != null) {
             this.mUrlHandleWays = agentBuilder.mOpenOtherPage.getCode();
         }
@@ -403,7 +403,7 @@ public final class AgentWeb {
 
     @SuppressWarnings("ConstantConditions")
     private android.webkit.WebViewClient getWebViewClient() {
-        Timber.i("getDelegate:" + this.mMiddleWrareWebClientBaseHeader);
+        Timber.i("getDelegate:" + this.mMiddlewareWebClientBaseHeader);
         top.xuqingquan.web.system.DefaultWebClient mDefaultWebClient = top.xuqingquan.web.system.DefaultWebClient
                 .createBuilder()
                 .setActivity(this.mActivity)
@@ -411,10 +411,10 @@ public final class AgentWeb {
                 .setWebClientHelper(this.mWebClientHelper)
                 .setPermissionInterceptor(this.mPermissionInterceptor)
                 .setWebView(getWebCreator().getWebView())
-                .setInterceptUnkownUrl(this.mIsInterceptUnkownUrl)
+                .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
                 .setUrlHandleWays(this.mUrlHandleWays)
                 .build();
-        top.xuqingquan.web.system.MiddlewareWebClientBase header = this.mMiddleWrareWebClientBaseHeader;
+        top.xuqingquan.web.system.MiddlewareWebClientBase header = this.mMiddlewareWebClientBaseHeader;
         if (header != null) {
             top.xuqingquan.web.system.MiddlewareWebClientBase tail = header;
             int count = 1;
@@ -434,7 +434,7 @@ public final class AgentWeb {
 
     @SuppressWarnings("ConstantConditions")
     private com.tencent.smtt.sdk.WebViewClient getX5WebViewClient() {
-        Timber.i("getDelegate:" + this.mX5MiddleWrareWebClientBaseHeader);
+        Timber.i("getDelegate:" + this.mX5MiddlewareWebClientBaseHeader);
         top.xuqingquan.web.x5.DefaultWebClient mDefaultWebClient = top.xuqingquan.web.x5.DefaultWebClient
                 .createBuilder()
                 .setActivity(this.mActivity)
@@ -442,10 +442,10 @@ public final class AgentWeb {
                 .setWebClientHelper(this.mWebClientHelper)
                 .setPermissionInterceptor(this.mPermissionInterceptor)
                 .setWebView(getX5WebCreator().getWebView())
-                .setInterceptUnkownUrl(this.mIsInterceptUnkownUrl)
+                .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
                 .setUrlHandleWays(this.mUrlHandleWays)
                 .build();
-        top.xuqingquan.web.x5.MiddlewareWebClientBase header = this.mX5MiddleWrareWebClientBaseHeader;
+        top.xuqingquan.web.x5.MiddlewareWebClientBase header = this.mX5MiddlewareWebClientBaseHeader;
         if (header != null) {
             top.xuqingquan.web.x5.MiddlewareWebClientBase tail = header;
             int count = 1;

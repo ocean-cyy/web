@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 import top.xuqingquan.utils.Timber;
+import top.xuqingquan.web.nokernel.AdblockCallback;
 import top.xuqingquan.web.nokernel.WebConfig;
 
 /**
@@ -88,6 +89,7 @@ public class AdblockWebView extends AgentWebView {
     private boolean loading;
     private volatile boolean elementsHidden = false;
     private final Handler handler = new Handler();
+    private AdblockCallback adblockCallback;
     private boolean isDebug;
 
     // used to prevent user see flickering for elements to hide
@@ -358,7 +360,10 @@ public class AdblockWebView extends AgentWebView {
                 // check if we should block
                 if (provider.getEngine().matches(url, contentType, referrerChainArray)) {
                     logw("Blocked loading " + url);
-
+                    logw("Blocked loading " + url);
+                    if (adblockCallback != null) {
+                        adblockCallback.addBlockCount();
+                    }
                     // if we should block, return empty response which results in 'errorLoading' callback
                     return new WebResourceResponse("text/plain", "UTF-8", null);
                 }
@@ -442,10 +447,7 @@ public class AdblockWebView extends AgentWebView {
                         selectorsString = EMPTY_ELEMHIDE_ARRAY_STRING;
                     } else {
                         provider.waitForReady();
-                        String[] referrers = new String[]
-                                {
-                                        url
-                                };
+                        String[] referrers = new String[]{url};
 
                         List<Subscription> subscriptions = provider
                                 .getEngine()
@@ -815,6 +817,10 @@ public class AdblockWebView extends AgentWebView {
                 disposeRunnable.run();
             }
         }
+    }
+
+    public void setAdblockCallback(AdblockCallback adblockCallback) {
+        this.adblockCallback = adblockCallback;
     }
 
     public void logd(String msg) {
