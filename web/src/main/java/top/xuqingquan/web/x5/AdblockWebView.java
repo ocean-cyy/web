@@ -406,8 +406,15 @@ public class AdblockWebView extends AgentWebView {
                 logw("No referrer header for " + url);
                 referrers = EMPTY_ARRAY;
             }
-
-            return shouldInterceptRequest(view, url, request.isForMainFrame(), isXmlHttpRequest, referrers);
+            WebResourceResponse response = shouldInterceptRequest(view, url, request.isForMainFrame(), isXmlHttpRequest, referrers);
+            if (response == null) {
+                if (extWebViewClient != null) {
+                    response = extWebViewClient.shouldInterceptRequest(view, request);
+                } else {
+                    response = super.shouldInterceptRequest(view, request);
+                }
+            }
+            return response;
         }
     }
 
