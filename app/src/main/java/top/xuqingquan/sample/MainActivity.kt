@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
@@ -15,22 +13,19 @@ import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://m.baidu.com/"
+    private val url = "https://m.iqiyi.com/v_1h5kj51tkeg.html"
 
     private lateinit var agentWeb: AgentWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val webView = AdblockWebView(this)
-        webView.isDebug = true
         agentWeb = AgentWeb
             .with(this)
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
-            .setWebView(webView)
-            .setWebChromeClient(object : WebChromeClient() {})
-            .setWebViewClient(object : WebViewClient() {})
+            .interceptUnknownUrl()
+            .setWebView(AdblockWebView(this))
             .setPermissionInterceptor(object : PermissionInterceptor {
                 override fun intercept(
                     url: String?,
@@ -48,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             .ready()
             .get()
         agentWeb.urlLoader?.loadUrl(url)
+        agentWeb.webCreator?.getWebView()?.settings?.userAgentString=""
     }
 
     override fun onPause() {
