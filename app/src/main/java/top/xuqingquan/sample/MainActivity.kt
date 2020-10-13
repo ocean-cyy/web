@@ -9,11 +9,10 @@ import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://m.iqiyi.com/v_1h5kj51tkeg.html"
+    private val url = "http://pianbt.com/subject/27121260/"
 
     private lateinit var agentWeb: AgentWeb
 
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
             .interceptUnknownUrl()
-            .setWebView(AdblockWebView(this))
             .setPermissionInterceptor(object : PermissionInterceptor {
                 override fun intercept(
                     url: String?,
@@ -39,6 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             .setOpenOtherPageWays(OpenOtherPageWays.DISALLOW)
+            .parseThunder()
             .createAgentWeb()
             .ready()
             .get()

@@ -73,6 +73,10 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
      */
     private static final String HTTPS_SCHEME = "https://";
     /**
+     * thunder scheme
+     */
+    private static final String THUNDER_SCHEME = "thunder://";
+    /**
      * true 表示当前应用内依赖了 alipay library , false  反之
      */
     private static final boolean HAS_ALIPAY_LIB;
@@ -143,9 +147,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
             return super.shouldOverrideUrlLoading(view, (WebResourceRequest) null);
         }
         String url = request.getUrl().toString();
-        if (webClientHelper && parseThunder && url.startsWith("thunder://")) {
-            url = WebUtils.parseThunder(url);
-        }
         if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
             return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
         }
@@ -169,6 +170,11 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
         }
         if (url.startsWith(ALIPAYS_SCHEME) && lookup(url)) {
             Timber.i("alipays url lookup alipay ~~ ");
+            return true;
+        }
+        if (view != null && parseThunder && url.startsWith(THUNDER_SCHEME)) {
+            String thunder = WebUtils.parseThunder(url);
+            view.loadUrl(thunder);
             return true;
         }
         if (queryActivitiesNumber(url) > 0 && deepLink(url)) {
@@ -227,9 +233,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
         if (url == null) {
             return super.shouldOverrideUrlLoading(view, (String) null);
         }
-        if (webClientHelper && parseThunder && url.startsWith("thunder://")) {
-            url = WebUtils.parseThunder(url);
-        }
         if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
             return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
         }
@@ -252,6 +255,11 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
         }
         //支付宝
         if (url.startsWith(ALIPAYS_SCHEME) && lookup(url)) {
+            return true;
+        }
+        if (view != null && parseThunder && url.startsWith(THUNDER_SCHEME)) {
+            String thunder = WebUtils.parseThunder(url);
+            view.loadUrl(thunder);
             return true;
         }
         //打开url 相对应的页面

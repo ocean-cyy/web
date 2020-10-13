@@ -7,13 +7,13 @@ buildscript {
     ext.test = '1.0.2'
     ext.espresso = '3.0.2'
     ext.junit = '4.13'
-    ext.constraint = '2.0.1'
+    ext.constraint = '2.0.2'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'

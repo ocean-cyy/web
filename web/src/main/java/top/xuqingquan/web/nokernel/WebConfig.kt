@@ -70,7 +70,7 @@ object WebConfig {
     /**
      * AgentWeb 的版本
      */
-    const val AGENT_WEB_VERSION = " $AGENT_WEB_NAME/${BuildConfig.VERSION_NAME}"
+    const val AGENT_WEB_VERSION = " $AGENT_WEB_NAME/${BuildConfig.AgentWebVersionName}"
 
     /**
      * 通过JS获取的文件大小， 这里限制最大为5MB ，太大会抛出 OutOfMemoryError
