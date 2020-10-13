@@ -775,7 +775,7 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder parseThunder(boolean parseThunder) {
+        public CommonBuilder parseThunder() {
             mAgentBuilder.mParseThunder = true;
             return this;
         }
