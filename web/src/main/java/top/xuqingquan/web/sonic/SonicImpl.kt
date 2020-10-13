@@ -12,6 +12,7 @@ import top.xuqingquan.web.x5.MiddlewareWebClientBase as X5MiddlewareWebClientBas
 /**
  * Create by 许清泉 on 2020/8/22 21:27
  */
+@Suppress("unused")
 class SonicImpl(private val url: String, private val context: Context) {
 
     private var sonicSession: SonicSession? = null

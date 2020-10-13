@@ -52,7 +52,7 @@ import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FILE_CHOOSER_INTENT
 import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION;
 import static top.xuqingquan.web.nokernel.ActionActivity.KEY_URI;
 
-public class FileChooser {
+final class FileChooser {
     /**
      * Activity
      */
@@ -80,7 +80,7 @@ public class FileChooser {
     /**
      * 当前系统是否高于 Android 5.0 ；
      */
-    private boolean mIsAboveLollipop;
+    private final boolean mIsAboveLollipop;
     /**
      * android.webkit.WebChromeClient.FileChooserParams 封装了 Intent ，mAcceptType  等参数
      */
@@ -96,7 +96,7 @@ public class FileChooser {
     /**
      * 是否为Js Channel
      */
-    private boolean mJsChannel;
+    private final boolean mJsChannel;
     /**
      * TAG
      */
@@ -117,19 +117,19 @@ public class FileChooser {
     /**
      * 权限拦截
      */
-    private PermissionInterceptor mPermissionInterceptor;
+    private final PermissionInterceptor mPermissionInterceptor;
     /**
      * FROM_INTENTION_CODE 用于表示当前Action
      */
-    private int FROM_INTENTION_CODE = 21;
+    private final int FROM_INTENTION_CODE = 21;
     /**
      * 当前 AbsAgentWebUIController
      */
-    private WeakReference<AbsAgentWebUIController> mAgentWebUIController;
+    private final WeakReference<AbsAgentWebUIController> mAgentWebUIController;
     /**
      * 选择文件类型
      */
-    private String mAcceptType;
+    private final String mAcceptType;
     /**
      * 修复某些特定手机拍照后，立刻获取照片为空的情况
      */
@@ -384,7 +384,7 @@ public class FileChooser {
         ActionActivity.start(mActivity, mAction);
     }
 
-    private ActionActivity.PermissionListener mPermissionListener = (permissions, grantResults, extras) -> {
+    private final ActionActivity.PermissionListener mPermissionListener = (permissions, grantResults, extras) -> {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             boolean tag = hasPermission(mActivity, permissions);
             permissionResult(tag, extras.getInt(KEY_FROM_INTENTION));
@@ -535,6 +535,9 @@ public class FileChooser {
         if (target != null) {
             try {
                 String path = RealPath.getPath(mActivity, data.getData());
+                if (path == null) {
+                    return new Uri[]{target};
+                }
                 return new Uri[]{Uri.fromFile(new File(path))};
             } catch (Throwable t) {
                 return new Uri[]{target};
@@ -643,8 +646,8 @@ public class FileChooser {
     private static final class AboveLCallback implements Handler.Callback {
         private android.webkit.ValueCallback<Uri[]> sysValueCallback;
         private com.tencent.smtt.sdk.ValueCallback<Uri[]> x5ValueCallback;
-        private Uri[] mUris;
-        private WeakReference<AbsAgentWebUIController> controller;
+        private final Uri[] mUris;
+        private final WeakReference<AbsAgentWebUIController> controller;
 
         private AboveLCallback(android.webkit.ValueCallback<Uri[]> valueCallbacks, Uri[] uris, WeakReference<AbsAgentWebUIController> controller) {
             this.sysValueCallback = valueCallbacks;
@@ -751,10 +754,10 @@ public class FileChooser {
 
 
     static class EncodeFileRunnable implements Runnable {
-        private String filePath;
-        private Queue<FileParcel> mQueue;
-        private CountDownLatch mCountDownLatch;
-        private int id;
+        private final String filePath;
+        private final Queue<FileParcel> mQueue;
+        private final CountDownLatch mCountDownLatch;
+        private final int id;
 
         EncodeFileRunnable(String filePath, Queue<FileParcel> queue, CountDownLatch countDownLatch, int id) {
             this.filePath = filePath;
@@ -824,8 +827,8 @@ public class FileChooser {
 
     static class CovertFileThread extends Thread {
 
-        private WeakReference<JsChannelCallback> mJsChannelCallback;
-        private String[] paths;
+        private final WeakReference<JsChannelCallback> mJsChannelCallback;
+        private final String[] paths;
 
         private CovertFileThread(JsChannelCallback JsChannelCallback, String[] paths) {
             super("agentweb-thread");

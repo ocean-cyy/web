@@ -12,6 +12,7 @@ import java.util.Locale
 
 import com.tencent.smtt.sdk.WebView as X5WebView
 
+@Suppress("unused")
 class JsCallback {
     private var mIndex: Int = 0
     private var mCouldGoOn: Boolean = false

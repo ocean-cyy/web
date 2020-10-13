@@ -1,5 +1,6 @@
 package top.xuqingquan.web.x5;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -8,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,11 +33,11 @@ import top.xuqingquan.web.nokernel.WebUtils;
 import top.xuqingquan.web.publics.AbsAgentWebUIController;
 import top.xuqingquan.web.publics.AgentWebUtils;
 
-public class DefaultWebClient extends MiddlewareWebClientBase {
+public final class DefaultWebClient extends MiddlewareWebClientBase {
     /**
      * Activity's WeakReference
      */
-    private WeakReference<Activity> mWeakReference;
+    private final WeakReference<Activity> mWeakReference;
     /**
      * 缩放
      */
@@ -43,11 +45,13 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     /**
      * WebViewClient
      */
-    private WebViewClient mWebViewClient;
+    private final WebViewClient mWebViewClient;
     /**
      * mWebClientHelper
      */
-    private boolean webClientHelper;
+    private final boolean webClientHelper;
+
+    private final boolean parseThunder;
     /**
      * intent ' s scheme
      */
@@ -75,19 +79,19 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     /**
      * 默认为咨询用户
      */
-    private int mUrlHandleWays;
+    private final int mUrlHandleWays;
     /**
      * 是否拦截找不到相应页面的Url，默认拦截
      */
-    private boolean mIsInterceptUnknownUrl;
+    private final boolean mIsInterceptUnknownUrl;
     /**
      * AbsAgentWebUIController
      */
-    private WeakReference<AbsAgentWebUIController> mAgentWebUIController;
+    private final WeakReference<AbsAgentWebUIController> mAgentWebUIController;
     /**
      * WebView
      */
-    private WebView mWebView;
+    private final WebView mWebView;
     /**
      * Alipay PayTask 对象
      */
@@ -99,11 +103,11 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     /**
      * 缓存当前出现错误的页面
      */
-    private Set<String> mErrorUrlsSet = new HashSet<>();
+    private final Set<String> mErrorUrlsSet = new HashSet<>();
     /**
      * 缓存等待加载完成的页面 onPageStart()执行之后 ，onPageFinished()执行之前
      */
-    private Set<String> mWaitingFinishSet = new HashSet<>();
+    private final Set<String> mWaitingFinishSet = new HashSet<>();
 
     static {
         boolean tag = true;
@@ -122,6 +126,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
         this.mWebViewClient = builder.mClient;
         this.mWeakReference = new WeakReference<>(builder.mActivity);
         this.webClientHelper = builder.mWebClientHelper;
+        this.parseThunder = builder.mParseThunder;
         this.mAgentWebUIController = new WeakReference<>(AgentWebUtils.getAgentWebUIControllerByWebView(builder.mWebView));
         this.mIsInterceptUnknownUrl = builder.mIsInterceptUnkownScheme;
         if (builder.mUrlHandleWays <= 0) {
@@ -133,8 +138,14 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+    public boolean shouldOverrideUrlLoading(@Nullable WebView view, @Nullable WebResourceRequest request) {
+        if (request == null) {
+            return super.shouldOverrideUrlLoading(view, (WebResourceRequest) null);
+        }
         String url = request.getUrl().toString();
+        if (webClientHelper && parseThunder && url.startsWith("thunder://")) {
+            url = WebUtils.parseThunder(url);
+        }
         if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
             return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
         }
@@ -174,7 +185,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
     private boolean deepLink(String url) {
         switch (mUrlHandleWays) {
             // 直接打开其他App
-            case WebConfig.DERECT_OPEN_OTHER_PAGE:
+            case WebConfig.DIRECT_OPEN_OTHER_PAGE:
                 lookup(url);
                 return true;
             // 咨询用户是否打开其他App
@@ -212,7 +223,13 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
 
     @Override
     @Deprecated
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    public boolean shouldOverrideUrlLoading(@Nullable WebView view, @Nullable String url) {
+        if (url == null) {
+            return super.shouldOverrideUrlLoading(view, (String) null);
+        }
+        if (webClientHelper && parseThunder && url.startsWith("thunder://")) {
+            url = WebUtils.parseThunder(url);
+        }
         if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
             return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
         }
@@ -257,6 +274,10 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
             }
             Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
             PackageManager mPackageManager = mWeakReference.get().getPackageManager();
+            if (mPackageManager == null) {
+                return 0;
+            }
+            @SuppressLint("QueryPermissionsNeeded")
             List<ResolveInfo> mResolveInfos = mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             return mResolveInfos.size();
         } catch (Throwable t) {
@@ -470,6 +491,7 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
         private Activity mActivity;
         private WebViewClient mClient;
         private boolean mWebClientHelper;
+        private boolean mParseThunder;
         @SuppressWarnings({"unused", "FieldCanBeLocal", "RedundantSuppression"})
         private PermissionInterceptor mPermissionInterceptor;
         private WebView mWebView;
@@ -488,6 +510,11 @@ public class DefaultWebClient extends MiddlewareWebClientBase {
 
         public Builder setWebClientHelper(boolean webClientHelper) {
             this.mWebClientHelper = webClientHelper;
+            return this;
+        }
+
+        public Builder setParseThunder(boolean parseThunder) {
+            this.mParseThunder = parseThunder;
             return this;
         }
 

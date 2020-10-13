@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import top.xuqingquan.utils.Timber;
@@ -26,6 +25,7 @@ import top.xuqingquan.web.nokernel.IUrlLoader;
 import top.xuqingquan.web.nokernel.JsInterfaceHolder;
 import top.xuqingquan.web.nokernel.OpenOtherPageWays;
 import top.xuqingquan.web.nokernel.PermissionInterceptor;
+import top.xuqingquan.web.nokernel.PermissionInterceptorWrapper;
 import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.web.nokernel.WebLifeCycle;
 import top.xuqingquan.web.publics.AbsAgentWebUIController;
@@ -49,11 +49,11 @@ public final class AgentWeb {
     /**
      * Activity
      */
-    private Activity mActivity;
+    private final Activity mActivity;
     /**
      * 承载 WebParentLayout 的 ViewGroup
      */
-    private ViewGroup mViewGroup;
+    private final ViewGroup mViewGroup;
     /**
      * 负责创建布局 WebView ，WebParentLayout  Indicator等。
      */
@@ -81,7 +81,7 @@ public final class AgentWeb {
     /**
      * is show indicator
      */
-    private boolean mEnableIndicator;
+    private final boolean mEnableIndicator;
     /**
      * IEventHandler 处理WebView相关返回事件
      */
@@ -89,7 +89,7 @@ public final class AgentWeb {
     /**
      * WebView 注入对象
      */
-    private ArrayMap<String, Object> mJavaObjects = new ArrayMap<>();
+    private final ArrayMap<String, Object> mJavaObjects = new ArrayMap<>();
     /**
      * WebListenerManager
      */
@@ -122,15 +122,19 @@ public final class AgentWeb {
     /**
      * WebViewClient 辅助控制开关
      */
-    private boolean mWebClientHelper;
+    private final boolean mWebClientHelper;
+    /**
+     * WebViewClient 解析种子文件开关
+     */
+    private final boolean mParseThunder;
     /**
      * PermissionInterceptor 权限拦截
      */
-    private PermissionInterceptor mPermissionInterceptor;
+    private final PermissionInterceptor mPermissionInterceptor;
     /**
      * 是否拦截未知的Url， @link{DefaultWebClient}
      */
-    private boolean mIsInterceptUnknownUrl;
+    private final boolean mIsInterceptUnknownUrl;
     /**
      * Url处理方式，是直接跳转还是弹窗让用户去选择
      */
@@ -217,6 +221,7 @@ public final class AgentWeb {
             this.mPermissionInterceptor = new PermissionInterceptorWrapper(agentBuilder.mPermissionInterceptor);
         }
         this.mWebClientHelper = agentBuilder.mWebClientHelper;
+        this.mParseThunder = agentBuilder.mParseThunder;
         this.mIsInterceptUnknownUrl = agentBuilder.mIsInterceptUnknownUrl;
         if (agentBuilder.mOpenOtherPage != null) {
             this.mUrlHandleWays = agentBuilder.mOpenOtherPage.getCode();
@@ -409,6 +414,7 @@ public final class AgentWeb {
                 .setActivity(this.mActivity)
                 .setClient(mWebViewClient)
                 .setWebClientHelper(this.mWebClientHelper)
+                .setParseThunder(this.mParseThunder)
                 .setPermissionInterceptor(this.mPermissionInterceptor)
                 .setWebView(getWebCreator().getWebView())
                 .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
@@ -440,6 +446,7 @@ public final class AgentWeb {
                 .setActivity(this.mActivity)
                 .setClient(mX5WebViewClient)
                 .setWebClientHelper(this.mWebClientHelper)
+                .setParseThunder(this.mParseThunder)
                 .setPermissionInterceptor(this.mPermissionInterceptor)
                 .setWebView(getX5WebCreator().getWebView())
                 .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
@@ -484,7 +491,7 @@ public final class AgentWeb {
                 mJsInterfaceHolder = top.xuqingquan.web.x5.JsInterfaceHolderImpl.getJsInterfaceHolder(mX5WebCreator);
             }
             Timber.i("mJavaObjects:" + mJavaObjects.size());
-            if (mJavaObjects != null && !mJavaObjects.isEmpty()) {
+            if (!mJavaObjects.isEmpty()) {
                 mJsInterfaceHolder.addJavaObjects(mJavaObjects);
             }
             if (mX5WebListenerManager != null) {
@@ -510,7 +517,7 @@ public final class AgentWeb {
                 mJsInterfaceHolder = top.xuqingquan.web.system.JsInterfaceHolderImpl.getJsInterfaceHolder(mWebCreator);
             }
             Timber.i("mJavaObjects:" + mJavaObjects.size());
-            if (mJavaObjects != null && !mJavaObjects.isEmpty()) {
+            if (!mJavaObjects.isEmpty()) {
                 mJsInterfaceHolder.addJavaObjects(mJavaObjects);
             }
             if (mWebListenerManager != null) {
@@ -539,7 +546,7 @@ public final class AgentWeb {
             top.xuqingquan.web.system.MiddlewareWebChromeBase tail = header;
             int count = 1;
             top.xuqingquan.web.system.MiddlewareWebChromeBase tmp = header;
-            for (; tmp.next() != null; ) {
+            while (tmp.next() != null) {
                 tmp = tmp.next();
                 tail = tmp;
                 count++;
@@ -568,7 +575,7 @@ public final class AgentWeb {
             top.xuqingquan.web.x5.MiddlewareWebChromeBase tail = header;
             int count = 1;
             top.xuqingquan.web.x5.MiddlewareWebChromeBase tmp = header;
-            for (; tmp.next() != null; ) {
+            while (tmp.next() != null) {
                 tmp = tmp.next();
                 tail = tmp;
                 count++;
@@ -582,7 +589,7 @@ public final class AgentWeb {
     }
 
     public static final class PreAgentWeb {
-        private AgentWeb mAgentWeb;
+        private final AgentWeb mAgentWeb;
         private boolean isReady = false;
 
         PreAgentWeb(AgentWeb agentWeb) {
@@ -612,11 +619,11 @@ public final class AgentWeb {
     }
 
     public static final class AgentBuilder {
-        private Activity mActivity;
+        private final Activity mActivity;
         private ViewGroup mViewGroup;
         private int mIndex = -1;
         private BaseIndicatorView mBaseIndicatorView;
-        private IndicatorController mIndicatorController = null;
+        private final IndicatorController mIndicatorController = null;
         /*默认进度条是显示的*/
         private boolean mEnableIndicator = true;
         private ViewGroup.LayoutParams mLayoutParams = null;
@@ -636,6 +643,7 @@ public final class AgentWeb {
         private android.webkit.WebView mWebView;
         private com.tencent.smtt.sdk.WebView mX5WebView;
         private boolean mWebClientHelper = true;
+        private boolean mParseThunder = false;
         private top.xuqingquan.web.system.IWebLayout mWebLayout = null;
         private top.xuqingquan.web.x5.IWebLayout mX5WebLayout = null;
         private PermissionInterceptor mPermissionInterceptor = null;
@@ -653,7 +661,7 @@ public final class AgentWeb {
         private View mErrorView;
         private int mErrorLayout;
         private int mReloadId;
-        private int mTag;
+        private final int mTag;
 
         AgentBuilder(@NonNull Fragment fragment) {
             mActivity = fragment.getActivity();
@@ -709,7 +717,7 @@ public final class AgentWeb {
     }
 
     public static class IndicatorBuilder {
-        private AgentBuilder mAgentBuilder;
+        private final AgentBuilder mAgentBuilder;
 
         IndicatorBuilder(AgentBuilder agentBuilder) {
             this.mAgentBuilder = agentBuilder;
@@ -751,7 +759,7 @@ public final class AgentWeb {
     }
 
     public static class CommonBuilder {
-        private AgentBuilder mAgentBuilder;
+        private final AgentBuilder mAgentBuilder;
 
         CommonBuilder(AgentBuilder agentBuilder) {
             this.mAgentBuilder = agentBuilder;
@@ -764,6 +772,11 @@ public final class AgentWeb {
 
         public CommonBuilder closeWebViewClientHelper() {
             mAgentBuilder.mWebClientHelper = false;
+            return this;
+        }
+
+        public CommonBuilder parseThunder(boolean parseThunder) {
+            mAgentBuilder.mParseThunder = true;
             return this;
         }
 
@@ -923,22 +936,5 @@ public final class AgentWeb {
 
     public Activity getActivity() {
         return this.mActivity;
-    }
-
-    public static final class PermissionInterceptorWrapper implements PermissionInterceptor {
-
-        private WeakReference<PermissionInterceptor> mWeakReference;
-
-        private PermissionInterceptorWrapper(PermissionInterceptor permissionInterceptor) {
-            this.mWeakReference = new WeakReference<>(permissionInterceptor);
-        }
-
-        @Override
-        public boolean intercept(String url, @NonNull String[] permissions, @NonNull String action) {
-            if (this.mWeakReference.get() == null) {
-                return false;
-            }
-            return mWeakReference.get().intercept(url, permissions, action);
-        }
     }
 }

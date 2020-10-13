@@ -8,31 +8,32 @@ import java.io.File
 /**
  * Created by 许清泉 on 2019-06-19 20:00
  */
+@Suppress("unused")
 object WebConfig {
 
     /**
      * 直接打开其他页面
      */
-    const val DERECT_OPEN_OTHER_PAGE = 1001
+    const val DIRECT_OPEN_OTHER_PAGE = 1001
 
     /**
      * 弹窗咨询用户是否前往其他页面
      */
-    const val ASK_USER_OPEN_OTHER_PAGE = DERECT_OPEN_OTHER_PAGE shr 2
+    const val ASK_USER_OPEN_OTHER_PAGE = DIRECT_OPEN_OTHER_PAGE shr 2
 
     /**
      * 不允许打开其他页面
      */
-    internal const val DISALLOW_OPEN_OTHER_APP = DERECT_OPEN_OTHER_PAGE shr 4
+    internal const val DISALLOW_OPEN_OTHER_APP = DIRECT_OPEN_OTHER_PAGE shr 4
     const val FILE_CACHE_PATH = "agentweb-cache"
-    internal val AGENTWEB_CACHE_PATCH = "${File.separator}${FILE_CACHE_PATH}"
-    const val AGENTWEB_NAME = "AgentWeb"
+    internal val AGENT_WEB_CACHE_PATCH = "${File.separator}${FILE_CACHE_PATH}"
+    private const val AGENT_WEB_NAME = "AgentWeb"
 
     /**
      * 缓存路径
      */
     @JvmField
-    var AGENTWEB_FILE_PATH: String? = null
+    var AGENT_WEB_FILE_PATH: String? = null
 
     /**
      * DEBUG 模式 ， 如果需要查看日志请设置为 true
@@ -50,17 +51,17 @@ object WebConfig {
     /**
      * 默认 WebView  类型 。
      */
-    const val WEBVIEW_DEFAULT_TYPE = 1
+    const val WEB_VIEW_DEFAULT_TYPE = 1
 
     /**
      * 使用 AgentWebView
      */
-    const val WEBVIEW_AGENTWEB_SAFE_TYPE = 2
+    const val WEB_VIEW_AGENT_WEB_SAFE_TYPE = 2
 
     /**
      * 自定义 WebView
      */
-    const val WEBVIEW_CUSTOM_TYPE = 3
+    const val WEB_VIEW_CUSTOM_TYPE = 3
 
     @Volatile
     @JvmField
@@ -69,7 +70,7 @@ object WebConfig {
     /**
      * AgentWeb 的版本
      */
-    const val AGENTWEB_VERSION = " $AGENTWEB_NAME/${BuildConfig.VERSION_NAME}"
+    const val AGENT_WEB_VERSION = " $AGENT_WEB_NAME/${BuildConfig.VERSION_NAME}"
 
     /**
      * 通过JS获取的文件大小， 这里限制最大为5MB ，太大会抛出 OutOfMemoryError
@@ -77,7 +78,7 @@ object WebConfig {
     @JvmField
     var MAX_FILE_LENGTH = 1024 * 1024 * 5
 
-    private var tbsStatus = false//x5是否可用
+    internal var tbsStatus = false//x5是否可用
 
     private var tbsEnable: Boolean? = null//x5是否启用
 
@@ -94,7 +95,7 @@ object WebConfig {
      */
     @JvmStatic
     fun enableTbs() {
-        tbsStatus = true
+        tbsEnable = true
     }
 
     /**

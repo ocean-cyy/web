@@ -48,9 +48,9 @@ class UrlLoaderImpl : IUrlLoader {
     override fun loadUrl(url: String, headers: Map<String, String>?) {
         try {
             if (!WebUtils.isUIThread()) {
-                WebUtils.runInUiThread(Runnable {
+                WebUtils.runInUiThread {
                     loadUrl(url, headers)
-                })
+                }
             }
             Timber.i("loadUrl:$url headers:$headers")
             if (WebConfig.isTbsEnable()) {

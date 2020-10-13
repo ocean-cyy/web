@@ -9,7 +9,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class NestedScrollAgentWebView extends AgentWebView implements NestedScrollingChild {
+public final class NestedScrollAgentWebView extends AgentWebView implements NestedScrollingChild {
 
     private int mLastMotionY;
     private final int[] mScrollOffset = new int[2];

@@ -23,13 +23,15 @@ class SonicWebViewClient(private val sonicSession: SonicSession?) : MiddlewareWe
         view: WebView?,
         request: WebResourceRequest?
     ): WebResourceResponse? {
-        return shouldInterceptRequest(view, request?.url?.toString());
+        @Suppress("DEPRECATION")
+        return shouldInterceptRequest(view, request?.url?.toString())
     }
 
     override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
         if (sonicSession != null && sonicSession.sessionClient != null) {
             return sonicSession.sessionClient.requestResource(url) as? WebResourceResponse?
         }
+        @Suppress("DEPRECATION")
         return super.shouldInterceptRequest(view, url)
     }
 

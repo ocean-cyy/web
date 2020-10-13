@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Action implements Parcelable {
+public final class Action implements Parcelable {
 
 	public transient static final int ACTION_PERMISSION = 1;
 	public transient static final int ACTION_FILE = 2;

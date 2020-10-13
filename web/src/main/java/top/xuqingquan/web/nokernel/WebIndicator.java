@@ -21,7 +21,7 @@ import top.xuqingquan.utils.DimensionsKt;
 import top.xuqingquan.utils.Timber;
 
 @SuppressWarnings("rawtypes")
-public class WebIndicator extends BaseIndicatorView implements BaseIndicatorSpec {
+public final class WebIndicator extends BaseIndicatorView implements BaseIndicatorSpec {
     /**
      * 进度条颜色
      */
@@ -218,12 +218,12 @@ public class WebIndicator extends BaseIndicatorView implements BaseIndicatorSpec
         indicatorStatus = STARTED;
     }
 
-    private ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener = animation -> {
+    private final ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener = animation -> {
         WebIndicator.this.mCurrentProgress = (float) animation.getAnimatedValue();
         WebIndicator.this.invalidate();
     };
 
-    private AnimatorListenerAdapter mAnimatorListenerAdapter = new AnimatorListenerAdapter() {
+    private final AnimatorListenerAdapter mAnimatorListenerAdapter = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
             doEnd();

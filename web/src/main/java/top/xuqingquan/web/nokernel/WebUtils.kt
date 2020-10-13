@@ -13,17 +13,19 @@ import android.provider.MediaStore
 import android.support.v4.os.EnvironmentCompat
 import android.text.TextUtils
 import android.widget.Toast
+import top.xuqingquan.utils.EncryptUtils
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getMIMEType
 import top.xuqingquan.utils.getUriFromFile
 import top.xuqingquan.web.R
-import top.xuqingquan.web.nokernel.WebConfig.AGENTWEB_CACHE_PATCH
-import top.xuqingquan.web.nokernel.WebConfig.AGENTWEB_FILE_PATH
+import top.xuqingquan.web.nokernel.WebConfig.AGENT_WEB_CACHE_PATCH
+import top.xuqingquan.web.nokernel.WebConfig.AGENT_WEB_FILE_PATH
 import top.xuqingquan.web.nokernel.WebConfig.FILE_CACHE_PATH
 import top.xuqingquan.web.publics.WebParentLayout
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.Method
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,13 +44,13 @@ object WebUtils {
      */
     @JvmStatic
     fun getCachePath(context: Context): String {
-        return context.cacheDir.absolutePath + AGENTWEB_CACHE_PATCH
+        return context.cacheDir.absolutePath + AGENT_WEB_CACHE_PATCH
     }
 
     @JvmStatic
     fun getAgentWebFilePath(context: Context): String? {
-        if (!TextUtils.isEmpty(AGENTWEB_FILE_PATH)) {
-            return AGENTWEB_FILE_PATH
+        if (!TextUtils.isEmpty(AGENT_WEB_FILE_PATH)) {
+            return AGENT_WEB_FILE_PATH
         }
         val dir = getDiskExternalCacheDir(context)
         val mFile = File(dir, FILE_CACHE_PATH)
@@ -62,8 +64,8 @@ object WebUtils {
         }
 
         Timber.i("path:" + mFile.absolutePath + "  path:" + mFile.path)
-        AGENTWEB_FILE_PATH = mFile.absolutePath
-        return AGENTWEB_FILE_PATH
+        AGENT_WEB_FILE_PATH = mFile.absolutePath
+        return AGENT_WEB_FILE_PATH
     }
 
     @JvmStatic
@@ -146,7 +148,7 @@ object WebUtils {
     @JvmStatic
     fun getCommonFileIntentCompat(context: Context, file: File): Intent {
         val mIntent = Intent().setAction(Intent.ACTION_VIEW)
-        setIntentDataAndType(context, mIntent, getMIMEType(file), file, false)
+        setIntentDataAndType(context, mIntent, getMIMEType(file), file)
         return mIntent
     }
 
@@ -154,15 +156,11 @@ object WebUtils {
         context: Context,
         intent: Intent,
         type: String,
-        file: File,
-        writeAble: Boolean
+        file: File
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setDataAndType(getUriFromFile(context, file), type)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            if (writeAble) {
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            }
         } else {
             intent.setDataAndType(Uri.fromFile(file), type)
         }
@@ -219,4 +217,40 @@ object WebUtils {
         }
         return null
     }
+
+    @JvmStatic
+    fun parseThunder(url: String): String {
+        if (!url.startsWith("thunder://")) {
+            return url
+        }
+        var result = url
+        Timber.d("thunder=>$url")
+        val thunder = url.replace("thunder://", "")
+        val decode = EncryptUtils.base64Decode(thunder.toByteArray())
+        var decodeStr = String(decode, Charset.forName("UTF-8"))
+        Timber.d("首次解析=>$decodeStr")
+        var encode = EncryptUtils.base64Encode(decodeStr.toByteArray(Charset.forName("UTF-8")))
+        var encodeStr = String(encode)
+        Timber.d("首次校验=>$encodeStr")
+        if (encodeStr == thunder) {
+            Timber.d("解析成功")
+            result = decodeStr.substring(2, decodeStr.length - 2)
+        } else {
+            Timber.d("解析失败，重试")
+            decodeStr = String(decode, Charset.forName("GBK"))
+            Timber.d("二次解析=>$decodeStr")
+            encode = EncryptUtils.base64Encode(decodeStr.toByteArray(Charset.forName("GBK")))
+            encodeStr = String(encode)
+            Timber.d("二次校验=>$encodeStr")
+            if (encodeStr == thunder) {
+                Timber.d("二次解析成功")
+                result = decodeStr.substring(2, decodeStr.length - 2)
+            } else {
+                Timber.d("二次解析失败")
+            }
+        }
+        Timber.d("decode=>${decodeStr}")
+        return result
+    }
+
 }

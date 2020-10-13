@@ -25,31 +25,31 @@ import top.xuqingquan.web.nokernel.WebIndicator;
 import top.xuqingquan.web.publics.WebParentLayout;
 
 @SuppressWarnings("rawtypes")
-public class DefaultWebCreator implements WebCreator {
-    private Activity mActivity;
-    private ViewGroup mViewGroup;
-    private boolean mIsNeedDefaultProgress;
-    private int mIndex;
+public final class DefaultWebCreator implements WebCreator {
+    private final Activity mActivity;
+    private final ViewGroup mViewGroup;
+    private final boolean mIsNeedDefaultProgress;
+    private final int mIndex;
     private BaseIndicatorView mProgressView;
-    private ViewGroup.LayoutParams mLayoutParams;
+    private final ViewGroup.LayoutParams mLayoutParams;
     private int mColor = -1;
     /**
      * 单位dp
      */
     private int mHeight;
     private boolean mIsCreated = false;
-    private top.xuqingquan.web.x5.IWebLayout mIWebLayout;
+    private final IWebLayout mIWebLayout;
     private BaseIndicatorSpec mBaseIndicatorSpec;
     private WebView mWebView;
     private FrameLayout mFrameLayout = null;
-    private int mWebViewType = WebConfig.WEBVIEW_DEFAULT_TYPE;
+    private int mWebViewType = WebConfig.WEB_VIEW_DEFAULT_TYPE;
 
     /**
      * 使用默认的进度条
      */
     public DefaultWebCreator(
             @NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index,
-            int color, int mHeight, WebView webView, top.xuqingquan.web.x5.IWebLayout webLayout) {
+            int color, int mHeight, WebView webView, IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.mIsNeedDefaultProgress = true;
@@ -64,7 +64,7 @@ public class DefaultWebCreator implements WebCreator {
     /**
      * 关闭进度条
      */
-    public DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, @Nullable WebView webView, top.xuqingquan.web.x5.IWebLayout webLayout) {
+    public DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, @Nullable WebView webView, IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.mIsNeedDefaultProgress = false;
@@ -77,7 +77,7 @@ public class DefaultWebCreator implements WebCreator {
     /**
      * 自定义Indicator
      */
-    public DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, BaseIndicatorView progressView, WebView webView, top.xuqingquan.web.x5.IWebLayout webLayout) {
+    public DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, BaseIndicatorView progressView, WebView webView, IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.mIsNeedDefaultProgress = false;
@@ -158,9 +158,9 @@ public class DefaultWebCreator implements WebCreator {
         }
         mFrameLayout.addView(target, mLayoutParams);
         mFrameLayout.bindWebView(this.mWebView);
-        Timber.i("  instanceof  AgentWebView:" + (this.mWebView instanceof top.xuqingquan.web.x5.AgentWebView));
-        if (this.mWebView instanceof top.xuqingquan.web.x5.AgentWebView) {
-            this.mWebViewType = WebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE;
+        Timber.i("  instanceof  AgentWebView:" + (this.mWebView instanceof AgentWebView));
+        if (this.mWebView instanceof AgentWebView) {
+            this.mWebViewType = WebConfig.WEB_VIEW_AGENT_WEB_SAFE_TYPE;
         }
         ViewStub mViewStub = new ViewStub(mActivity);
         mViewStub.setId(R.id.scaffold_mainframe_error_viewsub_id);
@@ -195,7 +195,7 @@ public class DefaultWebCreator implements WebCreator {
             mIWebLayout.getLayout().addView(mWebView, -1, -1);
             Timber.i("add webview");
         } else {
-            this.mWebViewType = WebConfig.WEBVIEW_CUSTOM_TYPE;
+            this.mWebViewType = WebConfig.WEB_VIEW_CUSTOM_TYPE;
         }
         this.mWebView = mWebView;
         return mIWebLayout.getLayout();
@@ -205,13 +205,13 @@ public class DefaultWebCreator implements WebCreator {
         WebView mWebView;
         if (this.mWebView != null) {
             mWebView = this.mWebView;
-            this.mWebViewType = WebConfig.WEBVIEW_CUSTOM_TYPE;
+            this.mWebViewType = WebConfig.WEB_VIEW_CUSTOM_TYPE;
         } else if (WebConfig.IS_KITKAT_OR_BELOW_KITKAT) {
-            mWebView = new top.xuqingquan.web.x5.AgentWebView(mActivity);
-            this.mWebViewType = WebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE;
+            mWebView = new AgentWebView(mActivity);
+            this.mWebViewType = WebConfig.WEB_VIEW_AGENT_WEB_SAFE_TYPE;
         } else {
             mWebView = new WebView(mActivity);
-            this.mWebViewType = WebConfig.WEBVIEW_DEFAULT_TYPE;
+            this.mWebViewType = WebConfig.WEB_VIEW_DEFAULT_TYPE;
         }
         return mWebView;
     }

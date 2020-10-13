@@ -12,9 +12,9 @@ import top.xuqingquan.web.nokernel.JsInterfaceObjectException;
 import top.xuqingquan.utils.Timber;
 
 @SuppressWarnings("rawtypes")
-public class JsInterfaceHolderImpl extends JsBaseInterfaceHolder {
+public final class JsInterfaceHolderImpl extends JsBaseInterfaceHolder {
 
-    private WebView mWebView;
+    private final WebView mWebView;
 
     public static JsInterfaceHolderImpl getJsInterfaceHolder(WebCreator webCreator) {
         return new JsInterfaceHolderImpl(webCreator);
@@ -53,6 +53,7 @@ public class JsInterfaceHolderImpl extends JsBaseInterfaceHolder {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     @SuppressLint("JavascriptInterface")
     private JsInterfaceHolder addJavaObjectDirect(String k, Object v) {
         Timber.i("k:$k  v:$v");

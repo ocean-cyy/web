@@ -2,12 +2,11 @@ package top.xuqingquan.web.publics
 
 import android.app.Activity
 import android.os.Build
-import android.os.Handler
-import android.webkit.JavascriptInterface
 import android.support.annotation.RequiresApi
+import android.webkit.JavascriptInterface
+import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.WebConfig
-import top.xuqingquan.utils.Timber
 import java.lang.ref.WeakReference
 
 class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
@@ -26,7 +25,7 @@ class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
                     mReference.get()!!.x5WebCreator!!.getWebView()!!, null, null,
                     mReference.get()!!.permissionInterceptor, null,
                     acceptType,
-                    Handler.Callback {
+                    {
                         if (mReference.get() != null) {
                             mReference.get()!!.jsAccessEntrace
                                 .quickCallJs(
@@ -46,7 +45,7 @@ class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
                     mReference.get()!!.webCreator!!.getWebView()!!, null, null,
                     mReference.get()!!.permissionInterceptor, null,
                     acceptType,
-                    Handler.Callback {
+                    {
                         if (mReference.get() != null) {
                             mReference.get()!!.jsAccessEntrace
                                 .quickCallJs(

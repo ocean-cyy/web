@@ -99,11 +99,11 @@ open class AgentWebView : WebView {
             mWebChromeClient = webChromeClient
         }
 
-        internal fun onPageStarted() {
+        fun onPageStarted() {
             mIsOnReceivedTitle = false
         }
 
-        internal fun onPageFinished(view: WebView?) {
+        fun onPageFinished(view: WebView?) {
             if (!mIsOnReceivedTitle && mWebChromeClient != null) {
                 var list: WebBackForwardList? = null
                 try {
@@ -123,7 +123,7 @@ open class AgentWebView : WebView {
             }
         }
 
-        internal fun onReceivedTitle() {
+        fun onReceivedTitle() {
             mIsOnReceivedTitle = true
         }
     }

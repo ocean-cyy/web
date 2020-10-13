@@ -120,7 +120,7 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
     companion object {
         private const val USERAGENT_UC = " UCBrowser/11.6.4.950 "
         private const val USERAGENT_QQ_BROWSER = " MQQBrowser/8.0 "
-        private const val USERAGENT_AGENTWEB = WebConfig.AGENTWEB_VERSION
+        private const val USERAGENT_AGENTWEB = WebConfig.AGENT_WEB_VERSION
 
         @JvmStatic
         val instance: AbsAgentWebSettings

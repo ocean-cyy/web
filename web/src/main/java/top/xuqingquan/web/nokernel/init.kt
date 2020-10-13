@@ -49,7 +49,7 @@ fun initTbs(
 
         override fun onViewInitFinished(p0: Boolean) {
             if (p0) {
-                WebConfig.enableTbs()
+                WebConfig.tbsStatus = true
             }
             Timber.d("QbSdk----onViewInitFinished--->$p0")
         }

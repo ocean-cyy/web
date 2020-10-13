@@ -44,7 +44,7 @@ import top.xuqingquan.utils.PermissionUtils;
  * Created by 许清泉 on 2019-06-19 23:29
  */
 @SuppressWarnings("rawtypes")
-public class DefaultDownloadImpl implements DownloadListener {
+public final class DefaultDownloadImpl implements DownloadListener {
     /**
      * Application Context
      */
@@ -63,7 +63,7 @@ public class DefaultDownloadImpl implements DownloadListener {
      */
     protected WeakReference<AbsAgentWebUIController> mAgentWebUIController;
 
-    private static Handler mHandler = new Handler(Looper.getMainLooper());
+    private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private boolean isInstallDownloader;
 
@@ -91,6 +91,7 @@ public class DefaultDownloadImpl implements DownloadListener {
         mHandler.post(() -> onDownloadStartInternal(url, userAgent, contentDisposition, mimetype, contentLength));
     }
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     protected void onDownloadStartInternal(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         if (null == mActivityWeakReference.get() || mActivityWeakReference.get().isFinishing()) {
             return;
@@ -224,7 +225,9 @@ public class DefaultDownloadImpl implements DownloadListener {
 
     protected void forceDownload(final String url) {
         ResourceRequest resourceRequest = mDownloadTasks.get(url);
-        resourceRequest.setForceDownload(true);
+        if (resourceRequest != null) {
+            resourceRequest.setForceDownload(true);
+        }
         performDownload(url);
     }
 
@@ -259,8 +262,10 @@ public class DefaultDownloadImpl implements DownloadListener {
                 return;
             }
             ResourceRequest resourceRequest = mDownloadTasks.get(url);
-            resourceRequest.addHeader("Cookie", AgentWebConfig.getCookiesByUrl(url));
-            taskEnqueue(resourceRequest);
+            if (resourceRequest != null) {
+                resourceRequest.addHeader("Cookie", AgentWebConfig.getCookiesByUrl(url));
+                taskEnqueue(resourceRequest);
+            }
         } catch (Throwable throwable) {
             Timber.e(throwable);
         }

@@ -18,6 +18,7 @@ import com.tencent.smtt.sdk.CookieManager as X5CookieManager
  * Create by 许清泉 on 2020/8/22 20:35
  */
 class SonicRuntimeImpl(context: Context) : SonicRuntime(context) {
+    @Suppress("PrivatePropertyName")
     private val TAG = "SonicRuntimeImpl"
     private val tbsEnable by lazy { WebConfig.isTbsEnable() }
 

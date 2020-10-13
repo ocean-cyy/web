@@ -1,25 +1,24 @@
-@file:Suppress("DEPRECATION")
-
 package top.xuqingquan.web.publics
 
 import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Handler
 import android.os.Message
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebView
 import android.widget.EditText
-import android.support.v7.app.AlertDialog
-import top.xuqingquan.web.R
-import top.xuqingquan.web.nokernel.WebUtils
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getApplicationName
+import top.xuqingquan.web.R
+import top.xuqingquan.web.nokernel.WebUtils
 import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptResult
 import com.tencent.smtt.export.external.interfaces.JsResult as X5JsResult
 import com.tencent.smtt.sdk.WebView as X5WebView
 
+@Suppress("DEPRECATION")
 open class DefaultUIController : AbsAgentWebUIController() {
 
     private var mJsPromptResult: JsPromptResult? = null

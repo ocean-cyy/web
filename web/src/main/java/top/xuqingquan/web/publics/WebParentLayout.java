@@ -20,7 +20,7 @@ import top.xuqingquan.web.nokernel.Provider;
 import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.utils.Timber;
 
-public class WebParentLayout extends FrameLayout implements Provider<AbsAgentWebUIController> {
+public final class WebParentLayout extends FrameLayout implements Provider<AbsAgentWebUIController> {
     private AbsAgentWebUIController mAgentWebUIController = null;
     @LayoutRes
     private int mErrorLayoutRes;

@@ -12,7 +12,7 @@ import top.xuqingquan.web.nokernel.WebConfig;
 @SuppressWarnings("rawtypes")
 public abstract class JsBaseInterfaceHolder implements JsInterfaceHolder {
 
-    private WebCreator mWebCreator;
+    private final WebCreator mWebCreator;
 
     protected JsBaseInterfaceHolder(WebCreator webCreator) {
         this.mWebCreator = webCreator;
@@ -20,7 +20,7 @@ public abstract class JsBaseInterfaceHolder implements JsInterfaceHolder {
 
     @Override
     public boolean checkObject(@NonNull Object v) {
-        if (mWebCreator.getWebViewType() == WebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE) {
+        if (mWebCreator.getWebViewType() == WebConfig.WEB_VIEW_AGENT_WEB_SAFE_TYPE) {
             return true;
         }
         boolean tag = false;
