@@ -72,8 +72,10 @@ fun initAdblock(
     }
     val map = urlToResourceIdMap
         ?: mapOf(
-            "https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt" to R.raw.easylistchina_easylist,
-            "https://easylist-downloads.adblockplus.org/exceptionrules.txt" to R.raw.exceptionrules
+            "https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt" to R.raw.easylistchina_easylist,//中文规则
+            "https://easylist-downloads.adblockplus.org/exceptionrules.txt" to R.raw.exceptionrules,//可接受广告
+            "https://cdn.adblockcdn.com/filters/adblock_custom.txt" to R.raw.adblock_custom,//自定义规则
+            "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt" to R.raw.abp_filters_anti_cv//反规避拦截规则
         )
     val provider =
         AdblockHelper.get().init(context, context.cacheDir.absolutePath, WebConfig.DEBUG, "adblock")
