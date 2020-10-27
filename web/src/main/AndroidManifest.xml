@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <application>
+    <application android:requestLegacyExternalStorage="true">
         <!-- 如果有接入腾讯X5时候需要用这个做播放视频 -->
         <activity
             android:name="com.tencent.smtt.sdk.VideoActivity"

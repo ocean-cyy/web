@@ -6,7 +6,7 @@ buildscript {
     ext.support = '28.0.0'
     ext.test = '1.0.2'
     ext.espresso = '3.0.2'
-    ext.junit = '4.13'
+    ext.junit = '4.13.1'
     ext.constraint = '2.0.2'
     repositories {
         google()

@@ -2,11 +2,13 @@ package top.xuqingquan.web.publics
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.graphics.Color
 import android.os.Handler
 import android.os.Message
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -14,12 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.TextView
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.utils.Timber
-
+import top.xuqingquan.web.R
+import top.xuqingquan.web.nokernel.WebConfig
 import com.tencent.smtt.sdk.WebView as X5WebView
 
 class DefaultDesignUIController : DefaultUIController() {
@@ -49,8 +48,8 @@ class DefaultDesignUIController : DefaultUIController() {
                 view,
                 message,
                 Snackbar.LENGTH_SHORT,
-                Color.WHITE,
-                ContextCompat.getColor(this.mActivity!!, android.R.color.black),
+                ContextCompat.getColor(this.mActivity!!, R.color.white),
+                ContextCompat.getColor(this.mActivity!!, R.color.black),
                 null,
                 -1, null
             )
@@ -72,8 +71,8 @@ class DefaultDesignUIController : DefaultUIController() {
                 view,
                 message,
                 Snackbar.LENGTH_SHORT,
-                Color.WHITE,
-                ContextCompat.getColor(this.mActivity!!, android.R.color.black),
+                ContextCompat.getColor(this.mActivity!!, R.color.white),
+                ContextCompat.getColor(this.mActivity!!, R.color.black),
                 null,
                 -1, null
             )

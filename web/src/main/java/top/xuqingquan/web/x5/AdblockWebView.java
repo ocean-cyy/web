@@ -42,7 +42,7 @@ import top.xuqingquan.web.nokernel.WebConfig;
  * Created by 许清泉 on 2020/8/29 23:41
  */
 @SuppressWarnings("all")
-public class AdblockWebView extends AgentWebView {
+public final class AdblockWebView extends AgentWebView {
 
     /**
      * Default (in some conditions) start redraw delay after DOM modified with injected JS (millis)
