@@ -12,7 +12,7 @@ import top.xuqingquan.web.nokernel.PermissionInterceptor
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "http://pianbt.com/subject/27121260/"
+    private val url = "http://m.bilibili.com/"
 
     private lateinit var agentWeb: AgentWeb
 
@@ -36,13 +36,13 @@ class MainActivity : AppCompatActivity() {
                     return false
                 }
             })
-            .setOpenOtherPageWays(OpenOtherPageWays.DISALLOW)
+            .setOpenOtherPageWays(OpenOtherPageWays.ASK)
             .parseThunder()
             .createAgentWeb()
             .ready()
             .get()
         agentWeb.urlLoader?.loadUrl(url)
-        agentWeb.webCreator?.getWebView()?.settings?.userAgentString=""
+        agentWeb.webCreator?.getWebView()?.settings?.userAgentString = ""
     }
 
     override fun onPause() {

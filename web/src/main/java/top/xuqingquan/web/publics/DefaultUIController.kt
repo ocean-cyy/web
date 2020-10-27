@@ -112,7 +112,7 @@ open class DefaultUIController : AbsAgentWebUIController() {
 
     private fun setDialogTextColor(dialog: AlertDialog) {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(ContextCompat.getColor(mActivity!!, R.color.black))
+            .setTextColor(ContextCompat.getColor(mActivity!!, R.color.gray1))
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(mActivity!!, R.color.blue))
     }
@@ -167,12 +167,12 @@ open class DefaultUIController : AbsAgentWebUIController() {
         showDialog(
             R.string.scaffold_tips,
             mActivity!!.getString(R.string.scaffold_honeycomblow),
+            R.string.scaffold_cancel,
+            { _, _ ->
+            },
             R.string.scaffold_download,
             { _, _ ->
                 callback.handleMessage(Message.obtain())
-            },
-            R.string.scaffold_cancel,
-            { _, _ ->
             })
     }
 
@@ -183,12 +183,12 @@ open class DefaultUIController : AbsAgentWebUIController() {
         showDialog(
             R.string.scaffold_tips,
             this.mActivity!!.getString(R.string.scaffold_download_file_tips, fileName),
+            R.string.scaffold_cancel,
+            { _, _ ->
+            },
             R.string.scaffold_download,
             { _, _ ->
                 callback.handleMessage(Message.obtain())
-            },
-            R.string.scaffold_cancel,
-            { _, _ ->
             })
     }
 
