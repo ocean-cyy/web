@@ -5,25 +5,30 @@ import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
+import org.adblockplus.libadblockplus.android.settings.AdblockHelper
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.system.adblock.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "http://m.bilibili.com/"
+    private val url = "http://www.keluzy9.com/"
 
     private lateinit var agentWeb: AgentWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val webView=AdblockWebView(this)
+        webView.setProvider(AdblockHelper.get().provider)
         agentWeb = AgentWeb
             .with(this)
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
             .interceptUnknownUrl()
+            .setWebView(webView)
             .setPermissionInterceptor(object : PermissionInterceptor {
                 override fun intercept(
                     url: String?,

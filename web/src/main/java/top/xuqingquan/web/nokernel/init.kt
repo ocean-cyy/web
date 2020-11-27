@@ -4,7 +4,7 @@ import android.content.Context
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
-import org.adblockplus.libadblockplus.android.SingleInstanceEngineProvider
+import org.adblockplus.libadblockplus.android.AdblockEngineProvider
 import org.adblockplus.libadblockplus.android.settings.AdblockHelper
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.R
@@ -64,8 +64,8 @@ fun initTbs(
 fun initAdblock(
     context: Context,
     urlToResourceIdMap: Map<String, Int>? = null,
-    engineCreatedListener: SingleInstanceEngineProvider.EngineCreatedListener? = null,
-    engineDisposedListener: SingleInstanceEngineProvider.EngineDisposedListener? = null
+    engineCreatedListener: AdblockEngineProvider.EngineCreatedListener? = null,
+    engineDisposedListener: AdblockEngineProvider.EngineDisposedListener? = null
 ) {
     if (AdblockHelper.get().isInit) {
         return
