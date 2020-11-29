@@ -6,6 +6,8 @@ import com.tencent.smtt.sdk.WebView
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.publics.AgentWebUtils
 import top.xuqingquan.utils.Timber
+import top.xuqingquan.utils.decode
+import top.xuqingquan.utils.hasUrlEncoded
 import top.xuqingquan.web.R
 import top.xuqingquan.web.nokernel.WebUtils
 import top.xuqingquan.web.utils.download
@@ -52,7 +54,7 @@ open class AgentWebSettingsImpl : AbsAgentWebSettings() {
                         }
                         return@DownloadListener
                     }
-                    val fileName = try {
+                    var fileName = try {
                         var lastIndexOf = url.lastIndexOf("/")
                         if (lastIndexOf != url.length - 1) {//如果已经不是最后一项了
                             lastIndexOf += 1
@@ -64,6 +66,13 @@ open class AgentWebSettingsImpl : AbsAgentWebSettings() {
                         }
                     } catch (e: Throwable) {
                         url
+                    }
+                    try {
+                        if (hasUrlEncoded(fileName)) {
+                            fileName = decode(fileName)
+                        }
+                    } catch (t: Throwable) {
+
                     }
                     if (uiController != null) {
                         uiController.onDownloadPrompt(fileName, Handler.Callback {
