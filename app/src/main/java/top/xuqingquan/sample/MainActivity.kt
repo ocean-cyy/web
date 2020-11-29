@@ -7,14 +7,19 @@ import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.ViewGroup
-import android.webkit.*
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse
+import com.tencent.smtt.sdk.WebChromeClient
+import com.tencent.smtt.sdk.WebView
+import com.tencent.smtt.sdk.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.EventsListener
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.system.AdblockWebView
+import top.xuqingquan.web.x5.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,13 +63,13 @@ class MainActivity : AppCompatActivity() {
                     return false
                 }
             })
-            .setWebChromeClient(object :WebChromeClient(){
+            .setWebChromeClient(object : WebChromeClient(){
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
                     super.onProgressChanged(view, newProgress)
                     Timber.d("newProgress=${newProgress}")
                 }
             })
-            .setWebViewClient(object :WebViewClient(){
+            .setWebViewClient(object : WebViewClient(){
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
                     Timber.d("onPageStarted")

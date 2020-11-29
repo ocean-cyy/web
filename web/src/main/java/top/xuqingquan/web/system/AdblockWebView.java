@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.CookieManager;
@@ -28,8 +30,6 @@ import org.adblockplus.libadblockplus.android.Utils;
 import org.adblockplus.libadblockplus.android.settings.AdblockHelper;
 import org.adblockplus.libadblockplus.sitekey.PublicKeyHolderImpl;
 import org.adblockplus.libadblockplus.sitekey.SiteKeysConfiguration;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -1266,7 +1266,7 @@ public final class AdblockWebView extends AgentWebView {
         }
     }
 
-    public void loge(Throwable t, @NonNls String message, Object... args) {
+    public void loge(Throwable t, @NonNull String message, Object... args) {
         if (isDebug()) {
             Timber.e(t, message, args);
         }

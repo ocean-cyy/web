@@ -3,6 +3,8 @@ package top.xuqingquan.sample
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_start.*
+import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.web.publics.AgentWebConfig
 
 
@@ -11,6 +13,9 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         AgentWebConfig.debug()
-        startActivity(Intent(this, MainActivity::class.java))
+        btn.setOnClickListener {
+            WebConfig.enableTbs()
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 }
