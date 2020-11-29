@@ -1262,7 +1262,7 @@ public final class AdblockWebView extends AgentWebView {
 
     public void loge(String msg, Object... args) {
         if (isDebug()) {
-            Timber.e(msg, msg);
+            Timber.e(msg, args);
         }
     }
 
