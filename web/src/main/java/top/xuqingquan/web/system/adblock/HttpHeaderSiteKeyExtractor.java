@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import timber.log.Timber;
+import top.xuqingquan.web.system.AdblockWebView;
 
 import static org.adblockplus.libadblockplus.android.Utils.convertHeaderEntriesToMap;
 import static org.adblockplus.libadblockplus.android.Utils.convertMapToHeadersList;

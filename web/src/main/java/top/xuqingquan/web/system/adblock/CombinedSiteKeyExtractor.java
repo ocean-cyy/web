@@ -7,6 +7,7 @@ import android.webkit.WebResourceResponse;
 import org.adblockplus.libadblockplus.sitekey.SiteKeysConfiguration;
 
 import timber.log.Timber;
+import top.xuqingquan.web.system.AdblockWebView;
 
 /**
  * Decides what extractor has to be used by analyzing the data
@@ -25,7 +26,7 @@ public class CombinedSiteKeyExtractor implements SiteKeyExtractor {
     private final SiteKeyExtractor jsExtractor;
 
     @SuppressWarnings("WeakerAccess")
-    protected CombinedSiteKeyExtractor(final AdblockWebView webView) {
+    public CombinedSiteKeyExtractor(final AdblockWebView webView) {
         httpExtractor = new HttpHeaderSiteKeyExtractor(webView);
         // by calling it new javascript interface handler added to the WebView
         jsExtractor = new JsSiteKeyExtractor(webView);

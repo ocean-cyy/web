@@ -4,6 +4,8 @@ import org.adblockplus.libadblockplus.sitekey.SiteKeysConfiguration;
 
 import java.lang.ref.WeakReference;
 
+import top.xuqingquan.web.system.AdblockWebView;
+
 /*
  * This is base implementation of SiteKeyExtractor
  */

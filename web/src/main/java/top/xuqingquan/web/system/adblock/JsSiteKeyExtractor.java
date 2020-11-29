@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
+import top.xuqingquan.web.system.AdblockWebView;
 
 /**
  * Extracts <i>Site Key</i> from `html.data-adblockkey` tag

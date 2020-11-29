@@ -6,6 +6,8 @@ import android.webkit.WebView;
 
 import org.adblockplus.libadblockplus.sitekey.SiteKeysConfiguration;
 
+import top.xuqingquan.web.system.AdblockWebView;
+
 /**
  * Created by 许清泉 on 11/28/20 1:39 AM
  */
