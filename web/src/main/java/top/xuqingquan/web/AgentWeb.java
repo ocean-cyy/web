@@ -25,7 +25,6 @@ import top.xuqingquan.web.nokernel.IUrlLoader;
 import top.xuqingquan.web.nokernel.JsInterfaceHolder;
 import top.xuqingquan.web.nokernel.OpenOtherPageWays;
 import top.xuqingquan.web.nokernel.PermissionInterceptor;
-import top.xuqingquan.web.nokernel.PermissionInterceptorWrapper;
 import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.web.nokernel.WebLifeCycle;
 import top.xuqingquan.web.publics.AbsAgentWebUIController;
@@ -218,7 +217,7 @@ public final class AgentWeb {
         if (agentBuilder.mPermissionInterceptor == null) {
             this.mPermissionInterceptor = null;
         } else {
-            this.mPermissionInterceptor = new PermissionInterceptorWrapper(agentBuilder.mPermissionInterceptor);
+            this.mPermissionInterceptor = agentBuilder.mPermissionInterceptor;
         }
         this.mWebClientHelper = agentBuilder.mWebClientHelper;
         this.mParseThunder = agentBuilder.mParseThunder;
