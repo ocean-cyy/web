@@ -13,8 +13,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        initAdblock(this)
-        initTbs(this)
+//        initAdblock(this)
+//        initTbs(this)
     }
 
 }

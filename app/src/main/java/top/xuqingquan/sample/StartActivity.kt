@@ -13,9 +13,9 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         AgentWebConfig.debug()
-        btn.setOnClickListener {
-            WebConfig.enableTbs()
+//        btn.setOnClickListener {
+//            WebConfig.enableTbs()
             startActivity(Intent(this, MainActivity::class.java))
-        }
+//        }
     }
 }
