@@ -593,7 +593,19 @@ final class FileChooser {
      * 经过多次的测试，在小米 MIUI ， 华为 ，多部分为 Android 6.0 左右系统相机获取到的文件
      * length为0 ，导致前端 ，获取到的文件， 作预览的时候不正常 ，等待5S左右文件又正常了 ， 所以这里做了阻塞等待处理，
      */
-    private void aboveLollipopCheckFilesAndCallback(final Uri[] datas, boolean isCamera) {
+    private void aboveLollipopCheckFilesAndCallback(final Uri[] uris, boolean isCamera) {
+        Uri[] datas;
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q && uris != null) {
+            //只设置Android10版本，避免出错
+            //Android 10，targetSdkVersion >= 29 时候，file://文件无法上传，但是转成content://就可以了
+            datas = new Uri[uris.length];
+            for (int i = 0; i < uris.length; i++) {
+                Uri data = uris[i];
+                datas[i] = FileUtils.getFileMediaUrl(mActivity, data);
+            }
+        } else {
+            datas = uris;
+        }
         String[] paths = null;
         try {
             paths = FileUtils.uriToPath(mActivity, datas);
