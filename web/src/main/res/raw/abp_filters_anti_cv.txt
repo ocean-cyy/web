@@ -1,8 +1,8 @@
 [Adblock Plus 3.1]
-! Checksum: ebRFe68Regwcz25xcSEXCw
-! Version: 202012100220
+! Checksum: jzY615GQa7Cpp7rCT7drYQ
+! Version: 202012101630
 ! Title: ABP filters
-! Last modified: 10 Dec 2020 02:20 UTC
+! Last modified: 10 Dec 2020 16:30 UTC
 ! Expires: 1 hours (update frequency)
 ! Homepage: https://github.com/abp-filters/abp-filters-anti-cv
 !
@@ -260,6 +260,7 @@ _bfr_$image,domain=ahaonline.cz|auto.cz|autorevue.cz|blesk.cz|dama.cz|e15.cz|mam
 &cmpState=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz|expres.cz|www.idnes.cz
 &ifr=0|$script,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz|iprima.cz
 =js&lst=$script,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz|iprima.cz|tiscali.cz|kinobox.cz|osobnosti.cz|karaoketexty.cz|nasepenize.cz|fights.cz|novinky.cz|super.cz|sport.cz|kupi.cz|horoskopy.cz|televizeseznam.cz
+/tigatage:$script,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz|iprima.cz|tiscali.cz|kinobox.cz|osobnosti.cz|karaoketexty.cz|nasepenize.cz|fights.cz|novinky.cz|super.cz|sport.cz|kupi.cz|horoskopy.cz|televizeseznam.cz
 X3V00Hx6H00E$image,script,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 ePojisteni$image,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 planeo$image,domain=www.idnes.cz|expres.cz|auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
@@ -434,11 +435,13 @@ novinky.cz,kupi.cz,sport.cz,super.cz,horoskopy.cz,televizeseznam.cz###sznad-vide
 novinky.cz,kupi.cz,sport.cz,super.cz,horoskopy.cz##[data-blahakvaka]
 novinky.cz##a[href*="&partId="]
 novinky.cz##a[title][target="_blank"][href^="//www.novinky.cz/"]
-novinky.cz##div[style^="background-Image:"], [style^="bAckgRound-imAge:"]
-sport.cz##iframe[frameborder="nO"][scrolling="No"][src^="https://www.sport.cz/"]
-super.cz##iframe[frameborder="nO"][scrolling="No"][src^="https://www.super.cz/"]
-novinky.cz##iframe[frameborder="NO"][scrolling="NO"][src^="https://www.novinky.cz/"]
+novinky.cz##div[style^="background-Image:"], [style^="bAckgroUnd-imAge:"]
+sport.cz##iframe[frameborder][scrolling][src^="https://www.sport.cz/"]
+super.cz##iframe[frameborder][scrolling][src^="https://www.super.cz/"]
+novinky.cz##iframe[frameborder][scrolling][src^="https://www.novinky.cz/"]
+kupi.cz##iframe[frameborder][scrolling][src^="https://www.kupi.cz/"]
 kupi.cz##[class$="_ssp"], [class^="ssp_"]
+novinky.cz,sport.cz,super.cz##[class$="_main__ad"]
 novinky.cz,super.cz,sport.cz,expres.cz##.barMan
 auto.cz,autorevue.cz,maminka.cz,reflex.cz,ahaonline.cz,blesk.cz,dama.cz,e15.cz,info.cz,mobilmania.cz,mojezdravi.cz,onetv.cz,zeny.cz,zive.cz,expres.cz##a[href*="verdsi="][href*="&ip="]
 auto.cz,autorevue.cz,maminka.cz,reflex.cz,ahaonline.cz,blesk.cz,dama.cz,e15.cz,info.cz,mobilmania.cz,mojezdravi.cz,onetv.cz,zeny.cz,zive.cz,expres.cz##[href*="&token="][target="_blank"]
@@ -454,6 +457,7 @@ ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,ipri
 ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,iprima.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,novinky.cz,onetv.cz,osobnosti.cz,reflex.cz,sport.cz,super.cz,tiscali.cz,zeny.cz,zive.cz##iframe[src*=" javascript: window"]
 ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,iprima.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,novinky.cz,onetv.cz,osobnosti.cz,reflex.cz,sport.cz,super.cz,tiscali.cz,zeny.cz,zive.cz##.pe-banner
 ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,iprima.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,novinky.cz,onetv.cz,osobnosti.cz,reflex.cz,sport.cz,super.cz,tiscali.cz,zeny.cz,zive.cz##.advert
+ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,iprima.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,novinky.cz,onetv.cz,osobnosti.cz,reflex.cz,sport.cz,super.cz,tiscali.cz,zeny.cz,zive.cz##a[href*="?action=ppl&cid="]
 auto.cz,autorevue.cz,maminka.cz,reflex.cz,ahaonline.cz,blesk.cz,dama.cz,e15.cz,info.cz,mobilmania.cz,mojezdravi.cz,onetv.cz,zeny.cz,zive.cz,expres.cz##div[style*="background-image: url("][style*="background-repeat: no-repeat;"]
 ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,onetv.cz,osobnosti.cz,reflex.cz,tiscali.cz,zeny.cz,zive.cz##a.tracked-event[data-tid]
 ahaonline.cz,auto.cz,autorevue.cz,blesk.cz,dama.cz,e15.cz,expres.cz,info.cz,karaoketexty.cz,kinobox.cz,kupi.cz,maminka.cz,mobilmania.cz,mojezdravi.cz,nasepenize.cz,onetv.cz,osobnosti.cz,reflex.cz,tiscali.cz,zeny.cz,zive.cz##a.tracked-event[href*="&tcid="]
@@ -482,7 +486,8 @@ xloscate=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|b
 /poho22zenec=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 ?mode1=ps2&$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 /hoj455yester=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
-/poho0zen5ci=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
+;lopotaskosem=$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
+/pohled9nyce$script,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 ! #CV-780
 .cz/*,,*,|$xmlhttprequest,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
 =autapay/*,|$xmlhttprequest,domain=auto.cz|autorevue.cz|maminka.cz|reflex.cz|ahaonline.cz|blesk.cz|dama.cz|e15.cz|info.cz|mobilmania.cz|mojezdravi.cz|onetv.cz|zeny.cz|zive.cz
@@ -954,7 +959,7 @@ french-streams.com#$#abort-on-property-read open
 ! Popup/Popunder
 batporno.com#$#abort-on-property-read decodeURI
 jetanimes.co#$#abort-on-property-read atob
-ed-protect.org,dl-protect.best,dl-protect.top,dl-protect.xyz,dl-protect1.com,hdss.la,wawacity.co,wawacity.ec,wawacity.ninja,wawacity.vip,streaming-vostfr.net,hdss.to,extreme-down.video#$#abort-current-inline-script String.fromCharCode /btoa|break/
+ed-protect.org,dl-protect.best,dl-protect.top,dl-protect.xyz,dl-protect1.com,hdss.la,wawacity.co,wawacity.ec,wawacity.ninja,wawacity.vip,streaming-vostfr.net,hdss.to,extreme-down.video,extreme-down.top,extrem-down.vip#$#abort-current-inline-script String.fromCharCode /btoa|break/
 ! *** Fetched from: https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/german.txt ***
 ! #CV-664
 news.de#$#hide-if-contains-image-hash ffffffffffff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff * 0 16 777x0x800x23; hide-if-contains-image-hash 3fff3fff3fff3fff3fff3fff3fff3fff3fff3fff3fff3fff3fff3fffbfffbfff * 0 16 279x0x300x21
@@ -1020,7 +1025,7 @@ delfi.lt#$#abort-on-property-read __dabd
 ! *** Fetched from: https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/norwegian.txt ***
 ! *** Fetched from: https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/polish.txt ***
 ! #CV-705
-www.wp.pl#$#abort-on-property-read SlotRegistrar; abort-current-inline-script PRELOAD randvar; abort-on-property-read Object.prototype.bodies
+www.wp.pl#$#abort-on-property-read SlotRegistrar; abort-current-inline-script PRELOAD randvar
 dobreprogramy.pl#$#abort-on-property-read wp_adv_labels
 abczdrowie.pl#$#abort-on-property-read slot.parentElement
 autokult.pl,fotoblogia.pl,kafeteria.pl,komorkomania.pl,medycyna24.pl,smaczneblogi.pl,gadzetomania.pl#$#abort-on-property-read __wpApi
