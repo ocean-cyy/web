@@ -78,7 +78,7 @@ fun initAdblock(
             "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt" to R.raw.abp_filters_anti_cv//反规避拦截规则
         )
     val provider =
-        AdblockHelper.get().init(context, context.cacheDir.absolutePath, WebConfig.DEBUG, "adblock")
+        AdblockHelper.get().init(context, context.cacheDir.absolutePath, "adblock")
     provider.preloadSubscriptions("rules", map)
     if (engineCreatedListener != null) {
         provider.addEngineCreatedListener(engineCreatedListener)
@@ -94,5 +94,5 @@ fun initAdblock(
             Timber.d("addEngineDisposedListener")
         }
     }
-    provider.retain(true)
+    provider.provider.retain(true)
 }
