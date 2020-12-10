@@ -9,12 +9,14 @@ import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
+import top.xuqingquan.web.nokernel.EventsListener
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.system.AdblockWebView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://ditu.baidu.com/"
+    private val url = "https://www.baidu.com/"
 
     private lateinit var agentWeb: AgentWeb
 
@@ -26,22 +28,22 @@ class MainActivity : AppCompatActivity() {
             .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
             .interceptUnknownUrl()
-//            .setWebView(AdblockWebView(this).apply {
-//                isDebug=true
-//                setEventsListener(object :EventsListener{
-//                    override fun onNavigation() {
-//                        Timber.d("onNavigation")
-//                    }
-//
-//                    override fun onResourceLoadingBlocked(info: EventsListener.BlockedResourceInfo?) {
-//                        Timber.d("onResourceLoadingBlocked:${info?.requestUrl},${info?.parentFrameUrls},${info?.contentType}")
-//                    }
-//
-//                    override fun onResourceLoadingWhitelisted(info: EventsListener.WhitelistedResourceInfo?) {
-//                        Timber.d("onResourceLoadingWhitelisted:${info?.requestUrl},${info?.parentFrameUrls},${info?.reason}")
-//                    }
-//                })
-//            })
+            .setWebView(AdblockWebView(this).apply {
+                isDebug=true
+                setEventsListener(object : EventsListener {
+                    override fun onNavigation() {
+                        Timber.d("onNavigation")
+                    }
+
+                    override fun onResourceLoadingBlocked(info: EventsListener.BlockedResourceInfo?) {
+                        Timber.d("onResourceLoadingBlocked:${info?.requestUrl},${info?.parentFrameUrls},${info?.contentType}")
+                    }
+
+                    override fun onResourceLoadingWhitelisted(info: EventsListener.WhitelistedResourceInfo?) {
+                        Timber.d("onResourceLoadingWhitelisted:${info?.requestUrl},${info?.parentFrameUrls},${info?.reason}")
+                    }
+                })
+            })
 //            .setPermissionInterceptor(object : PermissionInterceptor {
 //                override fun intercept(
 //                    url: String?,
@@ -97,6 +99,15 @@ class MainActivity : AppCompatActivity() {
             .get()
         agentWeb.urlLoader?.loadUrl(url)
         agentWeb.webCreator?.getWebView()?.settings?.userAgentString = ""
+        refresh.setOnClickListener {
+            agentWeb.urlLoader?.reload()
+            enable.text = "enable:"+(agentWeb.webCreator?.getWebView() as AdblockWebView).isAdblockEnable
+        }
+        enable.text = "enable:"+(agentWeb.webCreator?.getWebView() as AdblockWebView).isAdblockEnable
+        enable.setOnClickListener {
+            (agentWeb.webCreator?.getWebView() as AdblockWebView).isAdblockEnable = !((agentWeb.webCreator?.getWebView() as AdblockWebView).isAdblockEnable)
+            enable.text = "enable:"+(agentWeb.webCreator?.getWebView() as AdblockWebView).isAdblockEnable
+        }
     }
 
     override fun onPause() {

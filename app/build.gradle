@@ -75,6 +75,6 @@ dependencies {
     implementation "top.xuqingquan:utils:2.2.9-support"
     //noinspection GradleDependency
 //    implementation "com.download.library:Downloader:4.1.3"
-//    implementation 'org.adblockplus:adblock-android-settings:4.1.2'
+    implementation 'org.adblockplus:adblock-android-settings:4.1.2'
 //    implementation "com.tencent.tbs.tbssdk:sdk:43967"
 }

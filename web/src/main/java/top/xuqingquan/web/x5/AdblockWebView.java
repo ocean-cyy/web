@@ -199,6 +199,23 @@ public final class AdblockWebView extends AgentWebView {
         return providerReference.get();
     }
 
+    public void setAdblockEnable(boolean adblockEnable) {
+        try {
+            getProvider().getEngine().setEnabled(adblockEnable);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isAdblockEnable() {
+        try {
+            return getProvider().getEngine().isEnabled();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private String readScriptFile(final String filename) throws IOException {
         return Utils
                 .readAssetAsString(getContext(), filename, ASSETS_CHARSET_NAME)
