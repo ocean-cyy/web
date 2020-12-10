@@ -2,6 +2,7 @@ package top.xuqingquan.web.publics
 
 import android.app.Activity
 import android.os.Build
+import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.webkit.JavascriptInterface
 import top.xuqingquan.utils.Timber
@@ -23,9 +24,9 @@ class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
             if (WebConfig.isTbsEnable() && mReference.get()?.x5WebCreator != null && mReference.get()?.x5WebCreator?.getWebView() != null) {
                 AgentWebUtils.showFileChooserCompat(mActivityWeakReference.get()!!,
                     mReference.get()!!.x5WebCreator!!.getWebView()!!, null, null,
-                    mReference.get()!!.permissionInterceptor, null,
+                    mReference.get()?.permissionInterceptor, null,
                     acceptType,
-                    {
+                    Handler.Callback {
                         if (mReference.get() != null) {
                             mReference.get()!!.jsAccessEntrace
                                 .quickCallJs(
@@ -43,9 +44,9 @@ class AgentWebJsInterfaceCompat(agentWeb: AgentWeb, activity: Activity) {
             } else if (mReference.get()?.webCreator != null && mReference.get()?.webCreator?.getWebView() != null) {
                 AgentWebUtils.showFileChooserCompat(mActivityWeakReference.get()!!,
                     mReference.get()!!.webCreator!!.getWebView()!!, null, null,
-                    mReference.get()!!.permissionInterceptor, null,
+                    mReference.get()?.permissionInterceptor, null,
                     acceptType,
-                    {
+                    Handler.Callback {
                         if (mReference.get() != null) {
                             mReference.get()!!.jsAccessEntrace
                                 .quickCallJs(

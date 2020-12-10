@@ -229,7 +229,7 @@ class DefaultChromeClient(
             false
         } else AgentWebUtils.showFileChooserCompat(
             mActivity, mWebView, valueCallbacks, fileChooserParams,
-            this.mPermissionInterceptor!!, null, null, null
+            this.mPermissionInterceptor, null, null, null
         )
     }
 

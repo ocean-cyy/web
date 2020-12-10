@@ -4,6 +4,7 @@
     package="top.xuqingquan.sample">
 
     <uses-sdk tools:overrideLibrary="org.adblockplus.libadblockplus.android.webview,org.adblockplus.libadblockplus.android.settings" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".App"

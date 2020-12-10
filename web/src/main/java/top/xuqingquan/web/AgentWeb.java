@@ -231,6 +231,7 @@ public final class AgentWeb {
     /**
      * @return PermissionInterceptor 权限控制者
      */
+    @Nullable
     public PermissionInterceptor getPermissionInterceptor() {
         return this.mPermissionInterceptor;
     }

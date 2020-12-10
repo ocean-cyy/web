@@ -232,7 +232,7 @@ object AgentWebUtils {
         webView: WebView,
         valueCallbacks: ValueCallback<Array<Uri>>?,
         fileChooserParams: WebChromeClient.FileChooserParams?,
-        permissionInterceptor: PermissionInterceptor,
+        permissionInterceptor: PermissionInterceptor?,
         valueCallback: ValueCallback<Uri>?,
         mimeType: String?,
         jsChannelCallback: Handler.Callback?
@@ -275,7 +275,7 @@ object AgentWebUtils {
         webView: X5WebView,
         valueCallbacks: X5ValueCallback<Array<Uri>>?,
         fileChooserParams: X5WebChromeClient.FileChooserParams?,
-        permissionInterceptor: PermissionInterceptor,
+        permissionInterceptor: PermissionInterceptor?,
         valueCallback: X5ValueCallback<Uri>?,
         mimeType: String?,
         jsChannelCallback: Handler.Callback?
