@@ -1,35 +1,30 @@
-package top.xuqingquan.web.system;
+package top.xuqingquan.web.system
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.webkit.WebView;
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
+import android.util.AttributeSet
+import android.webkit.WebView
 
 /**
  * 修复 Android 5.0 & 5.1 打开 WebView 闪退问题：
  * 参阅 https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview
  */
-@SuppressWarnings({"unused", "deprecation", "RedundantSuppression"})
-public class LollipopFixedWebView extends WebView {
-    public LollipopFixedWebView(Context context) {
-        super(getFixedContext(context));
-    }
+open class LollipopFixedWebView : WebView {
+    constructor(context: Context) : super(getFixedContext(context))
+    constructor(context: Context, attrs: AttributeSet?) : super(getFixedContext(context), attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        getFixedContext(context), attrs, defStyleAttr
+    )
 
-    public LollipopFixedWebView(Context context, AttributeSet attrs) {
-        super(getFixedContext(context), attrs);
-    }
-
-    public LollipopFixedWebView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(getFixedContext(context), attrs, defStyleAttr);
-    }
-
-    public static Context getFixedContext(Context context) {
-        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 23) {
-            // Avoid crashing on Android 5 and 6 (API level 21 to 23)
-            return context.createConfigurationContext(new Configuration());
+    companion object {
+        fun getFixedContext(context: Context): Context {
+            return if (Build.VERSION.SDK_INT in 21..22) {
+                // Avoid crashing on Android 5 and 6 (API level 21 to 23)
+                context.createConfigurationContext(Configuration())
+            } else {
+                context
+            }
         }
-        return context;
     }
-
 }

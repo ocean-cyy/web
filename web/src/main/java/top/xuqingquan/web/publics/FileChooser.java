@@ -175,7 +175,7 @@ final class FileChooser {
         if (getDeniedPermissions(mActivity, AgentWebPermissions.STORAGE).isEmpty()) {
             touchOffFileChooserAction();
         } else {
-            Action mAction = Action.createPermissionsAction(AgentWebPermissions.STORAGE);
+            Action mAction = Action.createPermissionsAction(Arrays.asList(AgentWebPermissions.STORAGE));
             mAction.setFromIntention(FROM_INTENTION_CODE >> 2);
             ActionActivity.setPermissionListener(mPermissionListener);
             ActionActivity.start(mActivity, mAction);
@@ -349,7 +349,7 @@ final class FileChooser {
             List<String> deniedPermissions = checkNeedPermission();
             if (!deniedPermissions.isEmpty()) {
                 mAction.setAction(Action.ACTION_PERMISSION);
-                mAction.setPermissions(deniedPermissions.toArray(new String[]{}));
+                mAction.setPermissions(new ArrayList<>());
                 mAction.setFromIntention(FROM_INTENTION_CODE >> 3);
                 ActionActivity.setPermissionListener(this.mPermissionListener);
                 ActionActivity.start(mActivity, mAction);

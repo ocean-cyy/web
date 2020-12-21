@@ -119,7 +119,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
             if (mList.isEmpty()) {
                 preDownload(url);
             } else {
-                Action mAction = Action.createPermissionsAction(mList.toArray(new String[]{}));
+                Action mAction = Action.createPermissionsAction(mList);
                 ActionActivity.setPermissionListener(getPermissionListener(url));
                 ActionActivity.start(mActivityWeakReference.get(), mAction);
             }

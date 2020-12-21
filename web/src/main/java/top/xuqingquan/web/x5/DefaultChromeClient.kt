@@ -148,7 +148,7 @@ class DefaultChromeClient(
             Timber.i("onGeolocationPermissionsShowPromptInternal:true")
             callback?.invoke(origin, true, false)
         } else {
-            val mAction = Action.createPermissionsAction(deniedPermissions.toTypedArray())
+            val mAction = Action.createPermissionsAction(deniedPermissions)
             mAction.fromIntention = FROM_CODE_INTENTION_LOCATION
             ActionActivity.setPermissionListener(mPermissionListener)
             this.mCallback = callback
