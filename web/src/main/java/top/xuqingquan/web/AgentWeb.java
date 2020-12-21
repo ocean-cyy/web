@@ -532,7 +532,7 @@ public final class AgentWeb {
     @SuppressWarnings("ConstantConditions")
     private android.webkit.WebChromeClient getChromeClient() {
         this.mIndicatorController = (this.mIndicatorController == null) ?
-                IndicatorHandler.getInstance().inJectIndicator(getWebCreator().offer())
+                IndicatorHandler.getInstance().injectIndicator(getWebCreator().offer())
                 : this.mIndicatorController;
         this.mIVideo = getIVideo();
         top.xuqingquan.web.system.DefaultChromeClient mDefaultChromeClient =
@@ -562,7 +562,7 @@ public final class AgentWeb {
     @SuppressWarnings("ConstantConditions")
     private com.tencent.smtt.sdk.WebChromeClient getX5ChromeClient() {
         this.mIndicatorController = (this.mIndicatorController == null) ?
-                IndicatorHandler.getInstance().inJectIndicator(getX5WebCreator().offer())
+                IndicatorHandler.getInstance().injectIndicator(getX5WebCreator().offer())
                 : this.mIndicatorController;
         top.xuqingquan.web.x5.DefaultChromeClient mDefaultChromeClient =
                 new top.xuqingquan.web.x5.DefaultChromeClient(this.mActivity,

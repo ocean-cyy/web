@@ -49,7 +49,7 @@ class IndicatorHandler : IndicatorController {
     }
 
 
-    fun inJectIndicator(baseIndicatorSpec: BaseIndicatorSpec): IndicatorHandler {
+    fun injectIndicator(baseIndicatorSpec: BaseIndicatorSpec?): IndicatorHandler {
         this.mBaseIndicatorSpec = baseIndicatorSpec
         return this
     }
