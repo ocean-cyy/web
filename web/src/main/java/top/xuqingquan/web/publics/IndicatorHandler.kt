@@ -28,8 +28,8 @@ class IndicatorHandler : IndicatorController {
         }
     }
 
-    override fun offerIndicator(): BaseIndicatorSpec {
-        return this.mBaseIndicatorSpec!!
+    override fun offerIndicator(): BaseIndicatorSpec? {
+        return this.mBaseIndicatorSpec
     }
 
     fun reset() {
