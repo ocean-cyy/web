@@ -77,7 +77,20 @@ class DefaultChromeClient(
                 if (hasPermission) {
                     mCallback!!.invoke(mOrigin, true, false)
                 } else {
-                    mCallback!!.invoke(mOrigin, false, false)
+                    val mActivity = mActivityWeakReference.get()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mActivity != null) {
+                        var shouldShowRequestPermissionRationale = false
+                        for (permission in permissions) {
+                            if (mActivity.shouldShowRequestPermissionRationale(permission)
+                            ) {//只要有一个需要申请权限的
+                                shouldShowRequestPermissionRationale = true
+                                break
+                            }
+                        }
+                        mCallback!!.invoke(mOrigin, false, !shouldShowRequestPermissionRationale)
+                    } else {
+                        mCallback!!.invoke(mOrigin, false, true)
+                    }
                 }
                 mCallback = null
                 mOrigin = null

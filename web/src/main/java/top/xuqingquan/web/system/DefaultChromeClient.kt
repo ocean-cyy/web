@@ -157,19 +157,6 @@ class DefaultChromeClient(
             Timber.i("onGeolocationPermissionsShowPromptInternal:true")
             callback?.invoke(origin, true, false)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                var shouldShowRequestPermissionRationale = false
-                for (permission in deniedPermissions) {
-                    if (mActivity.shouldShowRequestPermissionRationale(permission)) {//只要有一个需要申请权限的
-                        shouldShowRequestPermissionRationale = true
-                        break
-                    }
-                }
-                if (!shouldShowRequestPermissionRationale) {
-                    callback?.invoke(origin, false, true)
-                    return
-                }
-            }
             val mAction = Action.createPermissionsAction(deniedPermissions)
             mAction.fromIntention = FROM_CODE_INTENTION_LOCATION
             ActionActivity.setPermissionListener(mPermissionListener)

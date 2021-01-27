@@ -5,6 +5,8 @@
 
     <uses-sdk tools:overrideLibrary="org.adblockplus.libadblockplus.android.webview,org.adblockplus.libadblockplus.android.settings" />
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".App"

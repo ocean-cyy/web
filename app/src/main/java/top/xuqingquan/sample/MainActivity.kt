@@ -2,15 +2,21 @@ package top.xuqingquan.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.KeyEvent
 import android.view.ViewGroup
+import android.webkit.WebView
 import kotlinx.android.synthetic.main.activity_main.*
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
+import top.xuqingquan.web.nokernel.PermissionInterceptor
+import top.xuqingquan.web.system.AbsAgentWebSettings
+import top.xuqingquan.web.system.IAgentWebSettings
 
 class MainActivity : AppCompatActivity() {
+    private val TAG = "MainActivity"
 
-    private val url = "https://graph.baidu.com/view/home"
+    private val url = "https://m.baidu.com"
 
     private lateinit var agentWeb: AgentWeb
 
@@ -23,6 +29,29 @@ class MainActivity : AppCompatActivity() {
             .useDefaultIndicator()
             .interceptUnknownUrl()
             .setOpenOtherPageWays(OpenOtherPageWays.ASK)
+            .setAgentWebWebSettings(object : AbsAgentWebSettings(){
+                override fun bindAgentWebSupport(agentWeb: AgentWeb) {
+                }
+
+                override fun toSetting(webView: WebView?): IAgentWebSettings<*> {
+                    val settings= super.toSetting(webView)
+                    settings.getWebSettings()?.setGeolocationEnabled(true)
+                    return settings
+                }
+            })
+            .setPermissionInterceptor(object : PermissionInterceptor {
+                override fun intercept(
+                    url: String?,
+                    permissions: Array<String>,
+                    action: String
+                ): Boolean {
+                    permissions.forEach {
+                        Log.d(TAG, "intercept: permissions=$it")
+                    }
+                    Log.d(TAG, "intercept: action=$action")
+                    return false
+                }
+            })
             .parseThunder()
             .createAgentWeb()
             .ready()
