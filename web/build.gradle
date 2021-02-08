@@ -1,11 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
@@ -54,10 +53,10 @@ dependencies {
     compileOnly fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin}"
     //noinspection GradleCompatible
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     //noinspection GradleCompatible
-    compileOnly 'com.google.android.material:material:1.0.0'
-    implementation "top.xuqingquan:utils:2.3.6-support"
+    compileOnly 'com.google.android.material:material:1.2.1'
+    implementation "top.xuqingquan:utils:3.0.0"
     //download（需要用到web下载的时候需要依赖）
     //noinspection GradleDependency
     compileOnly "com.download.library:Downloader:4.1.3"
@@ -66,9 +65,9 @@ dependencies {
     //去广告功能
     compileOnly 'org.adblockplus:adblock-android-settings:4.1.2'
     //test
-    testImplementation "junit:junit:${junit}"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
+    testImplementation "junit:junit:4.13.1"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
 }
 apply from: 'bintray.gradle'
