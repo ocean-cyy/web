@@ -3,7 +3,7 @@ package top.xuqingquan.web.x5
 import android.app.Activity
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.view.View
 import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.ValueCallback

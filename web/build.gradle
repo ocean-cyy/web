@@ -11,7 +11,7 @@ android {
         targetSdkVersion 30
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         flavorDimensions 'default'
         resourcePrefix "scaffold_"
         buildConfigField 'String', 'AgentWebVersionName', "\"${rootProject.ext.versionName}\""
@@ -54,9 +54,9 @@ dependencies {
     compileOnly fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin}"
     //noinspection GradleCompatible
-    implementation "com.android.support:appcompat-v7:${support}"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     //noinspection GradleCompatible
-    compileOnly "com.android.support:design:${support}"
+    compileOnly 'com.google.android.material:material:1.0.0'
     implementation "top.xuqingquan:utils:2.3.6-support"
     //download（需要用到web下载的时候需要依赖）
     //noinspection GradleDependency
@@ -67,8 +67,8 @@ dependencies {
     compileOnly 'org.adblockplus:adblock-android-settings:4.1.2'
     //test
     testImplementation "junit:junit:${junit}"
-    androidTestImplementation "com.android.support.test:runner:${test}"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espresso}"
-    androidTestImplementation "com.android.support.test:rules:${test}"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
 }
 apply from: 'bintray.gradle'

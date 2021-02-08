@@ -10,7 +10,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import android.support.v4.os.EnvironmentCompat
+import androidx.core.os.EnvironmentCompat
 import android.text.TextUtils
 import android.widget.Toast
 import top.xuqingquan.utils.EncryptUtils

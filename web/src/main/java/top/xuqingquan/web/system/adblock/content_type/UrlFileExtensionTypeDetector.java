@@ -1,7 +1,7 @@
 package top.xuqingquan.web.system.adblock.content_type;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.webkit.WebResourceRequest;
 
 import org.adblockplus.libadblockplus.FilterEngine;

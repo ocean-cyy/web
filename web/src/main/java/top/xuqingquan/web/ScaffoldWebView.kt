@@ -7,10 +7,10 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.webkit.WebView
 import android.widget.FrameLayout
-import android.support.annotation.ColorInt
-import android.support.annotation.DimenRes
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
+import androidx.annotation.ColorInt
+import androidx.annotation.DimenRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import top.xuqingquan.utils.px2dip
 import top.xuqingquan.web.nokernel.PermissionInterceptor
 import top.xuqingquan.web.nokernel.WebConfig

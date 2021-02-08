@@ -5,9 +5,9 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.os.Handler
 import android.os.Message
-import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
 import android.text.TextUtils
 import android.webkit.JsPromptResult
 import android.webkit.JsResult

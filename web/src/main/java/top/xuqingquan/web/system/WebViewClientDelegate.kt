@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.Message
 import android.view.KeyEvent
 import android.webkit.*
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 
 @Suppress("DEPRECATION")
 open class WebViewClientDelegate internal constructor(client: WebViewClient?) : WebViewClient() {

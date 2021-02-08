@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Message
 import android.view.KeyEvent
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.WebView
 import com.tencent.smtt.sdk.WebViewClient

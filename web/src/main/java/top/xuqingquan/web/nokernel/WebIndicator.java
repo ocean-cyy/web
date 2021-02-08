@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import top.xuqingquan.utils.DimensionsKt;
 import top.xuqingquan.utils.Timber;

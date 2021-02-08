@@ -5,9 +5,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.support.annotation.ColorInt
-import android.support.annotation.RequiresApi
-import android.support.design.widget.Snackbar
+import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
+import com.google.android.material.snackbar.Snackbar
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils

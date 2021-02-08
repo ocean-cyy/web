@@ -2,7 +2,7 @@
 buildscript {
     ext.versionCode = 259
     ext.versionName = '2.5.9-support'
-    ext.kotlin = '1.4.21'
+    ext.kotlin = '1.4.30'
     ext.support = '28.0.0'
     ext.test = '1.0.2'
     ext.espresso = '3.0.2'

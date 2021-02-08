@@ -1,7 +1,7 @@
 package top.xuqingquan.web.x5.adblock.content_type;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 
