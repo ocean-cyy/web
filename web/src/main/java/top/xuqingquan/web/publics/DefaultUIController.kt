@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package top.xuqingquan.web.publics
 
 import android.app.Activity
@@ -5,29 +7,23 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.os.Handler
 import android.os.Message
-import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
 import android.text.TextUtils
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebView
 import android.widget.EditText
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.getApplicationName
 import top.xuqingquan.web.R
 import top.xuqingquan.web.nokernel.WebUtils
-import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptResult
-import com.tencent.smtt.export.external.interfaces.JsResult as X5JsResult
-import com.tencent.smtt.sdk.WebView as X5WebView
 
-@Suppress("DEPRECATION")
 open class DefaultUIController : AbsAgentWebUIController() {
 
     private var mJsPromptResult: JsPromptResult? = null
     private var mJsResult: JsResult? = null
-    private var mX5JsPromptResult: X5JsPromptResult? = null
-    private var mX5JsResult: X5JsResult? = null
     private var mActivity: Activity? = null
     private var mWebParentLayout: WebParentLayout? = null
     private var mProgressDialog: ProgressDialog? = null
@@ -39,18 +35,8 @@ open class DefaultUIController : AbsAgentWebUIController() {
         WebUtils.toastShowShort(view.context.applicationContext, message)
     }
 
-    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
-        if (view == null || message.isNullOrEmpty()) {
-            return
-        }
-        WebUtils.toastShowShort(view.context.applicationContext, message)
-    }
 
     override fun onOpenPagePrompt(view: WebView, url: String, callback: Handler.Callback) {
-        onOpenPagePrompt(callback)
-    }
-
-    override fun onOpenPagePrompt(view: X5WebView, url: String, callback: Handler.Callback) {
         onOpenPagePrompt(callback)
     }
 
@@ -138,20 +124,8 @@ open class DefaultUIController : AbsAgentWebUIController() {
         onJsConfirmInternal(message, jsResult)
     }
 
-    override fun onJsConfirm(
-        view: X5WebView?, url: String?, message: String?, jsResult: X5JsResult?
-    ) {
-        onJsConfirmInternal(message, jsResult)
-    }
-
     override fun onSelectItemsPrompt(
         view: WebView, url: String, ways: Array<String>, callback: Handler.Callback
-    ) {
-        showChooserInternal(ways, callback)
-    }
-
-    override fun onSelectItemsPrompt(
-        view: X5WebView, url: String, ways: Array<String>, callback: Handler.Callback
     ) {
         showChooserInternal(ways, callback)
     }
@@ -231,27 +205,6 @@ open class DefaultUIController : AbsAgentWebUIController() {
             })
     }
 
-    private fun onJsConfirmInternal(
-        message: String?, jsResult: X5JsResult?
-    ) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
-            toCancelJsresult(jsResult)
-            return
-        }
-        Timber.i("activity:" + mActivity!!.hashCode() + "  ")
-        this.mX5JsResult = jsResult
-        showDialog(
-            R.string.scaffold_tips, message ?: "",
-            R.string.scaffold_cancel,
-            { _, _ ->
-                toCancelJsresult(jsResult)
-            },
-            android.R.string.ok,
-            { _, _ ->
-                jsResult?.confirm()
-            })
-    }
-
     private fun onJsPromptInternal(
         message: String?, defaultValue: String?, jsPromptResult: JsPromptResult?
     ) {
@@ -267,21 +220,6 @@ open class DefaultUIController : AbsAgentWebUIController() {
         })
     }
 
-    private fun onJsPromptInternal(
-        message: String?, defaultValue: String?, jsPromptResult: X5JsPromptResult?
-    ) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
-            jsPromptResult?.cancel()
-            return
-        }
-        this.mX5JsPromptResult = jsPromptResult
-        showDialog(message, defaultValue, {
-            toCancelJsresult(jsPromptResult)
-        }, { str ->
-            jsPromptResult?.confirm(str)
-        })
-    }
-
     override fun onJsPrompt(
         view: WebView?, url: String?, message: String?,
         defaultValue: String?, jsPromptResult: JsPromptResult?
@@ -289,22 +227,8 @@ open class DefaultUIController : AbsAgentWebUIController() {
         onJsPromptInternal(message, defaultValue, jsPromptResult)
     }
 
-    override fun onJsPrompt(
-        view: X5WebView?, url: String?, message: String?,
-        defaultValue: String?, jsPromptResult: X5JsPromptResult?
-    ) {
-        onJsPromptInternal(message, defaultValue, jsPromptResult)
-    }
-
     override fun onMainFrameError(
         view: WebView, errorCode: Int, description: String, failingUrl: String
-    ) {
-        Timber.i("mWebParentLayout onMainFrameError:" + mWebParentLayout!!)
-        mWebParentLayout?.showPageMainFrameError()
-    }
-
-    override fun onMainFrameError(
-        view: X5WebView, errorCode: Int, description: String, failingUrl: String
     ) {
         Timber.i("mWebParentLayout onMainFrameError:" + mWebParentLayout!!)
         mWebParentLayout?.showPageMainFrameError()
@@ -352,10 +276,6 @@ open class DefaultUIController : AbsAgentWebUIController() {
     }
 
     private fun toCancelJsresult(result: JsResult?) {
-        result?.cancel()
-    }
-
-    private fun toCancelJsresult(result: X5JsResult?) {
         result?.cancel()
     }
 

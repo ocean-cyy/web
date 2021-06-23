@@ -3,38 +3,20 @@ package top.xuqingquan.web.publics
 import android.os.Handler
 import android.os.Looper
 import android.webkit.WebView
+import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.nokernel.HttpHeaders
 import top.xuqingquan.web.nokernel.IUrlLoader
-import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.web.nokernel.WebUtils
-import top.xuqingquan.utils.Timber
 
-import com.tencent.smtt.sdk.WebView as X5WebView
-
-class UrlLoaderImpl : IUrlLoader {
+class UrlLoaderImpl(webView: WebView?, httpHeaders: HttpHeaders?) : IUrlLoader {
     private var mHandler: Handler? = null
-    private var mWebView: WebView? = null
-    private var mx5WebView: X5WebView? = null
-    private var mHttpHeaders: HttpHeaders? = null
+    private var mWebView: WebView? = webView
+    private var mHttpHeaders: HttpHeaders? = httpHeaders
 
-    constructor(webView: WebView?, httpHeaders: HttpHeaders?) {
-        this.mWebView = webView
+    init {
         if (this.mWebView == null) {
             throw NullPointerException("webview cannot be null .")
         }
-        this.mHttpHeaders = httpHeaders
-        if (this.mHttpHeaders == null) {
-            this.mHttpHeaders = HttpHeaders.create()
-        }
-        mHandler = Handler(Looper.getMainLooper())
-    }
-
-    constructor(webView: X5WebView?, httpHeaders: HttpHeaders?) {
-        this.mx5WebView = webView
-        if (this.mx5WebView == null) {
-            throw NullPointerException("webview cannot be null .")
-        }
-        this.mHttpHeaders = httpHeaders
         if (this.mHttpHeaders == null) {
             this.mHttpHeaders = HttpHeaders.create()
         }
@@ -53,18 +35,10 @@ class UrlLoaderImpl : IUrlLoader {
                 }
             }
             Timber.i("loadUrl:$url headers:$headers")
-            if (WebConfig.isTbsEnable()) {
-                if (headers.isNullOrEmpty()) {
-                    this.mx5WebView!!.loadUrl(url)
-                } else {
-                    this.mx5WebView!!.loadUrl(url, headers)
-                }
+            if (headers.isNullOrEmpty()) {
+                this.mWebView!!.loadUrl(url)
             } else {
-                if (headers.isNullOrEmpty()) {
-                    this.mWebView!!.loadUrl(url)
-                } else {
-                    this.mWebView!!.loadUrl(url, headers)
-                }
+                this.mWebView!!.loadUrl(url, headers)
             }
         } catch (e: Throwable) {
         }
@@ -75,11 +49,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { this.reload() }
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            this.mx5WebView!!.reload()
-        } else {
-            this.mWebView!!.reload()
-        }
+        this.mWebView!!.reload()
     }
 
     override fun loadData(data: String, mimeType: String, encoding: String) {
@@ -87,11 +57,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { loadData(data, mimeType, encoding) }
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            this.mx5WebView!!.loadData(data, mimeType, encoding)
-        } else {
-            this.mWebView!!.loadData(data, mimeType, encoding)
-        }
+        this.mWebView!!.loadData(data, mimeType, encoding)
     }
 
     override fun stopLoading() {
@@ -99,11 +65,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { this.stopLoading() }
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            this.mx5WebView!!.stopLoading()
-        } else {
-            this.mWebView!!.stopLoading()
-        }
+        this.mWebView!!.stopLoading()
     }
 
     override fun loadDataWithBaseURL(
@@ -117,11 +79,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl) }
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            this.mx5WebView!!.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl)
-        } else {
-            this.mWebView!!.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl)
-        }
+        this.mWebView!!.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, failUrl)
     }
 
     override fun postUrl(url: String, params: ByteArray) {
@@ -129,11 +87,7 @@ class UrlLoaderImpl : IUrlLoader {
             mHandler!!.post { postUrl(url, params) }
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            this.mx5WebView!!.postUrl(url, params)
-        } else {
-            this.mWebView!!.postUrl(url, params)
-        }
+        this.mWebView!!.postUrl(url, params)
     }
 
     override fun getHttpHeaders(): HttpHeaders {

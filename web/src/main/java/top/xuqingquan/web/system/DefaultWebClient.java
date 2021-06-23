@@ -9,8 +9,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -18,7 +16,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.alipay.sdk.app.PayTask;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
@@ -65,21 +64,9 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
      */
     private static final String ALIPAYS_SCHEME = "alipays://";
     /**
-     * http scheme
-     */
-    private static final String HTTP_SCHEME = "http://";
-    /**
-     * https scheme
-     */
-    private static final String HTTPS_SCHEME = "https://";
-    /**
      * thunder scheme
      */
     private static final String THUNDER_SCHEME = "thunder://";
-    /**
-     * true 表示当前应用内依赖了 alipay library , false  反之
-     */
-    private static final boolean HAS_ALIPAY_LIB;
     /**
      * 默认为咨询用户
      */
@@ -97,10 +84,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
      */
     private final WebView mWebView;
     /**
-     * Alipay PayTask 对象
-     */
-    private Object mPayTask;
-    /**
      * SMS scheme
      */
     private static final String SCHEME_SMS = "sms:";
@@ -112,17 +95,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
      * 缓存等待加载完成的页面 onPageStart()执行之后 ，onPageFinished()执行之前
      */
     private final Set<String> mWaitingFinishSet = new HashSet<>();
-
-    static {
-        boolean tag = true;
-        try {
-            Class.forName("com.alipay.sdk.app.PayTask");
-        } catch (Throwable ignore) {
-            tag = false;
-        }
-        HAS_ALIPAY_LIB = tag;
-        Timber.i("HAS_ALIPAY_LIB:" + HAS_ALIPAY_LIB);
-    }
 
     private DefaultWebClient(Builder builder) {
         super(builder.mClient);
@@ -147,9 +119,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
             return super.shouldOverrideUrlLoading(view, (WebResourceRequest) null);
         }
         String url = request.getUrl().toString();
-        if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
-            return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
-        }
         if (!webClientHelper) {
             return super.shouldOverrideUrlLoading(view, request);
         }
@@ -232,9 +201,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
     public boolean shouldOverrideUrlLoading(@Nullable WebView view, @Nullable String url) {
         if (url == null) {
             return super.shouldOverrideUrlLoading(view, (String) null);
-        }
-        if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
-            return (webClientHelper && HAS_ALIPAY_LIB && isAlipay(view, url));
         }
         if (!webClientHelper) {
             return false;
@@ -337,33 +303,6 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
                 mActivity.startActivity(intent);
                 return true;
             }
-        } catch (Throwable throwable) {
-            Timber.e(throwable);
-        }
-        return false;
-    }
-
-    private boolean isAlipay(final WebView view, String url) {
-        try {
-            Activity mActivity = mWeakReference.get();
-            if (mActivity == null) {
-                return false;
-            }
-            /*
-             * 推荐采用的新的二合一接口(payInterceptorWithUrl),只需调用一次
-             */
-            if (mPayTask == null) {
-                mPayTask = new PayTask(mActivity);
-            }
-            final PayTask task = (PayTask) mPayTask;
-            boolean isIntercepted = task.payInterceptorWithUrl(url, true, result -> {
-                final String url1 = result.getReturnUrl();
-                if (!TextUtils.isEmpty(url1)) {
-                    WebUtils.runInUiThread(() -> view.loadUrl(url1));
-                }
-            });
-            Timber.i("alipay-isIntercepted:" + isIntercepted + "  url:" + url);
-            return isIntercepted;
         } catch (Throwable throwable) {
             Timber.e(throwable);
         }

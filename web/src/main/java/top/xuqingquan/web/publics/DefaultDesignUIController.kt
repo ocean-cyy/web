@@ -4,11 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Handler
 import android.os.Message
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,10 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.R
-import top.xuqingquan.web.nokernel.WebConfig
-import com.tencent.smtt.sdk.WebView as X5WebView
 
 class DefaultDesignUIController : DefaultUIController() {
 
@@ -29,10 +27,6 @@ class DefaultDesignUIController : DefaultUIController() {
     private var mLayoutInflater: LayoutInflater? = null
 
     override fun onJsAlert(view: WebView?, url: String?, message: String?) {
-        onJsAlertInternal(view, message)
-    }
-
-    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
         onJsAlertInternal(view, message)
     }
 
@@ -59,40 +53,8 @@ class DefaultDesignUIController : DefaultUIController() {
 
     }
 
-    private fun onJsAlertInternal(view: X5WebView?, message: String?) {
-        if (this.mActivity == null || this.mActivity!!.isFinishing || this.mActivity!!.isDestroyed) {
-            return
-        }
-        if (view == null || message.isNullOrEmpty()) {
-            return
-        }
-        try {
-            AgentWebUtils.show(
-                view,
-                message,
-                Snackbar.LENGTH_SHORT,
-                ContextCompat.getColor(this.mActivity!!, R.color.white),
-                ContextCompat.getColor(this.mActivity!!, R.color.black),
-                null,
-                -1, null
-            )
-        } catch (throwable: Throwable) {
-            Timber.e(throwable)
-        }
-
-    }
-
     override fun onSelectItemsPrompt(
         view: WebView,
-        url: String,
-        ways: Array<String>,
-        callback: Handler.Callback
-    ) {
-        showChooserInternal(url, ways, callback)
-    }
-
-    override fun onSelectItemsPrompt(
-        view: X5WebView,
         url: String,
         ways: Array<String>,
         callback: Handler.Callback
@@ -180,11 +142,7 @@ class DefaultDesignUIController : DefaultUIController() {
         if (!TextUtils.isEmpty(intent) && intent.contains("performDownload")) {
             return
         }
-        if (WebConfig.isTbsEnable()) {
-            onJsAlertInternal(mWebParentLayout!!.x5WebView!!, message)
-        } else {
-            onJsAlertInternal(mWebParentLayout!!.webView!!, message)
-        }
+        onJsAlertInternal(mWebParentLayout!!.webView!!, message)
     }
 
     companion object {

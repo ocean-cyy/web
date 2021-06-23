@@ -82,35 +82,4 @@ object WebConfig {
 
     private var tbsEnable: Boolean? = null//x5是否启用
 
-    /**
-     * 禁用tbs
-     */
-    @JvmStatic
-    fun disableTbs() {
-        tbsEnable = false
-    }
-
-    /**
-     * 设置tbs为可用
-     */
-    @JvmStatic
-    fun enableTbs() {
-        tbsEnable = true
-    }
-
-    /**
-     * 判断tbs是否可用
-     */
-    @JvmStatic
-    fun isTbsEnable(): Boolean {
-        if (tbsEnable == null) {
-            tbsEnable = tbsStatus
-        }
-        return tbsEnable!!
-    }
-
-    @JvmStatic
-    fun resetTbsStatus() {
-        tbsEnable = tbsStatus
-    }
 }

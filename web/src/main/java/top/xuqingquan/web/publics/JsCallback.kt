@@ -4,36 +4,23 @@ import android.webkit.WebView
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.utils.Timber
-
 import java.lang.ref.WeakReference
-import java.util.Locale
-
-import com.tencent.smtt.sdk.WebView as X5WebView
+import java.util.*
 
 @Suppress("unused")
-class JsCallback {
-    private var mIndex: Int = 0
+class JsCallback internal constructor(view: WebView, injectedName: String, index: Int) {
+    private var mIndex: Int = index
     private var mCouldGoOn: Boolean = false
     private var mWebViewRef: WeakReference<WebView>? = null
-    private var mx5WebViewRef: WeakReference<X5WebView>? = null
     private var mIsPermanent: Int = 0
-    private var mInjectedName: String? = null
+    private var mInjectedName: String? = injectedName
 
-    internal constructor(view: WebView, injectedName: String, index: Int) {
+    init {
         mCouldGoOn = true
         mWebViewRef = WeakReference(view)
-        mInjectedName = injectedName
-        mIndex = index
     }
 
-    internal constructor(view: X5WebView, injectedName: String, index: Int) {
-        mCouldGoOn = true
-        mx5WebViewRef = WeakReference(view)
-        mInjectedName = injectedName
-        mIndex = index
-    }
 
     /**
      * 向网页执行js回调；
@@ -43,14 +30,8 @@ class JsCallback {
      */
     @Throws(JsCallbackException::class)
     fun apply(vararg args: Any) {
-        if (WebConfig.isTbsEnable()) {
-            if (mx5WebViewRef?.get() == null) {
-                throw JsCallbackException("the WebView related to the JsCallback has been recycled")
-            }
-        } else {
-            if (mWebViewRef?.get() == null) {
-                throw JsCallbackException("the WebView related to the JsCallback has been recycled")
-            }
+        if (mWebViewRef?.get() == null) {
+            throw JsCallbackException("the WebView related to the JsCallback has been recycled")
         }
         if (!mCouldGoOn) {
             throw JsCallbackException("the JsCallback isn't permanent,cannot be called more than once")
@@ -72,11 +53,7 @@ class JsCallback {
         val execJs =
             String.format(Locale.getDefault(), CALLBACK_JS_FORMAT, mInjectedName, mIndex, mIsPermanent, sb.toString())
         Timber.d(execJs)
-        if (WebConfig.isTbsEnable()) {
-            mx5WebViewRef?.get()?.loadUrl(execJs)
-        } else {
             mWebViewRef?.get()?.loadUrl(execJs)
-        }
         mCouldGoOn = mIsPermanent > 0
     }
 

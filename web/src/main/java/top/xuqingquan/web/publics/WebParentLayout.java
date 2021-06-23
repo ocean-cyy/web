@@ -15,10 +15,9 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import top.xuqingquan.utils.Timber;
 import top.xuqingquan.web.R;
 import top.xuqingquan.web.nokernel.Provider;
-import top.xuqingquan.web.nokernel.WebConfig;
-import top.xuqingquan.utils.Timber;
 
 public final class WebParentLayout extends FrameLayout implements Provider<AbsAgentWebUIController> {
     private AbsAgentWebUIController mAgentWebUIController = null;
@@ -28,7 +27,6 @@ public final class WebParentLayout extends FrameLayout implements Provider<AbsAg
     private int mClickId = -1;
     private View mErrorView;
     private android.webkit.WebView mWebView;
-    private com.tencent.smtt.sdk.WebView x5WebView;
     private FrameLayout mErrorLayout = null;
 
     public WebParentLayout(@NonNull Context context) {
@@ -99,16 +97,9 @@ public final class WebParentLayout extends FrameLayout implements Provider<AbsAg
             final View clickView = mFrameLayout.findViewById(mClickId);
             if (clickView != null) {
                 clickView.setOnClickListener(v -> {
-                    if (WebConfig.isTbsEnable()) {
-                        if (getX5WebView() != null) {
-                            clickView.setClickable(false);
-                            getX5WebView().reload();
-                        }
-                    } else {
-                        if (getWebView() != null) {
-                            clickView.setClickable(false);
-                            getWebView().reload();
-                        }
+                    if (getWebView() != null) {
+                        clickView.setClickable(false);
+                        getWebView().reload();
                     }
                 });
                 return;
@@ -117,16 +108,9 @@ public final class WebParentLayout extends FrameLayout implements Provider<AbsAg
             }
         }
         mFrameLayout.setOnClickListener(v -> {
-            if (WebConfig.isTbsEnable()) {
-                if (getX5WebView() != null) {
-                    mFrameLayout.setClickable(false);
-                    getX5WebView().reload();
-                }
-            } else {
-                if (getWebView() != null) {
-                    mFrameLayout.setClickable(false);
-                    getWebView().reload();
-                }
+            if (getWebView() != null) {
+                mFrameLayout.setClickable(false);
+                getWebView().reload();
             }
         });
     }
@@ -165,18 +149,8 @@ public final class WebParentLayout extends FrameLayout implements Provider<AbsAg
         }
     }
 
-    public void bindWebView(com.tencent.smtt.sdk.WebView view) {
-        if (this.x5WebView == null) {
-            this.x5WebView = view;
-        }
-    }
-
     android.webkit.WebView getWebView() {
         return this.mWebView;
-    }
-
-    com.tencent.smtt.sdk.WebView getX5WebView() {
-        return this.x5WebView;
     }
 
 }

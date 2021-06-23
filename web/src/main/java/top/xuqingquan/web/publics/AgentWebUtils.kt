@@ -5,9 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
-import com.google.android.material.snackbar.Snackbar
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
@@ -18,18 +15,17 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
+import com.google.android.material.snackbar.Snackbar
 import top.xuqingquan.utils.Timber
 import top.xuqingquan.utils.clearCacheFolder
 import top.xuqingquan.web.R
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.web.nokernel.WebUtils
 import top.xuqingquan.web.nokernel.WebUtils.isUIThread
 import java.io.File
 import java.lang.ref.WeakReference
-import com.tencent.smtt.sdk.ValueCallback as X5ValueCallback
-import com.tencent.smtt.sdk.WebChromeClient as X5WebChromeClient
-import com.tencent.smtt.sdk.WebView as X5WebView
 
 object AgentWebUtils {
 
@@ -52,32 +48,6 @@ object AgentWebUtils {
             mViewGroup?.removeView(m)
             m.webChromeClient = null
             //m.webViewClient = null
-            m.tag = null
-            m.clearHistory()
-            m.destroy()
-        } catch (t: Throwable) {
-        }
-    }
-
-    @JvmStatic
-    fun clearWebView(m: X5WebView?) {
-        try {
-            if (m == null) {
-                return
-            }
-            if (!isUIThread()) {
-                return
-            }
-            m.loadUrl("about:blank")
-            m.stopLoading()
-            if (m.handler != null) {
-                m.handler.removeCallbacksAndMessages(null)
-            }
-            m.removeAllViews()
-            val mViewGroup = m.parent as ViewGroup?
-            mViewGroup?.removeView(m)
-            m.webChromeClient = null
-            m.webViewClient = null
             m.tag = null
             m.clearHistory()
             m.destroy()
@@ -132,35 +102,12 @@ object AgentWebUtils {
     }
 
     @JvmStatic
-    fun clearWebViewAllCache(context: Context, webView: X5WebView) {
-        try {
-            AgentWebConfig.removeAllX5Cookies(null)
-            webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            context.deleteDatabase("webviewCache.db")
-            context.deleteDatabase("webview.db")
-            webView.clearCache(true)
-            webView.clearHistory()
-            webView.clearFormData()
-            clearCacheFolder(File(WebUtils.getCachePath(context)), 0)
-        } catch (t: Throwable) {
-            Timber.e(t)
-        }
-
-    }
-
-    @JvmStatic
     fun clearWebViewAllCache(context: Context) {
         try {
-            if (WebConfig.isTbsEnable()) {
-                clearWebViewAllCache(
-                    context,X5WebView(context.applicationContext)
-                )
-            } else {
-                clearWebViewAllCache(
-                    context,
-                    top.xuqingquan.web.system.LollipopFixedWebView(context.applicationContext)
-                )
-            }
+            clearWebViewAllCache(
+                context,
+                top.xuqingquan.web.system.LollipopFixedWebView(context.applicationContext)
+            )
         } catch (e: Throwable) {
             e.printStackTrace()
         }
@@ -174,36 +121,7 @@ object AgentWebUtils {
     }
 
     @JvmStatic
-    fun getAgentWebUIControllerByWebView(webView: X5WebView): AbsAgentWebUIController? {
-        val mWebParentLayout = getWebParentLayoutByWebView(webView)
-        return mWebParentLayout.provide()
-    }
-
-    @JvmStatic
     fun getWebParentLayoutByWebView(webView: WebView): WebParentLayout {
-        var mViewGroup: ViewGroup?
-        check(webView.parent is ViewGroup) { "please check webcreator's create method was be called ?" }
-        mViewGroup = webView.parent as ViewGroup
-        while (mViewGroup != null) {
-            Timber.i("ViewGroup:$mViewGroup")
-            mViewGroup = if (mViewGroup.id == R.id.scaffold_web_parent_layout_id) {
-                val mWebParentLayout = mViewGroup as WebParentLayout?
-                Timber.i("found WebParentLayout")
-                return mWebParentLayout!!
-            } else {
-                val mViewParent = mViewGroup.parent
-                if (mViewParent is ViewGroup) {
-                    mViewParent
-                } else {
-                    null
-                }
-            }
-        }
-        throw IllegalStateException("please check webcreator's create method was be called ?")
-    }
-
-    @JvmStatic
-    fun getWebParentLayoutByWebView(webView: X5WebView): WebParentLayout {
         var mViewGroup: ViewGroup?
         check(webView.parent is ViewGroup) { "please check webcreator's create method was be called ?" }
         mViewGroup = webView.parent as ViewGroup
@@ -234,49 +152,6 @@ object AgentWebUtils {
         fileChooserParams: WebChromeClient.FileChooserParams?,
         permissionInterceptor: PermissionInterceptor?,
         valueCallback: ValueCallback<Uri>?,
-        mimeType: String?,
-        jsChannelCallback: Handler.Callback?
-    ): Boolean {
-        try {
-            val builder = FileChooser.newBuilder(activity, webView)
-            if (valueCallbacks != null) {
-                builder.setUriValueCallbacks(valueCallbacks)
-            }
-            if (fileChooserParams != null) {
-                builder.setFileChooserParams(fileChooserParams)
-            }
-            if (valueCallback != null) {
-                builder.setUriValueCallback(valueCallback)
-            }
-            if (!TextUtils.isEmpty(mimeType)) {
-                builder.setAcceptType(mimeType)
-            }
-            if (jsChannelCallback != null) {
-                builder.setJsChannelCallback(jsChannelCallback)
-            }
-            builder.setPermissionInterceptor(permissionInterceptor)
-            builder.build().openFileChooser()
-        } catch (throwable: Throwable) {
-            Timber.e(throwable)
-            if (valueCallbacks != null) {
-                Timber.i("onReceiveValue empty")
-                return false
-            }
-            valueCallback?.onReceiveValue(null)
-        }
-
-        return true
-    }
-
-    @JvmStatic
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    fun showFileChooserCompat(
-        activity: Activity,
-        webView: X5WebView,
-        valueCallbacks: X5ValueCallback<Array<Uri>>?,
-        fileChooserParams: X5WebChromeClient.FileChooserParams?,
-        permissionInterceptor: PermissionInterceptor?,
-        valueCallback: X5ValueCallback<Uri>?,
         mimeType: String?,
         jsChannelCallback: Handler.Callback?
     ): Boolean {

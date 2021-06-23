@@ -13,9 +13,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import top.xuqingquan.utils.px2dip
 import top.xuqingquan.web.nokernel.PermissionInterceptor
-import top.xuqingquan.web.nokernel.WebConfig
 import top.xuqingquan.web.publics.AgentWebConfig
-import com.tencent.smtt.sdk.WebView as X5WebView
 
 /**
  * Created by 许清泉 on 2019-05-22 21:00
@@ -109,11 +107,7 @@ class ScaffoldWebView : FrameLayout {
                 })
                 .createAgentWeb()//创建AgentWeb。
                 .get()
-        if (WebConfig.isTbsEnable()) {
-            agentWeb!!.x5WebCreator?.getWebView()?.overScrollMode = X5WebView.OVER_SCROLL_NEVER
-        } else {
-            agentWeb!!.webCreator?.getWebView()?.overScrollMode = WebView.OVER_SCROLL_NEVER
-        }
+        agentWeb!!.webCreator?.getWebView()?.overScrollMode = WebView.OVER_SCROLL_NEVER
     }
 
     /**
@@ -155,11 +149,7 @@ class ScaffoldWebView : FrameLayout {
     fun reload() = agentWeb?.urlLoader?.reload()
 
     fun getCurrentUrl(): String? {
-        return if (WebConfig.isTbsEnable()) {
-            agentWeb?.x5WebCreator?.getWebView()?.url
-        } else {
-            agentWeb?.webCreator?.getWebView()?.url
-        }
+        return agentWeb?.webCreator?.getWebView()?.url
     }
 
 }
