@@ -10,19 +10,6 @@
         tools:ignore="QueryAllPackagesPermission" />
 
     <application>
-        <!-- 如果有接入腾讯X5时候需要用这个做播放视频 -->
-        <activity
-            android:name="com.tencent.smtt.sdk.VideoActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="com.tencent.smtt.tbs.video.PLAY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <!-- AgentWeb申请权限用到这个类 -->
         <activity
             android:name=".nokernel.ActionActivity"
@@ -31,9 +18,5 @@
             android:launchMode="standard"
             android:theme="@style/scaffold_actionActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
-        <service
-            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
-            android:label="dexopt"
-            android:process=":dexopt" />
     </application>
 </manifest>
