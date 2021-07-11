@@ -64,6 +64,14 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
      */
     private static final String ALIPAYS_SCHEME = "alipays://";
     /**
+     * http scheme
+     */
+    private static final String HTTP_SCHEME = "http://";
+    /**
+     * https scheme
+     */
+    private static final String HTTPS_SCHEME = "https://";
+    /**
      * thunder scheme
      */
     private static final String THUNDER_SCHEME = "thunder://";
@@ -119,6 +127,9 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
             return super.shouldOverrideUrlLoading(view, (WebResourceRequest) null);
         }
         String url = request.getUrl().toString();
+        if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
+            return !webClientHelper;
+        }
         if (!webClientHelper) {
             return super.shouldOverrideUrlLoading(view, request);
         }
@@ -201,6 +212,9 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
     public boolean shouldOverrideUrlLoading(@Nullable WebView view, @Nullable String url) {
         if (url == null) {
             return super.shouldOverrideUrlLoading(view, (String) null);
+        }
+        if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
+            return webClientHelper;
         }
         if (!webClientHelper) {
             return false;

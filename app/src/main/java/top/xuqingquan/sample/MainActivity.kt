@@ -16,7 +16,7 @@ import top.xuqingquan.web.system.IAgentWebSettings
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
-    private val url = "https://m.baidu.com"
+    private val url = "https://tv.cctv.com/2021/07/07/VIDENGCCNuuthbOvE29cn212210707.shtml"
 
     private lateinit var agentWeb: AgentWeb
 
