@@ -34,10 +34,6 @@ android {
             jniLibs.srcDir 'libs'//说明so的路径为该libs路径，关联所有so文件
         }
     }
-    dexOptions {
-        preDexLibraries true
-        maxProcessCount 8
-    }
     //如果有用到kapt添加如下配置
     kapt {
         useBuildCache = true
