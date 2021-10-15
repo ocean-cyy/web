@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
+import top.xuqingquan.utils.StatusBarUtils
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor

@@ -4,19 +4,16 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "top.xuqingquan.sample"
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        ndk{
-            abiFilters 'armeabi-v7a','x86'
-        }
     }
 
     buildTypes {
@@ -26,20 +23,16 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     sourceSets {
         main {
             jniLibs.srcDir 'libs'//说明so的路径为该libs路径，关联所有so文件
         }
-    }
-    dexOptions {
-        preDexLibraries true
-        maxProcessCount 8
     }
     //如果有用到kapt添加如下配置
     kapt {
@@ -52,31 +45,18 @@ android {
         abortOnError false
     }
 }
-configurations.all {
-    resolutionStrategy.eachDependency { details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion "${support}"
-            }
-        }
-    }
-}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin}"
     //noinspection GradleCompatible
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':web')
+    implementation "top.xuqingquan:utils:3.0.7"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation (project(path: ':web')){
-//        exclude group:'top.xuqingquan',module:'utils'
-    }
-    implementation "top.xuqingquan:utils:2.3.5-support"
-    //noinspection GradleDependency
-    implementation "com.download.library:Downloader:4.1.3"
-//    implementation 'org.adblockplus:adblock-android-settings:4.1.2'
-    implementation "com.tencent.tbs.tbssdk:sdk:43967"
+    implementation 'com.tencent.tbs:tbssdk:44085'
 }
