@@ -15,6 +15,7 @@ android {
         flavorDimensions 'default'
         resourcePrefix "scaffold_"
         buildConfigField 'String', 'AgentWebVersionName', "\"${rootProject.ext.versionName}\""
+        consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {
         release {
