@@ -41,7 +41,7 @@ android {
             option("-Xmaxerrs", 500)
         }
     }
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
