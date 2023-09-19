@@ -66,7 +66,7 @@ class UrlLoaderImpl : IUrlLoader {
                     this.mWebView!!.loadUrl(url, headers)
                 }
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
     }
 

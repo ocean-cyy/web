@@ -45,42 +45,35 @@ public final class NestedScrollAgentWebView extends AgentWebView implements Nest
         int y = (int) event.getY();
         event.offsetLocation(0, mNestedYOffset);
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN -> {
                 mLastMotionY = y;
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
                 result = super.onTouchEvent(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
+            }
+            case MotionEvent.ACTION_MOVE -> {
                 int deltaY = mLastMotionY - y;
-
                 if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
                     deltaY -= mScrollConsumed[1];
                     trackedEvent.offsetLocation(0, mScrollOffset[1]);
                     mNestedYOffset += mScrollOffset[1];
                 }
-
                 mLastMotionY = y - mScrollOffset[1];
-
                 int oldY = getScrollY();
                 int newScrollY = Math.max(0, oldY + deltaY);
                 int dyConsumed = newScrollY - oldY;
                 int dyUnconsumed = deltaY - dyConsumed;
-
                 if (dispatchNestedScroll(0, dyConsumed, 0, dyUnconsumed, mScrollOffset)) {
                     mLastMotionY -= mScrollOffset[1];
                     trackedEvent.offsetLocation(0, mScrollOffset[1]);
                     mNestedYOffset += mScrollOffset[1];
                 }
-
                 result = super.onTouchEvent(trackedEvent);
                 trackedEvent.recycle();
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
+            }
+            case MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 stopNestedScroll();
                 result = super.onTouchEvent(event);
-                break;
+            }
         }
         return result;
     }

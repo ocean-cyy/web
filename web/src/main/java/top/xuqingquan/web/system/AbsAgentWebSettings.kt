@@ -25,7 +25,7 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
     }
 
     @Suppress("DEPRECATION")
-    @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
+    @SuppressLint("SetJavaScriptEnabled")
     private fun settings(webView: WebView?) {
         if (webView == null) {
             return
@@ -43,17 +43,11 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
             //没网，则从本地获取，即离线加载
             mWebSettings!!.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //适配5.0不允许http和https混合使用情况
-            mWebSettings!!.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //加上这一句可能导致Android4.4手机出现加载网页白屏
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-        }
+        //适配5.0不允许http和https混合使用情况
+        mWebSettings!!.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         mWebSettings!!.textZoom = 100
         mWebSettings!!.databaseEnabled = true
-        mWebSettings!!.setAppCacheEnabled(true)
         mWebSettings!!.loadsImagesAutomatically = true
         mWebSettings!!.setSupportMultipleWindows(false)
         // 是否阻塞加载网络图片  协议http or https
@@ -66,11 +60,7 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
         // 允许通过 file url 加载的 Javascript 可以访问其他的源，包括其他的文件和 http，https 等其他的源
         mWebSettings!!.allowUniversalAccessFromFileURLs = false
         mWebSettings!!.javaScriptCanOpenWindowsAutomatically = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mWebSettings!!.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
-        } else {
-            mWebSettings!!.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
-        }
+        mWebSettings!!.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         mWebSettings!!.loadWithOverviewMode = true
         mWebSettings!!.useWideViewPort = true
         mWebSettings!!.domStorageEnabled = true
@@ -84,9 +74,6 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
         //设置数据库路径  api19 已经废弃,这里只针对 webkit 起作用
         mWebSettings!!.setGeolocationDatabasePath(dir)
         mWebSettings!!.databasePath = dir
-        mWebSettings!!.setAppCachePath(dir)
-        //缓存文件最大值
-        mWebSettings!!.setAppCacheMaxSize(Long.MAX_VALUE)
         mWebSettings!!.userAgentString = getWebSettings()!!
             .userAgentString + USERAGENT_AGENTWEB + USERAGENT_UC + USERAGENT_QQ_BROWSER
         Timber.i("UserAgentString : " + mWebSettings!!.userAgentString)

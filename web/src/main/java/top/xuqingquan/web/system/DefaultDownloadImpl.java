@@ -42,32 +42,33 @@ import top.xuqingquan.utils.PermissionUtils;
 
 /**
  * Created by 许清泉 on 2019-06-19 23:29
+ * @noinspection unused
  */
 @SuppressWarnings("rawtypes")
 public final class DefaultDownloadImpl implements DownloadListener {
     /**
      * Application Context
      */
-    protected Context mContext;
-    protected ConcurrentHashMap<String, ResourceRequest> mDownloadTasks = new ConcurrentHashMap<>();
+    private final Context mContext;
+    private final ConcurrentHashMap<String, ResourceRequest> mDownloadTasks = new ConcurrentHashMap<>();
     /**
      * Activity
      */
-    protected WeakReference<Activity> mActivityWeakReference;
+    private final WeakReference<Activity> mActivityWeakReference;
     /**
      * 权限拦截
      */
-    protected PermissionInterceptor mPermissionListener;
+    private final PermissionInterceptor mPermissionListener;
     /**
      * AbsAgentWebUIController
      */
-    protected WeakReference<AbsAgentWebUIController> mAgentWebUIController;
+    private final WeakReference<AbsAgentWebUIController> mAgentWebUIController;
 
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private boolean isInstallDownloader;
 
-    protected DefaultDownloadImpl(Activity activity, WebView webView, PermissionInterceptor permissionInterceptor) {
+    private DefaultDownloadImpl(Activity activity, WebView webView, PermissionInterceptor permissionInterceptor) {
         this.mContext = activity.getApplicationContext();
         this.mActivityWeakReference = new WeakReference<>(activity);
         this.mPermissionListener = permissionInterceptor;
@@ -91,8 +92,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         mHandler.post(() -> onDownloadStartInternal(url, userAgent, contentDisposition, mimetype, contentLength));
     }
 
-    @SuppressWarnings({"unused", "RedundantSuppression"})
-    protected void onDownloadStartInternal(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+    private void onDownloadStartInternal(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         if (null == mActivityWeakReference.get() || mActivityWeakReference.get().isFinishing()) {
             return;
         }
@@ -129,7 +129,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
     }
 
     @Nullable
-    protected ResourceRequest createResourceRequest(String url) {
+    private ResourceRequest createResourceRequest(String url) {
         String fileName = convertUrl2FileName(url);
         File downloadFile = new File(FileUtils.getCacheFilePath(mContext), fileName);
         if (downloadFile.exists()) {
@@ -169,7 +169,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         return fileName;
     }
 
-    protected ActionActivity.PermissionListener getPermissionListener(final String url) {
+    private ActionActivity.PermissionListener getPermissionListener(final String url) {
         return (permissions, grantResults, extras) -> {
             if (checkNeedPermission().isEmpty()) {
                 preDownload(url);
@@ -188,7 +188,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         };
     }
 
-    protected List<String> checkNeedPermission() {
+    private List<String> checkNeedPermission() {
         List<String> deniedPermissions = new ArrayList<>();
         if (!PermissionUtils.hasPermission(mActivityWeakReference.get(), AgentWebPermissions.STORAGE)) {
             deniedPermissions.addAll(Arrays.asList(AgentWebPermissions.STORAGE));
@@ -196,7 +196,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         return deniedPermissions;
     }
 
-    protected void preDownload(String url) {
+    private void preDownload(String url) {
         Activity mActivity = mActivityWeakReference.get();
         if (null == mActivity || mActivity.isFinishing()) {
             return;
@@ -215,7 +215,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         }
     }
 
-    protected boolean isForceRequest(String url) {
+    private boolean isForceRequest(String url) {
         ResourceRequest resourceRequest = mDownloadTasks.get(url);
         if (null != resourceRequest) {
             return resourceRequest.getDownloadTask().isForceDownload();
@@ -223,7 +223,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         return false;
     }
 
-    protected void forceDownload(final String url) {
+    private void forceDownload(final String url) {
         ResourceRequest resourceRequest = mDownloadTasks.get(url);
         if (resourceRequest != null) {
             resourceRequest.setForceDownload(true);
@@ -231,7 +231,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         performDownload(url);
     }
 
-    protected void showDialog(final String url) {
+    private void showDialog(final String url) {
         Activity mActivity = mActivityWeakReference.get();
         if (null == mActivity || mActivity.isFinishing()) {
             return;
@@ -242,14 +242,14 @@ public final class DefaultDownloadImpl implements DownloadListener {
         }
     }
 
-    protected Handler.Callback createCallback(final String url) {
+    private Handler.Callback createCallback(final String url) {
         return msg -> {
             forceDownload(url);
             return true;
         };
     }
 
-    protected void performDownload(String url) {
+    private void performDownload(String url) {
         try {
             Timber.e("performDownload:" + url + " exist:" + DownloadImpl.getInstance().exist(url));
             // 该链接是否正在下载
@@ -271,7 +271,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         }
     }
 
-    protected void taskEnqueue(ResourceRequest resourceRequest) {
+    private void taskEnqueue(ResourceRequest resourceRequest) {
         resourceRequest.enqueue(new DownloadListenerAdapter() {
             @Override
             public boolean onResult(Throwable throwable, Uri path, String url, Extra extra) {

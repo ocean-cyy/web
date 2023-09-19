@@ -21,7 +21,7 @@ import com.tencent.smtt.sdk.WebView as X5WebView
  * Created by 许清泉 on 2019-05-22 21:00
  * 调用 [ScaffoldWebView.loadUrl]方法之前可以设置各种自定义的参数
  */
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class ScaffoldWebView : FrameLayout {
 
     var agentWeb: AgentWeb? = null
@@ -139,7 +139,7 @@ class ScaffoldWebView : FrameLayout {
             agentWeb?.urlLoader?.loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
             agentWeb?.clearWebCache()
             agentWeb?.destroy()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
     }
 

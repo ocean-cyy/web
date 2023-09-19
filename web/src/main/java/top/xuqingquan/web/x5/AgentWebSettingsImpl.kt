@@ -23,7 +23,7 @@ open class AgentWebSettingsImpl : AbsAgentWebSettings() {
         webView: WebView?, downloadListener: DownloadListener?
     ): WebListenerManager {
         if (webView == null) {
-            return super.setDownloader(webView, downloadListener)
+            return super.setDownloader(null, downloadListener)
         }
         val mContext = webView.context
         var listener = downloadListener
@@ -71,7 +71,7 @@ open class AgentWebSettingsImpl : AbsAgentWebSettings() {
                         if (hasUrlEncoded(fileName)) {
                             fileName = decode(fileName)
                         }
-                    } catch (t: Throwable) {
+                    } catch (_: Throwable) {
 
                     }
                     if (uiController != null) {

@@ -32,7 +32,7 @@ class IndicatorHandler : IndicatorController {
         return this.mBaseIndicatorSpec
     }
 
-    fun reset() {
+    private fun reset() {
         mBaseIndicatorSpec?.reset()
     }
 

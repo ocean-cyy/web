@@ -9,8 +9,10 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -191,11 +193,12 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
     private boolean deepLink(String url) {
         switch (mUrlHandleWays) {
             // 直接打开其他App
-            case WebConfig.DIRECT_OPEN_OTHER_PAGE:
+            case WebConfig.DIRECT_OPEN_OTHER_PAGE -> {
                 lookup(url);
                 return true;
+            }
             // 咨询用户是否打开其他App
-            case WebConfig.ASK_USER_OPEN_OTHER_PAGE:
+            case WebConfig.ASK_USER_OPEN_OTHER_PAGE -> {
                 Activity mActivity = mWeakReference.get();
                 if (mActivity == null) {
                     return false;
@@ -210,9 +213,13 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
                     return lookup(url);
                 }
                 if (mAgentWebUIController.get() != null) {
+                    String viewUrl = mWebView.getUrl();
+                    if (viewUrl == null) {
+                        viewUrl = "";
+                    }
                     mAgentWebUIController.get()
                             .onOpenPagePrompt(this.mWebView,
-                                    mWebView.getUrl(),
+                                    viewUrl,
                                     msg -> {
                                         if (msg.what == 1) {
                                             lookup(url);
@@ -221,9 +228,11 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
                                     });
                 }
                 return true;
+            }
             // 默认不打开
-            default:
+            default -> {
                 return false;
+            }
         }
     }
 

@@ -10,7 +10,7 @@ import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebStorage
 import com.tencent.smtt.sdk.WebView
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?) :
     WebChromeClient() {
     open var delegate: WebChromeClient? = webChromeClient

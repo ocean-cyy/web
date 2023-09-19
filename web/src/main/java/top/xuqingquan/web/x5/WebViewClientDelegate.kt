@@ -63,7 +63,6 @@ open class WebViewClientDelegate internal constructor(client: WebViewClient?) : 
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun shouldInterceptRequest(
         view: WebView?,
         request: WebResourceRequest?
@@ -140,7 +139,6 @@ open class WebViewClientDelegate internal constructor(client: WebViewClient?) : 
         super.onReceivedSslError(view, handler, error)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onReceivedClientCertRequest(view: WebView?, request: ClientCertRequest?) {
         if (delegate != null) {
             delegate!!.onReceivedClientCertRequest(view, request)

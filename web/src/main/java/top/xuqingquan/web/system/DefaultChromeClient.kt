@@ -153,7 +153,7 @@ class DefaultChromeClient(
             return
         }
         val deniedPermissions = getDeniedPermissions(mActivity, AgentWebPermissions.LOCATION)
-        if (deniedPermissions.isNullOrEmpty()) {
+        if (deniedPermissions.isEmpty()) {
             Timber.i("onGeolocationPermissionsShowPromptInternal:true")
             callback?.invoke(origin, true, false)
         } else {
@@ -193,6 +193,7 @@ class DefaultChromeClient(
     }
 
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onExceededDatabaseQuota(
         url: String?, databaseIdentifier: String?, quota: Long, estimatedDatabaseSize: Long,
         totalQuota: Long, quotaUpdater: WebStorage.QuotaUpdater?
@@ -215,7 +216,6 @@ class DefaultChromeClient(
         quotaUpdater?.updateQuota(requiredStorage * 2)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
         webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?
@@ -227,7 +227,6 @@ class DefaultChromeClient(
         return openFileChooserAboveL(filePathCallback, fileChooserParams)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private fun openFileChooserAboveL(
         valueCallbacks: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?

@@ -191,11 +191,12 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
     private boolean deepLink(String url) {
         switch (mUrlHandleWays) {
             // 直接打开其他App
-            case WebConfig.DIRECT_OPEN_OTHER_PAGE:
+            case WebConfig.DIRECT_OPEN_OTHER_PAGE -> {
                 lookup(url);
                 return true;
+            }
             // 咨询用户是否打开其他App
-            case WebConfig.ASK_USER_OPEN_OTHER_PAGE:
+            case WebConfig.ASK_USER_OPEN_OTHER_PAGE -> {
                 Activity mActivity = mWeakReference.get();
                 if (mActivity == null) {
                     return false;
@@ -221,9 +222,11 @@ public final class DefaultWebClient extends MiddlewareWebClientBase {
                                     });
                 }
                 return true;
+            }
             // 默认不打开
-            default:
+            default -> {
                 return false;
+            }
         }
     }
 

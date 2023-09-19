@@ -3,9 +3,12 @@ package top.xuqingquan.web.x5
 import android.app.Activity
 import android.net.Uri
 import android.os.Build
-import androidx.annotation.RequiresApi
 import android.view.View
-import com.tencent.smtt.export.external.interfaces.*
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
+import com.tencent.smtt.export.external.interfaces.JsPromptResult
+import com.tencent.smtt.export.external.interfaces.JsResult
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebStorage
@@ -23,7 +26,7 @@ import top.xuqingquan.web.publics.IVideo
 import top.xuqingquan.web.publics.IndicatorController
 import java.lang.ref.WeakReference
 
-@Suppress("DEPRECATION", "OverridingDeprecatedMember")
+@Suppress("DEPRECATION", "OverridingDeprecatedMember", "OVERRIDE_DEPRECATION")
 class DefaultChromeClient(
     activity: Activity,
     /**
@@ -157,7 +160,7 @@ class DefaultChromeClient(
             return
         }
         val deniedPermissions = getDeniedPermissions(mActivity, AgentWebPermissions.LOCATION)
-        if (deniedPermissions.isNullOrEmpty()) {
+        if (deniedPermissions.isEmpty()) {
             Timber.i("onGeolocationPermissionsShowPromptInternal:true")
             callback?.invoke(origin, true, false)
         } else {
@@ -219,7 +222,6 @@ class DefaultChromeClient(
         quotaUpdater?.updateQuota(requiredStorage * 2)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
         webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?
@@ -231,7 +233,6 @@ class DefaultChromeClient(
         return openFileChooserAboveL(filePathCallback, fileChooserParams)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private fun openFileChooserAboveL(
         valueCallbacks: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?

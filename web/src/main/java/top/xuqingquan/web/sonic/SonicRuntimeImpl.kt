@@ -1,7 +1,6 @@
 package top.xuqingquan.web.sonic
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebResourceResponse
@@ -83,15 +82,11 @@ class SonicRuntimeImpl(context: Context) : SonicRuntime(context) {
     ): Any {
         return if (tbsEnable) {
             val response = X5WebResourceResponse(mimeType, encoding, data)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                response.responseHeaders = headers
-            }
+            response.responseHeaders = headers
             response
         } else {
             val response = WebResourceResponse(mimeType, encoding, data)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                response.responseHeaders = headers
-            }
+            response.responseHeaders = headers
             response
         }
     }

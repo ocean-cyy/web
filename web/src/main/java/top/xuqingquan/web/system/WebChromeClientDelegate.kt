@@ -2,13 +2,19 @@ package top.xuqingquan.web.system
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Message
 import android.view.View
-import android.webkit.*
-import androidx.annotation.RequiresApi
+import android.webkit.ConsoleMessage
+import android.webkit.GeolocationPermissions
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.PermissionRequest
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebStorage
+import android.webkit.WebView
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?) :
     WebChromeClient() {
     open var delegate: WebChromeClient? = webChromeClient
@@ -158,17 +164,6 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         )
     }
 
-    override fun onReachedMaxAppCacheSize(
-        requiredStorage: Long, quota: Long,
-        quotaUpdater: WebStorage.QuotaUpdater?
-    ) {
-        if (this.delegate != null) {
-            this.delegate!!.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
-            return
-        }
-        super.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
-    }
-
     override fun onGeolocationPermissionsShowPrompt(
         origin: String?, callback: GeolocationPermissions.Callback?
     ) {
@@ -189,7 +184,6 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onGeolocationPermissionsHidePrompt()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onPermissionRequest(request: PermissionRequest?) {
         if (this.delegate != null) {
             this.delegate!!.onPermissionRequest(request)
@@ -198,7 +192,6 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.onPermissionRequest(request)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onPermissionRequestCanceled(request: PermissionRequest?) {
 
         if (this.delegate != null) {
@@ -256,7 +249,6 @@ open class WebChromeClientDelegate constructor(webChromeClient: WebChromeClient?
         super.getVisitedHistory(callback)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun onShowFileChooser(
         webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?

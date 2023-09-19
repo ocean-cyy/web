@@ -16,8 +16,7 @@ class JsCallJava(interfaceObj: Any, interfaceName: String) {
     private var mMethodsMap: HashMap<String, Method>? = null
     private var mInterfaceObj: Any? = null
     private var mInterfacedName: String? = null
-    var preloadInterfaceJs: String? = null
-        private set
+    private var preloadInterfaceJs: String? = null
 
     init {
         try {
@@ -268,10 +267,10 @@ class JsCallJava(interfaceObj: Any, interfaceName: String) {
     private fun getReturn(
         reqJson: JSONObject?,
         stateCode: Int,
-        result_o: Any?,
+        mResult: Any?,
         time: Long
     ): String {
-        var result = result_o
+        var result = mResult
         val insertRes: String
         when (result) {
             null -> insertRes = "null"
@@ -301,6 +300,7 @@ class JsCallJava(interfaceObj: Any, interfaceName: String) {
         private val IGNORE_UNSAFE_METHODS =
             arrayOf("getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait")
 
+        @Suppress("SameParameterValue")
         private fun promptMsgFormat(
             `object`: String,
             method: String,
@@ -329,8 +329,8 @@ class JsCallJava(interfaceObj: Any, interfaceName: String) {
         }
 
         @JvmStatic
-        fun getMsgJSONObject(message_o: String): JSONObject {
-            var message = message_o
+        fun getMsgJSONObject(msg: String): JSONObject {
+            var message = msg
             message = message.substring(MSG_PROMPT_HEADER.length)
             return try {
                 JSONObject(message)

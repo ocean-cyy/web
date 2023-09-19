@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package top.xuqingquan.web.publics
 
 import android.app.Activity
@@ -21,7 +23,6 @@ import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptR
 import com.tencent.smtt.export.external.interfaces.JsResult as X5JsResult
 import com.tencent.smtt.sdk.WebView as X5WebView
 
-@Suppress("DEPRECATION")
 open class DefaultUIController : AbsAgentWebUIController() {
 
     private var mJsPromptResult: JsPromptResult? = null

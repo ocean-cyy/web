@@ -1,7 +1,5 @@
 package top.xuqingquan.web.sonic
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -18,20 +16,18 @@ class SonicWebViewClient(private val sonicSession: SonicSession?) : MiddlewareWe
         sonicSession?.sessionClient?.pageFinish(url)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun shouldInterceptRequest(
         view: WebView?,
         request: WebResourceRequest?
     ): WebResourceResponse? {
-        @Suppress("DEPRECATION")
         return shouldInterceptRequest(view, request?.url?.toString())
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
         if (sonicSession != null && sonicSession.sessionClient != null) {
             return sonicSession.sessionClient.requestResource(url) as? WebResourceResponse?
         }
-        @Suppress("DEPRECATION")
         return super.shouldInterceptRequest(view, url)
     }
 

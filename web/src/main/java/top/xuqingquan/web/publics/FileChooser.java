@@ -1,5 +1,12 @@
 package top.xuqingquan.web.publics;
 
+import static top.xuqingquan.utils.PermissionUtils.getDeniedPermissions;
+import static top.xuqingquan.utils.PermissionUtils.hasPermission;
+import static top.xuqingquan.web.nokernel.ActionActivity.KEY_ACTION;
+import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FILE_CHOOSER_INTENT;
+import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION;
+import static top.xuqingquan.web.nokernel.ActionActivity.KEY_URI;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -9,9 +16,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import androidx.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,13 +52,6 @@ import top.xuqingquan.web.nokernel.FileParcel;
 import top.xuqingquan.web.nokernel.PermissionInterceptor;
 import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.web.nokernel.WebUtils;
-
-import static top.xuqingquan.utils.PermissionUtils.getDeniedPermissions;
-import static top.xuqingquan.utils.PermissionUtils.hasPermission;
-import static top.xuqingquan.web.nokernel.ActionActivity.KEY_ACTION;
-import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FILE_CHOOSER_INTENT;
-import static top.xuqingquan.web.nokernel.ActionActivity.KEY_FROM_INTENTION;
-import static top.xuqingquan.web.nokernel.ActionActivity.KEY_URI;
 
 final class FileChooser {
     /**
@@ -160,7 +161,6 @@ final class FileChooser {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     void openFileChooser() {
         if (!WebUtils.isUIThread()) {
             WebUtils.runInUiThread(this::openFileChooser);
@@ -170,7 +170,6 @@ final class FileChooser {
         openFileChooserInternal();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void fileChooser() {
         if (getDeniedPermissions(mActivity, AgentWebPermissions.STORAGE).isEmpty()) {
             touchOffFileChooserAction();
@@ -182,7 +181,6 @@ final class FileChooser {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void touchOffFileChooserAction() {
         Action mAction = new Action();
         mAction.setAction(Action.ACTION_FILE);
@@ -191,7 +189,6 @@ final class FileChooser {
                 .putExtra(KEY_FILE_CHOOSER_INTENT, getFileChooserIntent()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private Intent getFileChooserIntent() {
         Intent mIntent = null;
         if (WebConfig.isTbsEnable()) {
@@ -208,11 +205,7 @@ final class FileChooser {
             return mIntent;
         }
         Intent i = new Intent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            i.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        } else {
-            i.setAction(Intent.ACTION_GET_CONTENT);
-        }
+        i.setAction(Intent.ACTION_OPEN_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
         if (TextUtils.isEmpty(this.mAcceptType)) {
             i.setType("*/*");
@@ -231,7 +224,6 @@ final class FileChooser {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openFileChooserInternal() {
         boolean needVideo = false;
         // 是否直接打开文件选择器
@@ -295,9 +287,13 @@ final class FileChooser {
                                 new String[]{mActivity.getString(R.string.scaffold_camera),
                                         mActivity.getString(R.string.scaffold_file)}, getCallBack());
             } else {
+                String url = sysWebView.getUrl();
+                if (url==null){
+                    url = "";
+                }
                 this.mAgentWebUIController
                         .get()
-                        .onSelectItemsPrompt(this.sysWebView, sysWebView.getUrl(),
+                        .onSelectItemsPrompt(this.sysWebView, url,
                                 new String[]{mActivity.getString(R.string.scaffold_camera),
                                         mActivity.getString(R.string.scaffold_file)}, getCallBack());
             }
@@ -306,21 +302,18 @@ final class FileChooser {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private Handler.Callback getCallBack() {
         return msg -> {
             switch (msg.what) {
-                case 0:
+                case 0 -> {
                     mCameraState = true;
                     onCameraAction();
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     mCameraState = false;
                     fileChooser();
-                    break;
-                default:
-                    cancel();
-                    break;
+                }
+                default -> cancel();
             }
             return true;
         };
@@ -385,13 +378,10 @@ final class FileChooser {
     }
 
     private final ActionActivity.PermissionListener mPermissionListener = (permissions, grantResults, extras) -> {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            boolean tag = hasPermission(mActivity, permissions);
-            permissionResult(tag, extras.getInt(KEY_FROM_INTENTION));
-        }
+        boolean tag = hasPermission(mActivity, permissions);
+        permissionResult(tag, extras.getInt(KEY_FROM_INTENTION));
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void permissionResult(boolean grant, int from_intention) {
         if (from_intention == FROM_INTENTION_CODE >> 2) {
             if (grant) {
@@ -674,7 +664,7 @@ final class FileChooser {
         }
 
         @Override
-        public boolean handleMessage(final Message msg) {
+        public boolean handleMessage(@NonNull final Message msg) {
             WebUtils.runInUiThread(AboveLCallback.this::safeHandleMessage);
             return false;
         }

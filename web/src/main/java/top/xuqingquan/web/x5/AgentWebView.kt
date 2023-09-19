@@ -128,7 +128,7 @@ open class AgentWebView : WebView {
         }
     }
 
-    // Activity在onDestory时调用webView的destroy，可以停止播放页面中的音频
+    // Activity在onDestroy时调用webView的destroy，可以停止播放页面中的音频
     private fun fixedStillAttached() {
         // java.lang.Throwable: Error: WebView.destroy() called while still attached!
         // at android.webkit.WebViewClassic.destroy(WebViewClassic.java:4142)

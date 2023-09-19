@@ -1,7 +1,5 @@
 package top.xuqingquan.web.sonic
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse
 import com.tencent.smtt.sdk.WebView
@@ -18,7 +16,6 @@ class SonicX5WebViewClient(private val sonicSession: SonicSession?) : Middleware
         sonicSession?.sessionClient?.pageFinish(url)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun shouldInterceptRequest(
         view: WebView?,
         request: WebResourceRequest?

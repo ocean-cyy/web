@@ -1,17 +1,18 @@
 package top.xuqingquan.web;
 
 import android.app.Activity;
+import android.text.TextUtils;
+import android.util.ArrayMap;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import android.text.TextUtils;
-import android.util.ArrayMap;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.Map;
 
@@ -164,18 +165,21 @@ public final class AgentWeb {
         this.mIEventHandler = agentBuilder.mIEventHandler;
         this.mEnableIndicator = agentBuilder.mEnableIndicator;
         if (WebConfig.isTbsEnable()) {
+            //noinspection ReplaceNullCheck
             if (agentBuilder.mX5WebCreator == null) {
                 mX5WebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mX5WebView, agentBuilder.mX5WebLayout);
             } else {
                 mX5WebCreator = agentBuilder.mX5WebCreator;
             }
         } else {
+            //noinspection ReplaceNullCheck
             if (agentBuilder.mWebCreator == null) {
                 mWebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mWebView, agentBuilder.mWebLayout);
             } else {
                 mWebCreator = agentBuilder.mWebCreator;
             }
         }
+        //noinspection ConstantValue
         mIndicatorController = agentBuilder.mIndicatorController;
         if (WebConfig.isTbsEnable()) {
             this.mX5WebChromeClient = agentBuilder.mX5WebChromeClient;
@@ -186,8 +190,7 @@ public final class AgentWeb {
             if (getX5WebCreator() != null) {
                 this.mIUrlLoader = new UrlLoaderImpl(getX5WebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
                 this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getX5WebCreator().getWebView());
-                if (getX5WebCreator().getWebParentLayout() instanceof WebParentLayout) {
-                    WebParentLayout mWebParentLayout = (WebParentLayout) getX5WebCreator().getWebParentLayout();
+                if (getX5WebCreator().getWebParentLayout() instanceof WebParentLayout mWebParentLayout) {
                     mWebParentLayout.bindController(agentBuilder.mAgentWebUIController == null ? AgentWebUIControllerImplBase.build() : agentBuilder.mAgentWebUIController);
                     mWebParentLayout.setErrorLayoutRes(agentBuilder.mErrorLayout, agentBuilder.mReloadId);
                     mWebParentLayout.setErrorView(agentBuilder.mErrorView);
@@ -202,8 +205,7 @@ public final class AgentWeb {
             if (getWebCreator() != null) {
                 this.mIUrlLoader = new UrlLoaderImpl(getWebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
                 this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getWebCreator().getWebView());
-                if (getWebCreator().getWebParentLayout() instanceof WebParentLayout) {
-                    WebParentLayout mWebParentLayout = (WebParentLayout) getWebCreator().getWebParentLayout();
+                if (getWebCreator().getWebParentLayout() instanceof WebParentLayout mWebParentLayout) {
                     mWebParentLayout.bindController(agentBuilder.mAgentWebUIController == null ? AgentWebUIControllerImplBase.build() : agentBuilder.mAgentWebUIController);
                     mWebParentLayout.setErrorLayoutRes(agentBuilder.mErrorLayout, agentBuilder.mReloadId);
                     mWebParentLayout.setErrorView(agentBuilder.mErrorView);
@@ -470,7 +472,7 @@ public final class AgentWeb {
         }
     }
 
-    @SuppressWarnings("UnusedReturnValue")
+    /** @noinspection deprecation, UnusedReturnValue */
     private AgentWeb ready() {
         AgentWebConfig.initCookiesManager(mActivity.getApplicationContext());
         if (WebConfig.isTbsEnable()) {

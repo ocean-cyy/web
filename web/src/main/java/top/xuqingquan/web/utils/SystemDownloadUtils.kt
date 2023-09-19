@@ -2,6 +2,7 @@
 
 package top.xuqingquan.web.utils
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,7 @@ import kotlin.jvm.Throws
  * Created by 许清泉 on 2020/6/22 14:22
  */
 
+@SuppressLint("UnspecifiedRegisterReceiverFlag")
 @Throws(Throwable::class)
 fun download(context: Context, fileName: String, url: String) {
     val downloadPath = getCacheFilePath(context)
