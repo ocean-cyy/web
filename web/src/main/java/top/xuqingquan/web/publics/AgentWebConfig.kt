@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package top.xuqingquan.web.publics
 
 import android.annotation.SuppressLint
@@ -17,7 +19,6 @@ import com.tencent.smtt.sdk.CookieSyncManager as X5CookieSyncManager
 import com.tencent.smtt.sdk.ValueCallback as X5ValueCallback
 import com.tencent.smtt.sdk.WebView as X5WebView
 
-@Suppress("DEPRECATION")
 @SuppressLint("ObsoleteSdkInt")
 object AgentWebConfig {
 
@@ -68,8 +69,8 @@ object AgentWebConfig {
     }
 
     @JvmStatic
-    fun removeAllX5Cookies(callback_o: X5ValueCallback<Boolean>?) {
-        var callback = callback_o
+    fun removeAllX5Cookies(mCallback: X5ValueCallback<Boolean>?) {
+        var callback = mCallback
         if (callback == null) {
             callback = getX5DefaultIgnoreCallback()
         }
@@ -85,6 +86,7 @@ object AgentWebConfig {
 
     @JvmStatic
     @Synchronized
+    @Deprecated("不再需要手动同步")
     fun initCookiesManager(context: Context) {
         if (!IS_INITIALIZED) {
             createCookiesSyncInstance(context)

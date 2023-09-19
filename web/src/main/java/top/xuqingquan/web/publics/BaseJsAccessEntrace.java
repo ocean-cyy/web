@@ -1,14 +1,10 @@
 package top.xuqingquan.web.publics;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
-
 import androidx.annotation.Nullable;
 
-import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.utils.CharacterUtils;
+import top.xuqingquan.web.nokernel.WebConfig;
 
-@SuppressLint("ObsoleteSdkInt")
 public abstract class BaseJsAccessEntrace implements JsAccessEntrace {
 
     private android.webkit.WebView mWebView;
@@ -24,42 +20,25 @@ public abstract class BaseJsAccessEntrace implements JsAccessEntrace {
 
     @Override
     public void callJs(@Nullable String js, @Nullable android.webkit.ValueCallback<String> callback) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            this.evaluateJs(js, callback);
-        } else {
-            this.loadJs(js);
-        }
+        this.evaluateJs(js, callback);
     }
 
     @Override
     public void callJs(@Nullable String js, @Nullable com.tencent.smtt.sdk.ValueCallback<String> callback) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            this.evaluateJs(js, callback);
-        } else {
-            this.loadJs(js);
-        }
+        this.evaluateJs(js, callback);
     }
 
     @Override
     public void callJs(@Nullable String js) {
         if (WebConfig.isTbsEnable()) {
-            //noinspection RedundantCast
             this.callJs(js, (com.tencent.smtt.sdk.ValueCallback<String>) null);
         } else {
             this.callJs(js, (android.webkit.ValueCallback<String>) null);
         }
     }
 
-    private void loadJs(@Nullable String js) {
-        if (WebConfig.isTbsEnable() && mx5WebView != null) {
-            mx5WebView.loadUrl(js);
-        } else if (mWebView != null) {
-            mWebView.loadUrl(js);
-        }
-    }
-
     private void evaluateJs(@Nullable String js, @Nullable android.webkit.ValueCallback<String> callback) {
-        if (mWebView == null) {
+        if (mWebView == null || js == null || js.isEmpty()) {
             return;
         }
         mWebView.evaluateJavascript(js, value -> {
@@ -123,7 +102,6 @@ public abstract class BaseJsAccessEntrace implements JsAccessEntrace {
     @Override
     public void quickCallJs(@Nullable String method, @Nullable String... params) {
         if (WebConfig.isTbsEnable()) {
-            //noinspection RedundantCast
             this.quickCallJs(method, (com.tencent.smtt.sdk.ValueCallback<String>) null, params);
         } else {
             this.quickCallJs(method, (android.webkit.ValueCallback<String>) null, params);

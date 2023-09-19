@@ -55,7 +55,7 @@ object AgentWebUtils {
             m.tag = null
             m.clearHistory()
             m.destroy()
-        } catch (t: Throwable) {
+        } catch (_: Throwable) {
         }
     }
 
@@ -81,7 +81,7 @@ object AgentWebUtils {
             m.tag = null
             m.clearHistory()
             m.destroy()
-        } catch (t: Throwable) {
+        } catch (_: Throwable) {
         }
     }
 
@@ -226,7 +226,6 @@ object AgentWebUtils {
     }
 
     @JvmStatic
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun showFileChooserCompat(
         activity: Activity,
         webView: WebView,
@@ -269,7 +268,6 @@ object AgentWebUtils {
     }
 
     @JvmStatic
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun showFileChooserCompat(
         activity: Activity,
         webView: X5WebView,
@@ -307,7 +305,6 @@ object AgentWebUtils {
             }
             valueCallback?.onReceiveValue(null)
         }
-
         return true
     }
 }

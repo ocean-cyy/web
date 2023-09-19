@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import top.xuqingquan.utils.DimensionsKt;
 import top.xuqingquan.utils.Timber;
 
+/** @noinspection unused*/
 @SuppressWarnings("rawtypes")
 public final class WebIndicator extends BaseIndicatorView implements BaseIndicatorSpec {
     /**
@@ -123,7 +124,7 @@ public final class WebIndicator extends BaseIndicatorView implements BaseIndicat
 
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
     }
 
     @Override

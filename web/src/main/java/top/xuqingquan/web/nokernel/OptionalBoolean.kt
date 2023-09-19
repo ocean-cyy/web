@@ -6,6 +6,7 @@ package top.xuqingquan.web.nokernel
  * Puts 2 dimensions (having value/no value + true/false) into 1 dimension
  * to achieve atomic comparisons and null-safety.
  */
+@Suppress("unused")
 enum class OptionalBoolean {
     /**
      * No value (equal to "null")

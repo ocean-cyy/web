@@ -15,6 +15,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import top.xuqingquan.utils.EncryptUtils
 import top.xuqingquan.utils.Timber
+import top.xuqingquan.utils.ToastUtils
 import top.xuqingquan.utils.getMIMEType
 import top.xuqingquan.utils.getUriFromFile
 import top.xuqingquan.web.R
@@ -33,8 +34,6 @@ import java.util.*
  * Created by 许清泉 on 2019-06-19 21:55
  */
 object WebUtils {
-
-    private var mToast: Toast? = null
 
     private var mHandler: Handler? = null
 
@@ -166,19 +165,13 @@ object WebUtils {
         }
     }
 
-    @SuppressLint("ShowToast")
     @JvmStatic
     fun toastShowShort(context: Context, msg: String) {
-        if (mToast == null) {
-            mToast = Toast.makeText(context.applicationContext, msg, Toast.LENGTH_SHORT)
-        } else {
-            mToast!!.setText(msg)
-        }
-        mToast!!.show()
+        ToastUtils.show(context,msg)
     }
 
+    @Suppress("unused")
     @JvmStatic
-    @Deprecated("")
     internal fun getUIControllerAndShowMessage(activity: Activity?, message: String, from: String) {
         if (activity == null || activity.isFinishing) {
             return

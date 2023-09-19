@@ -4,15 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class Action implements Parcelable {
 
-    public transient static final int ACTION_PERMISSION = 1;
-    public transient static final int ACTION_FILE = 2;
-    public transient static final int ACTION_CAMERA = 3;
-    public transient static final int ACTION_VIDEO = 4;
+    public static final int ACTION_PERMISSION = 1;
+    public static final int ACTION_FILE = 2;
+    public static final int ACTION_CAMERA = 3;
+    public static final int ACTION_VIDEO = 4;
     private List<String> mPermissions = new ArrayList<>();
     private int mAction;
     private int mFromIntention;
@@ -77,6 +76,7 @@ public final class Action implements Parcelable {
         return mAction;
     }
 
+    /** @noinspection UnusedReturnValue*/
     public Action setFromIntention(int fromIntention) {
         this.mFromIntention = fromIntention;
         return this;

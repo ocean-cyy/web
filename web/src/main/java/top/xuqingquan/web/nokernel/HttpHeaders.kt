@@ -5,6 +5,7 @@ import android.net.Uri
 /**
  * Created by 许清泉 on 2019-07-08 20:53
  */
+@Suppress("unused")
 class HttpHeaders private constructor() {
 
     companion object {
@@ -24,8 +25,8 @@ class HttpHeaders private constructor() {
         return mHeaders[subUrl]
     }
 
-    fun additionalHttpHeader(url_o: String?, k: String, v: String) {
-        var url = url_o ?: return
+    fun additionalHttpHeader(baseUrl: String?, k: String, v: String) {
+        var url = baseUrl ?: return
         url = subBaseUrl(url)
         val mHeaders = mHeaders
         var headersMap = mHeaders[subBaseUrl(url)]
@@ -43,7 +44,7 @@ class HttpHeaders private constructor() {
         val subUrl = subBaseUrl(url)
         val mHeaders = mHeaders
         var headersMap: MutableMap<String, String>? = headers
-        if (null == headersMap) {
+        if (headersMap.isNullOrEmpty()) {
             headersMap = mutableMapOf()
         }
         mHeaders[subUrl] = headersMap
@@ -59,8 +60,8 @@ class HttpHeaders private constructor() {
         headersMap?.remove(k)
     }
 
-    fun isEmptyHeaders(url_o: String): Boolean {
-        var url = url_o
+    fun isEmptyHeaders(baseUrl: String): Boolean {
+        var url = baseUrl
         url = subBaseUrl(url)
         val heads = getHeaders(url)
         return heads.isNullOrEmpty()
