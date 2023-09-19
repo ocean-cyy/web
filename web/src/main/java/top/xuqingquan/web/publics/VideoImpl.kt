@@ -10,7 +10,6 @@ import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.FrameLayout
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import top.xuqingquan.web.nokernel.EventInterceptor
 
 class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventInterceptor {
@@ -21,21 +20,8 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
     private var mMovieView: View? = null
     private var mMovieParentView: ViewGroup? = null
     private var mCallback: WebChromeClient.CustomViewCallback? = null
-    private var mX5Callback: IX5WebChromeClient.CustomViewCallback? = null
-
-    override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
-        onShowCustomView(view, null, callback)
-    }
 
     override fun onShowCustomView(view: View?, callback: WebChromeClient.CustomViewCallback?) {
-        onShowCustomView(view, callback, null)
-    }
-
-    private fun onShowCustomView(
-        view: View?,
-        callback: WebChromeClient.CustomViewCallback?,
-        x5Callback: IX5WebChromeClient.CustomViewCallback?
-    ) {
         val mActivity = this.mActivity
         if (mActivity == null || mActivity.isFinishing || mActivity.isDestroyed) {
             return
@@ -62,7 +48,6 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
         }
         if (mMovieView != null) {
             callback?.onCustomViewHidden()
-            x5Callback?.onCustomViewHidden()
             return
         }
         mWebView?.visibility = View.GONE
@@ -73,7 +58,6 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
             mDecorView.addView(mMovieParentView)
         }
         this.mCallback = callback
-        this.mX5Callback = x5Callback
         this.mMovieView = view
         mMovieParentView!!.addView(view)
         mMovieParentView!!.visibility = View.VISIBLE
@@ -104,7 +88,6 @@ class VideoImpl(mActivity: Activity, webView: WebView?) : IVideo, EventIntercept
         mMovieParentView?.visibility = View.GONE
         this.mMovieView = null
         mCallback?.onCustomViewHidden()
-        mX5Callback?.onCustomViewHidden()
         mWebView?.visibility = View.VISIBLE
     }
 

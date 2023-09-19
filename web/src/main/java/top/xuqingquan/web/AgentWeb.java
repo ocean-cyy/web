@@ -6,6 +6,9 @@ import android.util.ArrayMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
@@ -26,7 +29,6 @@ import top.xuqingquan.web.nokernel.IUrlLoader;
 import top.xuqingquan.web.nokernel.JsInterfaceHolder;
 import top.xuqingquan.web.nokernel.OpenOtherPageWays;
 import top.xuqingquan.web.nokernel.PermissionInterceptor;
-import top.xuqingquan.web.nokernel.WebConfig;
 import top.xuqingquan.web.nokernel.WebLifeCycle;
 import top.xuqingquan.web.publics.AbsAgentWebUIController;
 import top.xuqingquan.web.publics.AgentWebConfig;
@@ -43,6 +45,18 @@ import top.xuqingquan.web.publics.JsAccessEntraceImpl;
 import top.xuqingquan.web.publics.UrlLoaderImpl;
 import top.xuqingquan.web.publics.VideoImpl;
 import top.xuqingquan.web.publics.WebParentLayout;
+import top.xuqingquan.web.system.AbsAgentWebSettings;
+import top.xuqingquan.web.system.AgentWebSettingsImpl;
+import top.xuqingquan.web.system.DefaultChromeClient;
+import top.xuqingquan.web.system.DefaultWebClient;
+import top.xuqingquan.web.system.DefaultWebCreator;
+import top.xuqingquan.web.system.IAgentWebSettings;
+import top.xuqingquan.web.system.IWebLayout;
+import top.xuqingquan.web.system.JsInterfaceHolderImpl;
+import top.xuqingquan.web.system.MiddlewareWebChromeBase;
+import top.xuqingquan.web.system.MiddlewareWebClientBase;
+import top.xuqingquan.web.system.WebCreator;
+import top.xuqingquan.web.system.WebListenerManager;
 
 @SuppressWarnings({"rawtypes", "unused", "RedundantSuppression"})
 public final class AgentWeb {
@@ -57,13 +71,11 @@ public final class AgentWeb {
     /**
      * 负责创建布局 WebView ，WebParentLayout  Indicator等。
      */
-    private top.xuqingquan.web.system.WebCreator mWebCreator;
-    private top.xuqingquan.web.x5.WebCreator mX5WebCreator;
+    private final WebCreator mWebCreator;
     /**
      * 管理 WebSettings
      */
-    private top.xuqingquan.web.system.IAgentWebSettings mAgentWebSettings;
-    private top.xuqingquan.web.x5.IAgentWebSettings mX5AgentWebSettings;
+    private IAgentWebSettings mAgentWebSettings;
     /**
      * IndicatorController 控制Indicator
      */
@@ -71,13 +83,11 @@ public final class AgentWeb {
     /**
      * WebChromeClient
      */
-    private android.webkit.WebChromeClient mWebChromeClient;
-    private com.tencent.smtt.sdk.WebChromeClient mX5WebChromeClient;
+    private final WebChromeClient mWebChromeClient;
     /**
      * WebViewClient
      */
-    private android.webkit.WebViewClient mWebViewClient;
-    private com.tencent.smtt.sdk.WebViewClient mX5WebViewClient;
+    private final WebViewClient mWebViewClient;
     /**
      * is show indicator
      */
@@ -93,8 +103,7 @@ public final class AgentWeb {
     /**
      * WebListenerManager
      */
-    private top.xuqingquan.web.system.WebListenerManager mWebListenerManager;
-    private top.xuqingquan.web.x5.WebListenerManager mX5WebListenerManager;
+    private WebListenerManager mWebListenerManager;
     /**
      * Activity
      */
@@ -110,11 +119,11 @@ public final class AgentWeb {
     /**
      * URL Loader ， 提供了 WebView#loadUrl(url) reload() stopLoading（） postUrl()等方法
      */
-    private IUrlLoader mIUrlLoader;
+    private final IUrlLoader mIUrlLoader;
     /**
      * WebView 生命周期 ， 跟随生命周期释放CPU
      */
-    private WebLifeCycle mWebLifeCycle;
+    private final WebLifeCycle mWebLifeCycle;
     /**
      * Video 视屏播放管理类
      */
@@ -142,13 +151,11 @@ public final class AgentWeb {
     /**
      * MiddlewareWebClientBase WebViewClient 中间件
      */
-    private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
-    private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddlewareWebClientBaseHeader;
+    private final MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
     /**
      * MiddlewareWebChromeBase WebChromeClient 中间件
      */
-    private top.xuqingquan.web.system.MiddlewareWebChromeBase mMiddlewareWebChromeBaseHeader;
-    private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5MiddlewareWebChromeBaseHeader;
+    private final MiddlewareWebChromeBase mMiddlewareWebChromeBaseHeader;
     /**
      * 事件拦截
      */
@@ -164,53 +171,25 @@ public final class AgentWeb {
         this.mViewGroup = agentBuilder.mViewGroup;
         this.mIEventHandler = agentBuilder.mIEventHandler;
         this.mEnableIndicator = agentBuilder.mEnableIndicator;
-        if (WebConfig.isTbsEnable()) {
-            //noinspection ReplaceNullCheck
-            if (agentBuilder.mX5WebCreator == null) {
-                mX5WebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mX5WebView, agentBuilder.mX5WebLayout);
-            } else {
-                mX5WebCreator = agentBuilder.mX5WebCreator;
-            }
+        //noinspection ReplaceNullCheck
+        if (agentBuilder.mWebCreator == null) {
+            mWebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mWebView, agentBuilder.mWebLayout);
         } else {
-            //noinspection ReplaceNullCheck
-            if (agentBuilder.mWebCreator == null) {
-                mWebCreator = configWebCreator(agentBuilder.mBaseIndicatorView, agentBuilder.mIndex, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mHeight, agentBuilder.mWebView, agentBuilder.mWebLayout);
-            } else {
-                mWebCreator = agentBuilder.mWebCreator;
-            }
+            mWebCreator = agentBuilder.mWebCreator;
         }
         //noinspection ConstantValue
         mIndicatorController = agentBuilder.mIndicatorController;
-        if (WebConfig.isTbsEnable()) {
-            this.mX5WebChromeClient = agentBuilder.mX5WebChromeClient;
-            this.mX5WebViewClient = agentBuilder.mX5WebViewClient;
-            this.mX5AgentWebSettings = agentBuilder.mX5AgentWebSettings;
-            this.mX5MiddlewareWebClientBaseHeader = agentBuilder.mX5MiddlewareWebClientBaseHeader;
-            this.mX5MiddlewareWebChromeBaseHeader = agentBuilder.mX5ChromeMiddleWareHeader;
-            if (getX5WebCreator() != null) {
-                this.mIUrlLoader = new UrlLoaderImpl(getX5WebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
-                this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getX5WebCreator().getWebView());
-                if (getX5WebCreator().getWebParentLayout() instanceof WebParentLayout mWebParentLayout) {
-                    mWebParentLayout.bindController(agentBuilder.mAgentWebUIController == null ? AgentWebUIControllerImplBase.build() : agentBuilder.mAgentWebUIController);
-                    mWebParentLayout.setErrorLayoutRes(agentBuilder.mErrorLayout, agentBuilder.mReloadId);
-                    mWebParentLayout.setErrorView(agentBuilder.mErrorView);
-                }
-            }
-        } else {
-            this.mWebChromeClient = agentBuilder.mWebChromeClient;
-            this.mWebViewClient = agentBuilder.mWebViewClient;
-            this.mAgentWebSettings = agentBuilder.mAgentWebSettings;
-            this.mMiddlewareWebClientBaseHeader = agentBuilder.mMiddlewareWebClientBaseHeader;
-            this.mMiddlewareWebChromeBaseHeader = agentBuilder.mChromeMiddleWareHeader;
-            if (getWebCreator() != null) {
-                this.mIUrlLoader = new UrlLoaderImpl(getWebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
-                this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getWebCreator().getWebView());
-                if (getWebCreator().getWebParentLayout() instanceof WebParentLayout mWebParentLayout) {
-                    mWebParentLayout.bindController(agentBuilder.mAgentWebUIController == null ? AgentWebUIControllerImplBase.build() : agentBuilder.mAgentWebUIController);
-                    mWebParentLayout.setErrorLayoutRes(agentBuilder.mErrorLayout, agentBuilder.mReloadId);
-                    mWebParentLayout.setErrorView(agentBuilder.mErrorView);
-                }
-            }
+        this.mWebChromeClient = agentBuilder.mWebChromeClient;
+        this.mWebViewClient = agentBuilder.mWebViewClient;
+        this.mAgentWebSettings = agentBuilder.mAgentWebSettings;
+        this.mMiddlewareWebClientBaseHeader = agentBuilder.mMiddlewareWebClientBaseHeader;
+        this.mMiddlewareWebChromeBaseHeader = agentBuilder.mChromeMiddleWareHeader;
+        this.mIUrlLoader = new UrlLoaderImpl(getWebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
+        this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getWebCreator().getWebView());
+        if (getWebCreator().getWebParentLayout() instanceof WebParentLayout mWebParentLayout) {
+            mWebParentLayout.bindController(agentBuilder.mAgentWebUIController == null ? AgentWebUIControllerImplBase.build() : agentBuilder.mAgentWebUIController);
+            mWebParentLayout.setErrorLayoutRes(agentBuilder.mErrorLayout, agentBuilder.mReloadId);
+            mWebParentLayout.setErrorView(agentBuilder.mErrorView);
         }
         if (agentBuilder.mJavaObject != null && !agentBuilder.mJavaObject.isEmpty()) {
             this.mJavaObjects.putAll((Map<? extends String, ?>) agentBuilder.mJavaObject);
@@ -245,29 +224,17 @@ public final class AgentWeb {
     public JsAccessEntrace getJsAccessEntrace() {
         JsAccessEntrace mJsAccessEntrace = this.mJsAccessEntrace;
         if (mJsAccessEntrace == null) {
-            if (WebConfig.isTbsEnable()) {
-                this.mJsAccessEntrace = JsAccessEntraceImpl.getInstance(getX5WebCreator().getWebView());
-            } else {
-                this.mJsAccessEntrace = JsAccessEntraceImpl.getInstance(getWebCreator().getWebView());
-            }
+            this.mJsAccessEntrace = JsAccessEntraceImpl.getInstance(getWebCreator().getWebView());
             mJsAccessEntrace = this.mJsAccessEntrace;
         }
         return mJsAccessEntrace;
     }
 
     public AgentWeb clearWebCache() {
-        if (WebConfig.isTbsEnable()) {
-            if (getX5WebCreator() != null && getX5WebCreator().getWebView() != null) {
-                AgentWebUtils.clearWebViewAllCache(mActivity, getX5WebCreator().getWebView());
-            } else {
-                AgentWebUtils.clearWebViewAllCache(mActivity);
-            }
+        if (getWebCreator() != null && getWebCreator().getWebView() != null) {
+            AgentWebUtils.clearWebViewAllCache(mActivity, getWebCreator().getWebView());
         } else {
-            if (getWebCreator() != null && getWebCreator().getWebView() != null) {
-                AgentWebUtils.clearWebViewAllCache(mActivity, getWebCreator().getWebView());
-            } else {
-                AgentWebUtils.clearWebViewAllCache(mActivity);
-            }
+            AgentWebUtils.clearWebViewAllCache(mActivity);
         }
         return this;
     }
@@ -303,36 +270,21 @@ public final class AgentWeb {
     }
 
     @Nullable
-    public top.xuqingquan.web.system.WebCreator getWebCreator() {
+    public WebCreator getWebCreator() {
         return this.mWebCreator;
-    }
-
-    @Nullable
-    public top.xuqingquan.web.x5.WebCreator getX5WebCreator() {
-        return this.mX5WebCreator;
     }
 
     private IEventHandler getIEventHandler() {
         if (this.mIEventHandler == null) {
-            if (WebConfig.isTbsEnable()) {
-                if (getX5WebCreator() != null) {
-                    mIEventHandler = EventHandlerImpl.getInstance(getX5WebCreator().getWebView(), getInterceptor());
-                }
-            } else {
-                if (getWebCreator() != null) {
-                    mIEventHandler = EventHandlerImpl.getInstance(getWebCreator().getWebView(), getInterceptor());
-                }
+            if (getWebCreator() != null) {
+                mIEventHandler = EventHandlerImpl.getInstance(getWebCreator().getWebView(), getInterceptor());
             }
         }
         return this.mIEventHandler;
     }
 
-    public top.xuqingquan.web.system.IAgentWebSettings getAgentWebSettings() {
+    public IAgentWebSettings getAgentWebSettings() {
         return this.mAgentWebSettings;
-    }
-
-    public top.xuqingquan.web.x5.IAgentWebSettings getX5AgentWebSettings() {
-        return this.mX5AgentWebSettings;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -351,32 +303,22 @@ public final class AgentWeb {
 
     public void destroy() {
         this.mWebLifeCycle.onDestroy();
-        WebConfig.resetTbsStatus();
     }
 
     private void doCompat() {
         mJavaObjects.put("agentWeb", new AgentWebJsInterfaceCompat(this, mActivity));
     }
 
-    private top.xuqingquan.web.system.WebCreator configWebCreator(BaseIndicatorView progressView, int index, ViewGroup.LayoutParams lp, int indicatorColor, int height_dp, android.webkit.WebView webView, top.xuqingquan.web.system.IWebLayout webLayout) {
+    private WebCreator configWebCreator(BaseIndicatorView progressView, int index, ViewGroup.LayoutParams lp, int indicatorColor, int height_dp, WebView webView, IWebLayout webLayout) {
         if (progressView != null && mEnableIndicator) {
-            return new top.xuqingquan.web.system.DefaultWebCreator(mActivity, mViewGroup, lp, index, progressView, webView, webLayout);
+            return new DefaultWebCreator(mActivity, mViewGroup, lp, index, progressView, webView, webLayout);
         } else {
             return mEnableIndicator ?
-                    new top.xuqingquan.web.system.DefaultWebCreator(mActivity, mViewGroup, lp, index, indicatorColor, height_dp, webView, webLayout)
-                    : new top.xuqingquan.web.system.DefaultWebCreator(mActivity, mViewGroup, lp, index, webView, webLayout);
+                    new DefaultWebCreator(mActivity, mViewGroup, lp, index, indicatorColor, height_dp, webView, webLayout)
+                    : new DefaultWebCreator(mActivity, mViewGroup, lp, index, webView, webLayout);
         }
     }
 
-    private top.xuqingquan.web.x5.WebCreator configWebCreator(BaseIndicatorView progressView, int index, ViewGroup.LayoutParams lp, int indicatorColor, int height_dp, com.tencent.smtt.sdk.WebView webView, top.xuqingquan.web.x5.IWebLayout webLayout) {
-        if (progressView != null && mEnableIndicator) {
-            return new top.xuqingquan.web.x5.DefaultWebCreator(mActivity, mViewGroup, lp, index, progressView, webView, webLayout);
-        } else {
-            return mEnableIndicator ?
-                    new top.xuqingquan.web.x5.DefaultWebCreator(mActivity, mViewGroup, lp, index, indicatorColor, height_dp, webView, webLayout)
-                    : new top.xuqingquan.web.x5.DefaultWebCreator(mActivity, mViewGroup, lp, index, webView, webLayout);
-        }
-    }
 
     private AgentWeb go(String url) {
         if (getUrlLoader() != null) {
@@ -409,9 +351,9 @@ public final class AgentWeb {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private android.webkit.WebViewClient getWebViewClient() {
+    private WebViewClient getWebViewClient() {
         Timber.i("getDelegate:" + this.mMiddlewareWebClientBaseHeader);
-        top.xuqingquan.web.system.DefaultWebClient mDefaultWebClient = top.xuqingquan.web.system.DefaultWebClient
+        DefaultWebClient mDefaultWebClient = DefaultWebClient
                 .createBuilder()
                 .setActivity(this.mActivity)
                 .setClient(mWebViewClient)
@@ -422,11 +364,11 @@ public final class AgentWeb {
                 .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
                 .setUrlHandleWays(this.mUrlHandleWays)
                 .build();
-        top.xuqingquan.web.system.MiddlewareWebClientBase header = this.mMiddlewareWebClientBaseHeader;
+        MiddlewareWebClientBase header = this.mMiddlewareWebClientBaseHeader;
         if (header != null) {
-            top.xuqingquan.web.system.MiddlewareWebClientBase tail = header;
+            MiddlewareWebClientBase tail = header;
             int count = 1;
-            top.xuqingquan.web.system.MiddlewareWebClientBase tmp = header;
+            MiddlewareWebClientBase tmp = header;
             while (tmp.next() != null) {
                 tmp = tmp.next();
                 tail = tmp;
@@ -440,143 +382,56 @@ public final class AgentWeb {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private com.tencent.smtt.sdk.WebViewClient getX5WebViewClient() {
-        Timber.i("getDelegate:" + this.mX5MiddlewareWebClientBaseHeader);
-        top.xuqingquan.web.x5.DefaultWebClient mDefaultWebClient = top.xuqingquan.web.x5.DefaultWebClient
-                .createBuilder()
-                .setActivity(this.mActivity)
-                .setClient(mX5WebViewClient)
-                .setWebClientHelper(this.mWebClientHelper)
-                .setParseThunder(this.mParseThunder)
-                .setPermissionInterceptor(this.mPermissionInterceptor)
-                .setWebView(getX5WebCreator().getWebView())
-                .setInterceptUnkownUrl(this.mIsInterceptUnknownUrl)
-                .setUrlHandleWays(this.mUrlHandleWays)
-                .build();
-        top.xuqingquan.web.x5.MiddlewareWebClientBase header = this.mX5MiddlewareWebClientBaseHeader;
-        if (header != null) {
-            top.xuqingquan.web.x5.MiddlewareWebClientBase tail = header;
-            int count = 1;
-            top.xuqingquan.web.x5.MiddlewareWebClientBase tmp = header;
-            while (tmp.next() != null) {
-                tmp = tmp.next();
-                tail = tmp;
-                count++;
-            }
-            Timber.i("MiddlewareWebClientBase middleware count:" + count);
-            tail.setDelegate(mDefaultWebClient);
-            return header;
-        } else {
-            return mDefaultWebClient;
-        }
-    }
-
-    /** @noinspection deprecation, UnusedReturnValue */
+    /**
+     * @noinspection deprecation, UnusedReturnValue
+     */
     private AgentWeb ready() {
         AgentWebConfig.initCookiesManager(mActivity.getApplicationContext());
-        if (WebConfig.isTbsEnable()) {
-            top.xuqingquan.web.x5.IAgentWebSettings mAgentWebSettings = this.mX5AgentWebSettings;
-            if (mAgentWebSettings == null) {
-                this.mX5AgentWebSettings = top.xuqingquan.web.x5.AgentWebSettingsImpl.getInstance();
-                mAgentWebSettings = this.mX5AgentWebSettings;
+        IAgentWebSettings mAgentWebSettings = this.mAgentWebSettings;
+        if (mAgentWebSettings == null) {
+            this.mAgentWebSettings = AgentWebSettingsImpl.getInstance();
+            mAgentWebSettings = this.mAgentWebSettings;
+        }
+        if (mAgentWebSettings instanceof AbsAgentWebSettings) {
+            ((AbsAgentWebSettings) mAgentWebSettings).bindAgentWeb(this);
+            if (mWebListenerManager == null) {
+                mWebListenerManager = (WebListenerManager) mAgentWebSettings;
             }
-            if (mAgentWebSettings instanceof top.xuqingquan.web.x5.AbsAgentWebSettings) {
-                ((top.xuqingquan.web.x5.AbsAgentWebSettings) mAgentWebSettings).bindAgentWeb(this);
-                if (mX5WebListenerManager == null) {
-                    mX5WebListenerManager = (top.xuqingquan.web.x5.WebListenerManager) mAgentWebSettings;
-                }
-            }
-            com.tencent.smtt.sdk.WebView webView = getX5WebCreator().getWebView();
-            mAgentWebSettings.toSetting(webView);
-            if (mJsInterfaceHolder == null) {
-                mJsInterfaceHolder = top.xuqingquan.web.x5.JsInterfaceHolderImpl.getJsInterfaceHolder(mX5WebCreator);
-            }
-            Timber.i("mJavaObjects:" + mJavaObjects.size());
-            if (!mJavaObjects.isEmpty()) {
-                mJsInterfaceHolder.addJavaObjects(mJavaObjects);
-            }
-            if (mX5WebListenerManager != null) {
-                mX5WebListenerManager.setDownloader(webView, null);
-                mX5WebListenerManager.setWebChromeClient(webView, getX5ChromeClient());
-                mX5WebListenerManager.setWebViewClient(webView, getX5WebViewClient());
-            }
-        } else {
-            top.xuqingquan.web.system.IAgentWebSettings mAgentWebSettings = this.mAgentWebSettings;
-            if (mAgentWebSettings == null) {
-                this.mAgentWebSettings = top.xuqingquan.web.system.AgentWebSettingsImpl.getInstance();
-                mAgentWebSettings = this.mAgentWebSettings;
-            }
-            if (mAgentWebSettings instanceof top.xuqingquan.web.system.AbsAgentWebSettings) {
-                ((top.xuqingquan.web.system.AbsAgentWebSettings) mAgentWebSettings).bindAgentWeb(this);
-                if (mWebListenerManager == null) {
-                    mWebListenerManager = (top.xuqingquan.web.system.WebListenerManager) mAgentWebSettings;
-                }
-            }
-            android.webkit.WebView webView = getWebCreator().getWebView();
-            mAgentWebSettings.toSetting(webView);
-            if (mJsInterfaceHolder == null) {
-                mJsInterfaceHolder = top.xuqingquan.web.system.JsInterfaceHolderImpl.getJsInterfaceHolder(mWebCreator);
-            }
-            Timber.i("mJavaObjects:" + mJavaObjects.size());
-            if (!mJavaObjects.isEmpty()) {
-                mJsInterfaceHolder.addJavaObjects(mJavaObjects);
-            }
-            if (mWebListenerManager != null) {
-                mWebListenerManager.setDownloader(webView, null);
-                mWebListenerManager.setWebChromeClient(webView, getChromeClient());
-                mWebListenerManager.setWebViewClient(webView, getWebViewClient());
-            }
+        }
+        WebView webView = getWebCreator().getWebView();
+        mAgentWebSettings.toSetting(webView);
+        if (mJsInterfaceHolder == null) {
+            mJsInterfaceHolder = JsInterfaceHolderImpl.getJsInterfaceHolder(mWebCreator);
+        }
+        Timber.i("mJavaObjects:" + mJavaObjects.size());
+        if (!mJavaObjects.isEmpty()) {
+            mJsInterfaceHolder.addJavaObjects(mJavaObjects);
+        }
+        if (mWebListenerManager != null) {
+            mWebListenerManager.setDownloader(webView, null);
+            mWebListenerManager.setWebChromeClient(webView, getChromeClient());
+            mWebListenerManager.setWebViewClient(webView, getWebViewClient());
         }
         return this;
     }
 
     @SuppressWarnings("ConstantConditions")
-    private android.webkit.WebChromeClient getChromeClient() {
+    private WebChromeClient getChromeClient() {
         this.mIndicatorController = (this.mIndicatorController == null) ?
                 IndicatorHandler.getInstance().injectIndicator(getWebCreator().offer())
                 : this.mIndicatorController;
         this.mIVideo = getIVideo();
-        top.xuqingquan.web.system.DefaultChromeClient mDefaultChromeClient =
-                new top.xuqingquan.web.system.DefaultChromeClient(this.mActivity,
+        DefaultChromeClient mDefaultChromeClient =
+                new DefaultChromeClient(this.mActivity,
                         this.mIndicatorController,
                         mWebChromeClient, this.mIVideo,
                         this.mPermissionInterceptor, getWebCreator().getWebView());
         Timber.i("WebChromeClient:" + this.mWebChromeClient);
-        top.xuqingquan.web.system.MiddlewareWebChromeBase header = this.mMiddlewareWebChromeBaseHeader;
+        MiddlewareWebChromeBase header = this.mMiddlewareWebChromeBaseHeader;
         if (header != null) {
-            top.xuqingquan.web.system.MiddlewareWebChromeBase tail = header;
+            MiddlewareWebChromeBase tail = header;
             int count = 1;
-            top.xuqingquan.web.system.MiddlewareWebChromeBase tmp = header;
-            while (tmp.next() != null) {
-                tmp = tmp.next();
-                tail = tmp;
-                count++;
-            }
-            Timber.i("MiddlewareWebClientBase middleware count:" + count);
-            tail.setDelegate(mDefaultChromeClient);
-            return header;
-        } else {
-            return mDefaultChromeClient;
-        }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private com.tencent.smtt.sdk.WebChromeClient getX5ChromeClient() {
-        this.mIndicatorController = (this.mIndicatorController == null) ?
-                IndicatorHandler.getInstance().injectIndicator(getX5WebCreator().offer())
-                : this.mIndicatorController;
-        top.xuqingquan.web.x5.DefaultChromeClient mDefaultChromeClient =
-                new top.xuqingquan.web.x5.DefaultChromeClient(this.mActivity,
-                        this.mIndicatorController,
-                        mX5WebChromeClient, this.mIVideo,
-                        this.mPermissionInterceptor, getX5WebCreator().getWebView());
-        Timber.i("WebChromeClient:" + this.mX5WebChromeClient);
-        top.xuqingquan.web.x5.MiddlewareWebChromeBase header = this.mX5MiddlewareWebChromeBaseHeader;
-        if (header != null) {
-            top.xuqingquan.web.x5.MiddlewareWebChromeBase tail = header;
-            int count = 1;
-            top.xuqingquan.web.x5.MiddlewareWebChromeBase tmp = header;
+            MiddlewareWebChromeBase tmp = header;
             while (tmp.next() != null) {
                 tmp = tmp.next();
                 tail = tmp;
@@ -629,37 +484,27 @@ public final class AgentWeb {
         /*默认进度条是显示的*/
         private boolean mEnableIndicator = true;
         private ViewGroup.LayoutParams mLayoutParams = null;
-        private android.webkit.WebViewClient mWebViewClient;
-        private com.tencent.smtt.sdk.WebViewClient mX5WebViewClient;
-        private android.webkit.WebChromeClient mWebChromeClient;
-        private com.tencent.smtt.sdk.WebChromeClient mX5WebChromeClient;
+        private WebViewClient mWebViewClient;
+        private WebChromeClient mWebChromeClient;
         private int mIndicatorColor = -1;
-        private top.xuqingquan.web.system.IAgentWebSettings mAgentWebSettings;
-        private top.xuqingquan.web.x5.IAgentWebSettings mX5AgentWebSettings;
-        private top.xuqingquan.web.system.WebCreator mWebCreator;
-        private top.xuqingquan.web.x5.WebCreator mX5WebCreator;
+        private IAgentWebSettings mAgentWebSettings;
+        private WebCreator mWebCreator;
         private HttpHeaders mHttpHeaders = null;
         private IEventHandler mIEventHandler;
         private int mHeight = -1;
         private ArrayMap<String, Object> mJavaObject;
-        private android.webkit.WebView mWebView;
-        private com.tencent.smtt.sdk.WebView mX5WebView;
+        private WebView mWebView;
         private boolean mWebClientHelper = true;
         private boolean mParseThunder = false;
-        private top.xuqingquan.web.system.IWebLayout mWebLayout = null;
-        private top.xuqingquan.web.x5.IWebLayout mX5WebLayout = null;
+        private IWebLayout mWebLayout = null;
         private PermissionInterceptor mPermissionInterceptor = null;
         private AbsAgentWebUIController mAgentWebUIController;
         private OpenOtherPageWays mOpenOtherPage = null;
         private boolean mIsInterceptUnknownUrl = false;
-        private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
-        private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddlewareWebClientBaseHeader;
-        private top.xuqingquan.web.system.MiddlewareWebClientBase mMiddlewareWebClientBaseTail;
-        private top.xuqingquan.web.x5.MiddlewareWebClientBase mX5MiddlewareWebClientBaseTail;
-        private top.xuqingquan.web.system.MiddlewareWebChromeBase mChromeMiddleWareHeader = null;
-        private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5ChromeMiddleWareHeader = null;
-        private top.xuqingquan.web.system.MiddlewareWebChromeBase mChromeMiddleWareTail = null;
-        private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5ChromeMiddleWareTail = null;
+        private MiddlewareWebClientBase mMiddlewareWebClientBaseHeader;
+        private MiddlewareWebClientBase mMiddlewareWebClientBaseTail;
+        private MiddlewareWebChromeBase mChromeMiddleWareHeader = null;
+        private MiddlewareWebChromeBase mChromeMiddleWareTail = null;
         private View mErrorView;
         private int mErrorLayout;
         private int mReloadId;
@@ -782,27 +627,17 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder setWebChromeClient(@Nullable android.webkit.WebChromeClient webChromeClient) {
+        public CommonBuilder setWebChromeClient(@Nullable WebChromeClient webChromeClient) {
             this.mAgentBuilder.mWebChromeClient = webChromeClient;
             return this;
         }
 
-        public CommonBuilder setWebChromeClient(@Nullable com.tencent.smtt.sdk.WebChromeClient webChromeClient) {
-            this.mAgentBuilder.mX5WebChromeClient = webChromeClient;
-            return this;
-        }
-
-        public CommonBuilder setWebViewClient(@Nullable android.webkit.WebViewClient webViewClient) {
+        public CommonBuilder setWebViewClient(@Nullable WebViewClient webViewClient) {
             this.mAgentBuilder.mWebViewClient = webViewClient;
             return this;
         }
 
-        public CommonBuilder setWebViewClient(@Nullable com.tencent.smtt.sdk.WebViewClient webViewClient) {
-            this.mAgentBuilder.mX5WebViewClient = webViewClient;
-            return this;
-        }
-
-        public CommonBuilder useMiddlewareWebClient(@Nullable top.xuqingquan.web.system.MiddlewareWebClientBase middleWrareWebClientBase) {
+        public CommonBuilder useMiddlewareWebClient(@Nullable MiddlewareWebClientBase middleWrareWebClientBase) {
             if (middleWrareWebClientBase == null) {
                 return this;
             }
@@ -815,20 +650,7 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder useMiddlewareWebClient(@Nullable top.xuqingquan.web.x5.MiddlewareWebClientBase middleWrareWebClientBase) {
-            if (middleWrareWebClientBase == null) {
-                return this;
-            }
-            this.mAgentBuilder.mX5MiddlewareWebClientBaseTail = middleWrareWebClientBase;
-            if (this.mAgentBuilder.mX5MiddlewareWebClientBaseHeader == null) {
-                this.mAgentBuilder.mX5MiddlewareWebClientBaseHeader = middleWrareWebClientBase;
-            } else {
-                this.mAgentBuilder.mX5MiddlewareWebClientBaseTail.enq(middleWrareWebClientBase);
-            }
-            return this;
-        }
-
-        public CommonBuilder useMiddlewareWebChrome(@Nullable top.xuqingquan.web.system.MiddlewareWebChromeBase middlewareWebChromeBase) {
+        public CommonBuilder useMiddlewareWebChrome(@Nullable MiddlewareWebChromeBase middlewareWebChromeBase) {
             if (middlewareWebChromeBase == null) {
                 return this;
             }
@@ -837,19 +659,6 @@ public final class AgentWeb {
                 this.mAgentBuilder.mChromeMiddleWareHeader = middlewareWebChromeBase;
             } else {
                 this.mAgentBuilder.mChromeMiddleWareTail.enq(middlewareWebChromeBase);
-            }
-            return this;
-        }
-
-        public CommonBuilder useMiddlewareWebChrome(@Nullable top.xuqingquan.web.x5.MiddlewareWebChromeBase middlewareWebChromeBase) {
-            if (middlewareWebChromeBase == null) {
-                return this;
-            }
-            this.mAgentBuilder.mX5ChromeMiddleWareTail = middlewareWebChromeBase;
-            if (this.mAgentBuilder.mX5ChromeMiddleWareHeader == null) {
-                this.mAgentBuilder.mX5ChromeMiddleWareHeader = middlewareWebChromeBase;
-            } else {
-                this.mAgentBuilder.mX5ChromeMiddleWareTail.enq(middlewareWebChromeBase);
             }
             return this;
         }
@@ -865,13 +674,8 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder setAgentWebWebSettings(@Nullable top.xuqingquan.web.system.IAgentWebSettings agentWebSettings) {
+        public CommonBuilder setAgentWebWebSettings(@Nullable IAgentWebSettings agentWebSettings) {
             this.mAgentBuilder.mAgentWebSettings = agentWebSettings;
-            return this;
-        }
-
-        public CommonBuilder setAgentWebWebSettings(@Nullable top.xuqingquan.web.x5.IAgentWebSettings agentWebSettings) {
-            this.mAgentBuilder.mX5AgentWebSettings = agentWebSettings;
             return this;
         }
 
@@ -885,23 +689,13 @@ public final class AgentWeb {
             return this;
         }
 
-        public CommonBuilder setWebView(@Nullable android.webkit.WebView webView) {
+        public CommonBuilder setWebView(@Nullable WebView webView) {
             this.mAgentBuilder.mWebView = webView;
             return this;
         }
 
-        public CommonBuilder setWebView(@Nullable com.tencent.smtt.sdk.WebView webView) {
-            this.mAgentBuilder.mX5WebView = webView;
-            return this;
-        }
-
-        public CommonBuilder setWebLayout(@Nullable top.xuqingquan.web.system.IWebLayout iWebLayout) {
+        public CommonBuilder setWebLayout(@Nullable IWebLayout iWebLayout) {
             this.mAgentBuilder.mWebLayout = iWebLayout;
-            return this;
-        }
-
-        public CommonBuilder setWebLayout(@Nullable top.xuqingquan.web.x5.IWebLayout iWebLayout) {
-            this.mAgentBuilder.mX5WebLayout = iWebLayout;
             return this;
         }
 

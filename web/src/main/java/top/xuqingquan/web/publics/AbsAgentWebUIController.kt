@@ -5,9 +5,6 @@ import android.os.Handler
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebView
-import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptResult
-import com.tencent.smtt.export.external.interfaces.JsResult as X5JsResult
-import com.tencent.smtt.sdk.WebView as X5WebView
 
 abstract class AbsAgentWebUIController {
     @Volatile
@@ -46,8 +43,6 @@ abstract class AbsAgentWebUIController {
      */
     abstract fun onJsAlert(view: WebView?, url: String?, message: String?)
 
-    abstract fun onJsAlert(view: X5WebView?, url: String?, message: String?)
-
     /**
      * 咨询用户是否前往其他页面
      *
@@ -56,8 +51,6 @@ abstract class AbsAgentWebUIController {
      * @param callback
      */
     abstract fun onOpenPagePrompt(view: WebView, url: String, callback: Handler.Callback)
-
-    abstract fun onOpenPagePrompt(view: X5WebView, url: String, callback: Handler.Callback)
 
     /**
      * WebChromeClient#onJsConfirm
@@ -69,19 +62,8 @@ abstract class AbsAgentWebUIController {
      */
     abstract fun onJsConfirm(view: WebView?, url: String?, message: String?, jsResult: JsResult?)
 
-    abstract fun onJsConfirm(
-        view: X5WebView?,
-        url: String?,
-        message: String?,
-        jsResult: X5JsResult?
-    )
-
     abstract fun onSelectItemsPrompt(
         view: WebView, url: String, ways: Array<String>, callback: Handler.Callback
-    )
-
-    abstract fun onSelectItemsPrompt(
-        view: X5WebView, url: String, ways: Array<String>, callback: Handler.Callback
     )
 
     /**
@@ -106,11 +88,6 @@ abstract class AbsAgentWebUIController {
         defaultValue: String?, jsPromptResult: JsPromptResult?
     )
 
-    abstract fun onJsPrompt(
-        view: X5WebView?, url: String?, message: String?,
-        defaultValue: String?, jsPromptResult: X5JsPromptResult?
-    )
-
     /**
      * 显示错误页
      *
@@ -121,10 +98,6 @@ abstract class AbsAgentWebUIController {
      */
     abstract fun onMainFrameError(
         view: WebView, errorCode: Int, description: String, failingUrl: String
-    )
-
-    abstract fun onMainFrameError(
-        view: X5WebView, errorCode: Int, description: String, failingUrl: String
     )
 
     /**

@@ -9,8 +9,6 @@ import top.xuqingquan.utils.Timber
 import java.lang.reflect.Method
 import java.util.*
 
-import com.tencent.smtt.sdk.WebView as X5WebView
-
 @Suppress("unused")
 class JsCallJava(interfaceObj: Any, interfaceName: String) {
     private var mMethodsMap: HashMap<String, Method>? = null
@@ -91,93 +89,6 @@ class JsCallJava(interfaceObj: Any, interfaceName: String) {
     }
 
     fun call(webView: WebView, jsonObject: JSONObject?): String {
-        val time = android.os.SystemClock.uptimeMillis()
-        return if (jsonObject != null) {
-            try {
-                val methodName = jsonObject.getString(KEY_METHOD)
-                val argsTypes = jsonObject.getJSONArray(KEY_TYPES)
-                val argsVals = jsonObject.getJSONArray(KEY_ARGS)
-                val sign = StringBuilder(methodName)
-                val len = argsTypes.length()
-                val values = arrayOfNulls<Any>(len)
-                var numIndex = 0
-                var currType: String
-
-                for (k in 0 until len) {
-                    currType = argsTypes.optString(k)
-                    when (currType) {
-                        "string" -> {
-                            sign.append("_S")
-                            values[k] = if (argsVals.isNull(k)) null else argsVals.getString(k)
-                        }
-                        "number" -> {
-                            sign.append("_N")
-                            numIndex = numIndex * 10 + k + 1
-                        }
-                        "boolean" -> {
-                            sign.append("_B")
-                            values[k] = argsVals.getBoolean(k)
-                        }
-                        "object" -> {
-                            sign.append("_O")
-                            values[k] = if (argsVals.isNull(k)) null else argsVals.getJSONObject(k)
-                        }
-                        "function" -> {
-                            sign.append("_F")
-                            values[k] = JsCallback(webView, mInterfacedName!!, argsVals.getInt(k))
-                        }
-                        else -> sign.append("_P")
-                    }
-                }
-
-                val currMethod = mMethodsMap!![sign.toString()] ?: return getReturn(
-                    jsonObject,
-                    500,
-                    "not found method($sign) with valid parameters",
-                    time
-                )
-
-                // 方法匹配失败
-                // 数字类型细分匹配
-                if (numIndex > 0) {
-                    val methodTypes = currMethod.parameterTypes
-                    var currIndex: Int
-                    var currCls: Class<*>
-                    while (numIndex > 0) {
-                        currIndex = numIndex - numIndex / 10 * 10 - 1
-                        currCls = methodTypes[currIndex]
-                        when (currCls) {
-                            Int::class.javaPrimitiveType -> values[currIndex] =
-                                argsVals.getInt(currIndex)
-                            Long::class.javaPrimitiveType -> //WARN: argsJson.getLong(k + defValue) will return a bigger incorrect number
-                                values[currIndex] =
-                                    java.lang.Long.parseLong(argsVals.getString(currIndex))
-                            else -> values[currIndex] = argsVals.getDouble(currIndex)
-                        }
-                        numIndex /= 10
-                    }
-                }
-
-                getReturn(jsonObject, 200, currMethod.invoke(mInterfaceObj, *values), time)
-            } catch (e: Throwable) {
-                //优先返回详细的错误信息
-                if (e.cause != null) {
-                    return getReturn(
-                        jsonObject,
-                        500,
-                        "method execute result:" + e.cause!!.message,
-                        time
-                    )
-                }
-                getReturn(jsonObject, 500, "method execute result:" + e.message, time)
-            }
-
-        } else {
-            getReturn(null, 500, "call data empty", time)
-        }
-    }
-
-    fun call(webView: X5WebView, jsonObject: JSONObject?): String {
         val time = android.os.SystemClock.uptimeMillis()
         return if (jsonObject != null) {
             try {

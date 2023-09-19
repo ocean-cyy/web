@@ -53,8 +53,6 @@ dependencies {
     implementation("top.xuqingquan:utils:3.1.8")
     //download（需要用到web下载的时候需要依赖）
     compileOnly("com.github.Justson:Downloader:v5.0.4-androidx")
-    compileOnly("com.tencent.tbs:tbssdk:44286")
-    compileOnly("com.tencent.sonic:sdk:3.1.0")
     compileOnly("com.alipay.sdk:alipaysdk-android:15.8.16")
     //test
     testImplementation("junit:junit:4.13.2")

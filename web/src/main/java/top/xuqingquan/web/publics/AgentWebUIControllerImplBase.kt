@@ -5,9 +5,6 @@ import android.os.Handler
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebView
-import com.tencent.smtt.sdk.WebView as X5WebView
-import com.tencent.smtt.export.external.interfaces.JsResult as X5JsResult
-import com.tencent.smtt.export.external.interfaces.JsPromptResult as X5JsPromptResult
 
 open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
 
@@ -15,15 +12,7 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
         getDelegate().onJsAlert(view, url, message)
     }
 
-    override fun onJsAlert(view: X5WebView?, url: String?, message: String?) {
-        getDelegate().onJsAlert(view, url, message)
-    }
-
     override fun onOpenPagePrompt(view: WebView, url: String, callback: Handler.Callback) {
-        getDelegate().onOpenPagePrompt(view, url, callback)
-    }
-
-    override fun onOpenPagePrompt(view: X5WebView, url: String, callback: Handler.Callback) {
         getDelegate().onOpenPagePrompt(view, url, callback)
     }
 
@@ -31,18 +20,8 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
         getDelegate().onJsConfirm(view, url, message, jsResult)
     }
 
-    override fun onJsConfirm(view: X5WebView?, url: String?, message: String?, jsResult: X5JsResult?) {
-        getDelegate().onJsConfirm(view, url, message, jsResult)
-    }
-
     override fun onSelectItemsPrompt(
         view: WebView, url: String, ways: Array<String>, callback: Handler.Callback
-    ) {
-        getDelegate().onSelectItemsPrompt(view, url, ways, callback)
-    }
-
-    override fun onSelectItemsPrompt(
-        view: X5WebView, url: String, ways: Array<String>, callback: Handler.Callback
     ) {
         getDelegate().onSelectItemsPrompt(view, url, ways, callback)
     }
@@ -62,21 +41,8 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
         getDelegate().onJsPrompt(view, url, message, defaultValue, jsPromptResult)
     }
 
-    override fun onJsPrompt(
-        view: X5WebView?, url: String?, message: String?,
-        defaultValue: String?, jsPromptResult: X5JsPromptResult?
-    ) {
-        getDelegate().onJsPrompt(view, url, message, defaultValue, jsPromptResult)
-    }
-
     override fun onMainFrameError(
         view: WebView, errorCode: Int, description: String, failingUrl: String
-    ) {
-        getDelegate().onMainFrameError(view, errorCode, description, failingUrl)
-    }
-
-    override fun onMainFrameError(
-        view: X5WebView, errorCode: Int, description: String, failingUrl: String
     ) {
         getDelegate().onMainFrameError(view, errorCode, description, failingUrl)
     }
@@ -92,7 +58,6 @@ open class AgentWebUIControllerImplBase : AbsAgentWebUIController() {
     override fun onCancelLoading() {
         getDelegate().onCancelLoading()
     }
-
 
     override fun onShowMessage(message: String, intent: String) {
         getDelegate().onShowMessage(message, intent)
