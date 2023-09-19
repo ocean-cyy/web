@@ -52,8 +52,7 @@ dependencies {
     compileOnly("com.google.android.material:material:1.9.0")
     implementation("top.xuqingquan:utils:3.1.8")
     //download（需要用到web下载的时候需要依赖）
-    //noinspection GradleDependency
-    compileOnly("com.download.library:Downloader:4.1.3")
+    compileOnly("com.github.Justson:Downloader:v5.0.4-androidx")
     compileOnly("com.tencent.tbs:tbssdk:44286")
     compileOnly("com.tencent.sonic:sdk:3.1.0")
     //test

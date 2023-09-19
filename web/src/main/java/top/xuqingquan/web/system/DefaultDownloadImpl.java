@@ -74,7 +74,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
         this.mPermissionListener = permissionInterceptor;
         this.mAgentWebUIController = new WeakReference<>(AgentWebUtils.getAgentWebUIControllerByWebView(webView));
         try {
-            DownloadImpl.getInstance().with(this.mContext);
+            DownloadImpl.getInstance(this.mContext);
             isInstallDownloader = true;
         } catch (Throwable throwable) {
             Timber.e(throwable);
@@ -143,7 +143,7 @@ public final class DefaultDownloadImpl implements DownloadListener {
             return null;
         }
         Timber.d("fileName=" + fileName);
-        return DownloadImpl.getInstance()
+        return DownloadImpl.getInstance(this.mContext)
                 .with(url)
                 .target(downloadFile, mContext.getPackageName() + ".ScaffoldFileProvider")
                 .setEnableIndicator(true)
@@ -251,9 +251,9 @@ public final class DefaultDownloadImpl implements DownloadListener {
 
     private void performDownload(String url) {
         try {
-            Timber.e("performDownload:" + url + " exist:" + DownloadImpl.getInstance().exist(url));
+            Timber.e("performDownload:" + url + " exist:" + DownloadImpl.getInstance(this.mContext).exist(url));
             // 该链接是否正在下载
-            if (DownloadImpl.getInstance().exist(url)) {
+            if (DownloadImpl.getInstance(this.mContext).exist(url)) {
                 if (null != mAgentWebUIController.get()) {
                     mAgentWebUIController.get().onShowMessage(
                             mActivityWeakReference.get()

@@ -209,13 +209,6 @@ class DefaultChromeClient(
         quotaUpdater?.updateQuota(totalQuota * 2)
     }
 
-    override fun onReachedMaxAppCacheSize(
-        requiredStorage: Long, quota: Long, quotaUpdater: WebStorage.QuotaUpdater?
-    ) {
-        super.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater)
-        quotaUpdater?.updateQuota(requiredStorage * 2)
-    }
-
     override fun onShowFileChooser(
         webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?,
         fileChooserParams: FileChooserParams?
