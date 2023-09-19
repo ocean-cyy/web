@@ -11,7 +11,7 @@ android {
         minSdk = 21
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourcePrefix = "scaffold_"
-        buildConfigField("String", "AgentWebVersionName", "\"3.0.7\"")
+        buildConfigField("String", "AgentWebVersionName", "\"3.0.8_lite\"")
         consumerProguardFiles("consumer-rules.pro")
     }
     buildTypes {
@@ -68,7 +68,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "top.xuqingquan"
                 artifactId = "web"
-                version = "3.0.7"
+                version = "3.0.8_lite"
             }
         }
     }
