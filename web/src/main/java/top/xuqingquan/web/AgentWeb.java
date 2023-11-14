@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebChromeClientExtension;
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebViewClientExtension;
+
 import java.util.Map;
 
 import top.xuqingquan.utils.Timber;
@@ -149,6 +152,12 @@ public final class AgentWeb {
      */
     private top.xuqingquan.web.system.MiddlewareWebChromeBase mMiddlewareWebChromeBaseHeader;
     private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5MiddlewareWebChromeBaseHeader;
+
+    /**
+     * x5 专用代理
+     */
+    private ProxyWebViewClientExtension mWebViewClientExtension;
+    private ProxyWebChromeClientExtension mWebChromeClientExtension;
     /**
      * 事件拦截
      */
@@ -187,6 +196,8 @@ public final class AgentWeb {
             this.mX5AgentWebSettings = agentBuilder.mX5AgentWebSettings;
             this.mX5MiddlewareWebClientBaseHeader = agentBuilder.mX5MiddlewareWebClientBaseHeader;
             this.mX5MiddlewareWebChromeBaseHeader = agentBuilder.mX5ChromeMiddleWareHeader;
+            this.mWebViewClientExtension = agentBuilder.mWebViewClientExtension;;
+            this.mWebChromeClientExtension = agentBuilder.mWebChromeClientExtension;
             if (getX5WebCreator() != null) {
                 this.mIUrlLoader = new UrlLoaderImpl(getX5WebCreator().create().getWebView(), agentBuilder.mHttpHeaders);
                 this.mWebLifeCycle = new DefaultWebLifeCycleImpl(getX5WebCreator().getWebView());
@@ -500,6 +511,8 @@ public final class AgentWeb {
                 mX5WebListenerManager.setDownloader(webView, null);
                 mX5WebListenerManager.setWebChromeClient(webView, getX5ChromeClient());
                 mX5WebListenerManager.setWebViewClient(webView, getX5WebViewClient());
+                mX5WebListenerManager.setProxyWebViewClientExtension(webView,this.mWebViewClientExtension);
+                mX5WebListenerManager.setProxyWebChromeClientExtension(webView,this.mWebChromeClientExtension);
             }
         } else {
             top.xuqingquan.web.system.IAgentWebSettings mAgentWebSettings = this.mAgentWebSettings;
@@ -633,6 +646,8 @@ public final class AgentWeb {
         private com.tencent.smtt.sdk.WebViewClient mX5WebViewClient;
         private android.webkit.WebChromeClient mWebChromeClient;
         private com.tencent.smtt.sdk.WebChromeClient mX5WebChromeClient;
+        private ProxyWebViewClientExtension mWebViewClientExtension;
+        private ProxyWebChromeClientExtension mWebChromeClientExtension;
         private int mIndicatorColor = -1;
         private top.xuqingquan.web.system.IAgentWebSettings mAgentWebSettings;
         private top.xuqingquan.web.x5.IAgentWebSettings mX5AgentWebSettings;
@@ -660,6 +675,7 @@ public final class AgentWeb {
         private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5ChromeMiddleWareHeader = null;
         private top.xuqingquan.web.system.MiddlewareWebChromeBase mChromeMiddleWareTail = null;
         private top.xuqingquan.web.x5.MiddlewareWebChromeBase mX5ChromeMiddleWareTail = null;
+
         private View mErrorView;
         private int mErrorLayout;
         private int mReloadId;
@@ -799,6 +815,16 @@ public final class AgentWeb {
 
         public CommonBuilder setWebViewClient(@Nullable com.tencent.smtt.sdk.WebViewClient webViewClient) {
             this.mAgentBuilder.mX5WebViewClient = webViewClient;
+            return this;
+        }
+
+        public CommonBuilder setProxyWebViewClientExtension(@Nullable ProxyWebViewClientExtension webViewClientExtension){
+            this.mAgentBuilder.mWebViewClientExtension = webViewClientExtension;
+            return this;
+        }
+
+        public CommonBuilder setProxyWebChromeClientExtension(@Nullable ProxyWebChromeClientExtension webViewClientExtension){
+            this.mAgentBuilder.mWebChromeClientExtension = webViewClientExtension;
             return this;
         }
 

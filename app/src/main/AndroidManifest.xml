@@ -4,6 +4,9 @@
     package="top.xuqingquan.sample">
 
     <uses-sdk tools:overrideLibrary="org.adblockplus.libadblockplus.android.webview,org.adblockplus.libadblockplus.android.settings" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -29,7 +32,6 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape"
             android:configChanges="screenSize|orientation|keyboardHidden" />
     </application>
 

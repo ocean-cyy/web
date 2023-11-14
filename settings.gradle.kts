@@ -19,5 +19,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "web"
-//include ':app'
+//include(":app")
 include(":web")

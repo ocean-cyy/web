@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    namespace 'top.xuqingquan.sample'
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "top.xuqingquan.sample"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -23,26 +22,22 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     sourceSets {
         main {
             jniLibs.srcDir 'libs'//说明so的路径为该libs路径，关联所有so文件
         }
     }
-    //如果有用到kapt添加如下配置
-    kapt {
-        useBuildCache = true
-        javacOptions {
-            option("-Xmaxerrs", 500)
-        }
-    }
     lint {
         abortOnError false
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -50,13 +45,14 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin}"
     //noinspection GradleCompatible
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation project(path: ':web')
-    implementation "top.xuqingquan:utils:3.0.7"
+    implementation "top.xuqingquan:utils:3.1.8"
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.tencent.tbs:tbssdk:44085'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.tencent.tbs:tbssdk:44286'
+    implementation 'com.github.Justson:Downloader:v5.0.4-androidx'
 }

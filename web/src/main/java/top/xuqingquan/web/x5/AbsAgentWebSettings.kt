@@ -2,6 +2,10 @@ package top.xuqingquan.web.x5
 
 import android.annotation.SuppressLint
 import android.os.Build
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebChromeClientExtension
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebViewClientExtension
+import com.tencent.smtt.export.external.proxy.ProxyWebChromeClient
+import com.tencent.smtt.export.external.proxy.ProxyWebViewClient
 import com.tencent.smtt.sdk.*
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.WebConfig
@@ -117,6 +121,24 @@ abstract class AbsAgentWebSettings : IAgentWebSettings<WebSettings>, WebListener
         webView: WebView?, webViewClient: WebViewClient
     ): WebListenerManager {
         webView?.webViewClient = webViewClient
+        return this
+    }
+
+    override fun setProxyWebViewClientExtension(
+        webView: WebView?,
+        webViewClient: ProxyWebViewClientExtension?
+    ): WebListenerManager {
+        webViewClient ?: return this
+        webView?.webViewClientExtension = webViewClient
+        return this
+    }
+
+    override fun setProxyWebChromeClientExtension(
+        webView: WebView?,
+        webChromeClient: ProxyWebChromeClientExtension?
+    ): WebListenerManager {
+        webChromeClient ?: return this
+        webView?.webChromeClientExtension = webChromeClient
         return this
     }
 

@@ -1,14 +1,19 @@
 package top.xuqingquan.sample
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.KeyEvent
 import android.view.ViewGroup
+import android.webkit.GeolocationPermissions
 import android.webkit.WebView
-import android.webkit.WebViewClient
-import kotlinx.android.synthetic.main.activity_main.*
-import top.xuqingquan.utils.StatusBarUtils
+import androidx.appcompat.app.AppCompatActivity
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebChromeClientExtension
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback
+import com.tencent.smtt.export.external.interfaces.MediaAccessPermissionsCallback
+import com.tencent.smtt.sdk.WebChromeClient
+import com.tencent.smtt.sdk.WebViewClient
+import top.xuqingquan.sample.databinding.ActivityMainBinding
+import top.xuqingquan.utils.Timber
 import top.xuqingquan.web.AgentWeb
 import top.xuqingquan.web.nokernel.OpenOtherPageWays
 import top.xuqingquan.web.nokernel.PermissionInterceptor
@@ -18,19 +23,59 @@ import top.xuqingquan.web.system.IAgentWebSettings
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
-    private val url = "https://m.baidu.com"
+    private val url = "https://dev4.thread0.com/h5/watermark/#/"
+//    private val url = "http://debugtbs.qq.com/"
 
     private lateinit var agentWeb: AgentWeb
 
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
+//        binding.webview.settings.javaScriptEnabled = true
+//        binding.webview.webViewClient = object :WebViewClient(){}
+//        binding.webview.webChromeClient = object :WebChromeClient(){
+//            override fun onGeolocationPermissionsHidePrompt() {
+//                super.onGeolocationPermissionsHidePrompt()
+//            }
+//
+//            override fun onGeolocationPermissionsShowPrompt(
+//                origin: String?, callback: GeolocationPermissionsCallback?
+//            ) {
+//                super.onGeolocationPermissionsShowPrompt(origin, callback)
+//                Log.e(TAG, "onGeolocationPermissionsShowPrompt: origin=${origin}" )
+//            }
+//        }
+//        binding.webview.webChromeClientExtension = object :ProxyWebChromeClientExtension(){
+//            override fun onPermissionRequest(
+//                origin: String?,
+//                resources: Long,
+//                callback: MediaAccessPermissionsCallback?
+//            ): Boolean {
+//                callback?.invoke(origin,resources,true)
+//                Log.e(TAG, "onPermissionRequest: origin=${origin},resources=$resources" )
+//                return true
+//            }
+//        }
+//        binding.webview.loadUrl(url)
         agentWeb = AgentWeb
             .with(this)
-            .setAgentWebParent(rootView, ViewGroup.LayoutParams(-1, -1))
+            .setAgentWebParent(binding.rootView, ViewGroup.LayoutParams(-1, -1))
             .useDefaultIndicator()
             .interceptUnknownUrl()
             .setOpenOtherPageWays(OpenOtherPageWays.ASK)
+            .setProxyWebChromeClientExtension(object :ProxyWebChromeClientExtension(){
+                override fun onPermissionRequest(
+                    origin: String?,
+                    resources: Long,
+                    callback: MediaAccessPermissionsCallback?
+                ): Boolean {
+                    callback?.invoke(origin,resources,true)
+                    Log.e(TAG, "onPermissionRequest: origin=${origin},resources=$resources" )
+                    return true
+                }
+            })
             .setAgentWebWebSettings(object : AbsAgentWebSettings(){
                 override fun bindAgentWebSupport(agentWeb: AgentWeb) {
                 }

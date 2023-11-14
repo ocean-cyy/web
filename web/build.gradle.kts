@@ -49,7 +49,7 @@ android {
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("androidx.appcompat:appcompat:1.6.1")
-    compileOnly("com.google.android.material:material:1.9.0")
+    compileOnly("com.google.android.material:material:1.10.0")
     implementation("top.xuqingquan:utils:3.1.8")
     //download（需要用到web下载的时候需要依赖）
     compileOnly("com.github.Justson:Downloader:v5.0.4-androidx")
@@ -70,7 +70,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "top.xuqingquan"
                 artifactId = "web"
-                version = "3.0.7"
+                version = "3.0.8"
             }
         }
     }
